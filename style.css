@@ -257,31 +257,6 @@ body.streetwear-theme {
   transform-origin: center;
 }
 
-/* Name Video Tag: TAQI HAIDER */
-.hero-character-label {
-  position: absolute;
-  top: 98%;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: clamp(140px, 18vw, 240px);
-  pointer-events: none;
-  z-index: 2;
-}
-
-.character-name-video {
-  width: 100%;
-  height: auto;
-  display: block;
-  mix-blend-mode: multiply;
-  object-fit: contain;
-  pointer-events: none;
-  background: transparent;
-  border: none;
-  outline: none;
-}
 
 /* Decorative 3-Symbol Separator (✦ ◆ ♣) */
 .decorative-separator {
@@ -1142,11 +1117,6 @@ body.streetwear-theme {
     font-size: clamp(2rem, 11.5vw, 5.5rem);
   }
 
-  .hero-character-label {
-    top: 100%;
-    width: clamp(120px, 24vw, 180px);
-  }
-
   .about-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
@@ -1207,10 +1177,5 @@ body.streetwear-theme {
 
   .hero-title {
     font-size: clamp(1.85rem, 11vw, 3.4rem);
-  }
-
-  .hero-character-label {
-    top: 100%;
-    width: clamp(95px, 26vw, 140px);
   }
 }

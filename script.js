@@ -19,13 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const pupilRight = document.getElementById('heroPupilRight');
   const characterWrapper = document.getElementById('heroCharacterWrapper');
   const heroVideo = document.getElementById('heroCharacterImg');
-  const heroNameVideo = document.getElementById('heroNameVideo');
 
-  [heroVideo, heroNameVideo].forEach(vid => {
-    if (vid && vid.tagName === 'VIDEO') {
-      vid.play().catch(() => {});
-    }
-  });
+  if (heroVideo && heroVideo.tagName === 'VIDEO') {
+    heroVideo.play().catch(() => {});
+  }
 
   if (heroCharacter && characterWrapper) {
     let mouseX = window.innerWidth / 2;
