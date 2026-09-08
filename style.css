@@ -257,36 +257,30 @@ body.streetwear-theme {
   transform-origin: center;
 }
 
-/* Handwritten Tag with Arrow: TAQI HAIDER */
+/* Name Video Tag: TAQI HAIDER */
 .hero-character-label {
   position: absolute;
-  top: 102%;
+  top: 98%;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  justify-content: center;
+  width: clamp(140px, 18vw, 240px);
   pointer-events: none;
+  z-index: 2;
 }
 
-.handwritten-arrow {
-  width: clamp(14px, 2vw, 22px);
-  height: clamp(22px, 3.2vw, 36px);
-  flex-shrink: 0;
-  margin-bottom: 0.12em;
-}
-
-.handwritten-text {
-  font-family: var(--font-handwritten);
-  font-size: clamp(1.1rem, 2.1vw, 2rem);
-  font-weight: 700;
-  color: var(--text-main);
-  transform: rotate(-1.5deg);
-  white-space: nowrap;
-  line-height: 1;
-  word-spacing: 0.35em;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+.character-name-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  mix-blend-mode: multiply;
+  object-fit: contain;
+  pointer-events: none;
+  background: transparent;
+  border: none;
+  outline: none;
 }
 
 /* Decorative 3-Symbol Separator (✦ ◆ ♣) */
@@ -1149,17 +1143,8 @@ body.streetwear-theme {
   }
 
   .hero-character-label {
-    top: 104%;
-  }
-
-  .handwritten-arrow {
-    width: 20px;
-    height: 32px;
-  }
-
-  .handwritten-text {
-    font-size: 1.25rem;
-    word-spacing: 0.25em;
+    top: 100%;
+    width: clamp(120px, 24vw, 180px);
   }
 
   .about-grid {
@@ -1225,17 +1210,7 @@ body.streetwear-theme {
   }
 
   .hero-character-label {
-    top: 105%;
-    gap: 0.15rem;
-  }
-
-  .handwritten-arrow {
-    width: 16px;
-    height: 25px;
-  }
-
-  .handwritten-text {
-    font-size: 1.05rem;
-    word-spacing: 0.18em;
+    top: 100%;
+    width: clamp(95px, 26vw, 140px);
   }
 }
