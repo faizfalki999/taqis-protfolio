@@ -91,13 +91,20 @@ body.streetwear-theme {
   line-height: 1.5;
   overflow-x: hidden;
   position: relative;
-  /* Multi-scale Crumpled Paper Wrinkles & Crease Highlights */
+  min-height: 100vh;
+  /* Full-Screen Edge-to-Edge Grid + Crumpled Paper Texture */
   background-image: 
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px),
     linear-gradient(125deg, rgba(255, 255, 255, 0.7) 0%, transparent 25%, rgba(0, 0, 0, 0.04) 30%, transparent 35%, rgba(255, 255, 255, 0.5) 55%, transparent 65%),
     linear-gradient(235deg, transparent 20%, rgba(0, 0, 0, 0.035) 38%, rgba(255, 255, 255, 0.6) 42%, transparent 58%, rgba(0, 0, 0, 0.03) 75%, transparent 85%),
     linear-gradient(35deg, rgba(255, 255, 255, 0.45) 0%, transparent 40%, rgba(0, 0, 0, 0.035) 60%, transparent 80%),
     radial-gradient(ellipse 120% 80% at 15% 10%, rgba(255, 255, 255, 0.85) 0%, transparent 50%),
     radial-gradient(ellipse 100% 70% at 85% 85%, rgba(0, 0, 0, 0.045) 0%, transparent 60%);
+  background-size: 
+    var(--grid-size) var(--grid-size),
+    var(--grid-size) var(--grid-size),
+    auto, auto, auto, auto, auto;
   background-attachment: fixed;
 }
 
@@ -116,16 +123,12 @@ body.streetwear-theme {
   background-size: 380px 380px;
 }
 
-/* Graph / Grid Paper Background Texture */
+/* Page Container (Content Centering & Spacing) */
 .page-container {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 2rem;
   background-color: transparent;
-  background-image: 
-    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-  background-size: var(--grid-size) var(--grid-size);
   position: relative;
 }
 
@@ -166,14 +169,19 @@ body.streetwear-theme {
 /* Giant Headline with Embedded Character */
 .hero-title-container {
   width: 100%;
+  max-width: 100%;
   text-align: center;
   position: relative;
-  margin: 0.5rem 0 3rem 0;
+  margin: 0.5rem 0 3.5rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
 }
 
 .hero-title {
   font-family: 'BB Torsos Pro', var(--font-display);
-  font-size: clamp(4rem, 14.5vw, 13.5rem);
+  font-size: clamp(2.2rem, 11.8vw, 12.5rem);
   font-weight: 900;
   line-height: 0.85;
   letter-spacing: -0.01em;
@@ -184,6 +192,7 @@ body.streetwear-theme {
   align-items: flex-end;
   flex-wrap: nowrap;
   user-select: none;
+  max-width: 100%;
 }
 
 .title-part {
@@ -248,7 +257,7 @@ body.streetwear-theme {
   transform-origin: center;
 }
 
-/* Handwritten Tag with Arrow: Raag */
+/* Handwritten Tag with Arrow: Taqi Haider */
 .hero-character-label {
   position: absolute;
   top: 102%;
@@ -261,13 +270,14 @@ body.streetwear-theme {
 }
 
 .handwritten-arrow {
-  width: 24px;
-  height: 38px;
+  width: clamp(16px, 2.2vw, 24px);
+  height: clamp(24px, 3.4vw, 38px);
+  flex-shrink: 0;
 }
 
 .handwritten-text {
   font-family: var(--font-handwritten);
-  font-size: clamp(1.4rem, 2.2vw, 2.1rem);
+  font-size: clamp(1.15rem, 2.2vw, 2.1rem);
   font-weight: 600;
   color: var(--text-main);
   transform: rotate(-2deg);
@@ -1119,12 +1129,35 @@ body.streetwear-theme {
     padding: 0 1.2rem;
   }
 
+  .hero-section {
+    padding: 1.8rem 0 1.2rem 0;
+  }
+
   .hero-topbar {
-    font-size: 0.82rem;
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .hero-title-container {
+    margin: 0.3rem 0 3rem 0;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 11.5vw, 5.5rem);
+  }
+
+  .hero-character-label {
+    top: 104%;
+  }
+
+  .handwritten-arrow {
+    width: 20px;
+    height: 32px;
   }
 
   .handwritten-text {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
+    word-spacing: 0.25em;
   }
 
   .about-grid {
@@ -1163,5 +1196,44 @@ body.streetwear-theme {
     flex-direction: column;
     gap: 0.8rem;
     text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-container {
+    padding: 0 0.85rem;
+  }
+
+  .hero-section {
+    padding: 1.2rem 0 0.8rem 0;
+  }
+
+  .hero-topbar {
+    font-size: 0.72rem;
+    letter-spacing: 0.01em;
+    padding: 0 0.1rem;
+  }
+
+  .hero-title-container {
+    margin: 0.2rem 0 2.8rem 0;
+  }
+
+  .hero-title {
+    font-size: clamp(1.85rem, 11vw, 3.4rem);
+  }
+
+  .hero-character-label {
+    top: 105%;
+    gap: 0.15rem;
+  }
+
+  .handwritten-arrow {
+    width: 16px;
+    height: 25px;
+  }
+
+  .handwritten-text {
+    font-size: 1.05rem;
+    word-spacing: 0.18em;
   }
 }
