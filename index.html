@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taqi Haider — Creative Director & Animator Portfolio</title>
+  <meta name="description" content="Portfolio of Taqi Haider — Creative Director, Animator, and Co-founder at IKIAKI Studios. Specializing in 2D animation, motion design, and bold brand storytelling.">
+  
+  <!-- Google Fonts: Extended editorial display, geometric sans, and handwritten script -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62.5..125,400..900&family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=Syne:wght@700;800&family=Unbounded:wght@700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="streetwear-theme">
+
+  <!-- Organic Paper Grain & Fiber Noise Overlay -->
+  <div class="paper-grain-overlay" aria-hidden="true"></div>
+
+  <!-- PAGE WRAPPER WITH SUBTLE GRAPH / GRID PAPER TEXTURE -->
+  <div class="page-container">
+
+    <!-- ================================================================= -->
+    <!-- SECTION 1: HERO SECTION                                          -->
+    <!-- ================================================================= -->
+    <header class="hero-section" id="hero">
+      
+      <!-- Top Utility Header Row: DESIGNER / ILLUSTRATOR & 2026 -->
+      <div class="hero-topbar">
+        <span class="hero-tagline">DESIGNER / ILLUSTRATOR</span>
+        <span class="hero-year">2026</span>
+      </div>
+
+      <!-- Giant Editorial Title: PORTFOLIO with Inline Character Embed -->
+      <div class="hero-title-container">
+        <h1 class="hero-title">
+          <span class="title-part part-left">PORTF</span>
+          
+          <!-- =========================================================== -->
+          <!-- HERO CHARACTER EMBED COMPONENT                              -->
+          <!-- =========================================================== -->
+          <div class="hero-character-slot" id="heroCharacterSlot" aria-label="Taqi Haider Character Avatar">
+            <div class="character-wrapper" id="heroCharacterWrapper">
+              <!-- High-Fidelity Character Video Animation (Embedded in PORTFOLIO Title) -->
+              <video autoplay loop muted playsinline webkit-playsinline preload="auto" class="character-img-hero" id="heroCharacterImg" aria-label="Taqi Haider Hero Character Video">
+                <source src="me_transparent.webm" type="video/webm">
+                <source src="me_cropped.mp4" type="video/mp4">
+              </video>
+            </div>
+            
+            <!-- Handwritten Arrow and Name Annotation: Taqi Haider -->
+            <div class="hero-character-label">
+              <svg class="handwritten-arrow" viewBox="0 0 32 45" fill="none">
+                <path d="M 8 40 C 5 24, 12 12, 16 3 M 16 3 L 10 9 M 16 3 L 22 8" stroke="#191b1b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="handwritten-text">Taqi Haider</span>
+            </div>
+          </div>
+          
+          <span class="title-part part-right">LIO</span>
+        </h1>
+      </div>
+
+      <!-- Decorative Motif Separator Row -->
+      <div class="decorative-separator" aria-hidden="true">
+        <span class="symbol symbol-star">✦</span>
+        <span class="symbol symbol-diamond">◆</span>
+        <span class="symbol symbol-club">♣</span>
+      </div>
+
+    </header>
+
+    <!-- ================================================================= -->
+    <!-- SECTION 2: ABOUT / HELLO (3-COLUMN EDITORIAL GRID)               -->
+    <!-- ================================================================= -->
+    <section class="about-section" id="about">
+      <div class="about-grid">
+
+        <!-- Left Column: Character / Turntable Viewer Slot -->
+        <div class="about-col about-col-left">
+          <div class="character-viewer-card" id="characterViewerContainer">
+            <!-- Registration & Crop Marks for Editorial Look -->
+            <div class="crop-mark top-left"></div>
+            <div class="crop-mark top-right"></div>
+            <div class="crop-mark bottom-left"></div>
+            <div class="crop-mark bottom-right"></div>
+            
+
+
+            <!-- ========================================================= -->
+            <!-- 3D ROTATING CHARACTER MODEL / TURNTABLE RIG               -->
+            <!-- Smooth continuous 360° 3D spinning animation (ambient)    -->
+            <!-- ========================================================= -->
+            <div class="turntable-display" id="turntableDisplay" aria-label="3D Character Model rotating 360 degrees smoothly">
+              
+              <!-- 3D Turntable Perspective Scene -->
+              <div class="scene-3d" id="turntable3dScene">
+                <div class="turntable-rig" id="turntableRig">
+                  
+                  <!-- 3D Character Multi-Angle Mesh Rig -->
+                  <div class="char-mesh-3d" id="charMesh3d">
+                    <div class="mesh-plane plane-front" id="planeFront">
+                      <img src="front.png" alt="Taqi Haider - Front View" draggable="false" />
+                    </div>
+                    <div class="mesh-plane plane-side-r" id="planeSideR">
+                      <img src="side_right.png" alt="Taqi Haider - Right Side View" draggable="false" />
+                    </div>
+                    <div class="mesh-plane plane-back" id="planeBack">
+                      <img src="back.png" alt="Taqi Haider - Back View" draggable="false" />
+                    </div>
+                    <div class="mesh-plane plane-side-l" id="planeSideL">
+                      <img src="side_left.png" alt="Taqi Haider - Left Side View" draggable="false" />
+                    </div>
+                  </div>
+
+                  <!-- 3D Rotating Turntable Pedestal Base -->
+                  <div class="turntable-pedestal-3d" id="turntablePedestal">
+                    <div class="pedestal-disc-top">
+                      <div class="pedestal-grid-lines"></div>
+                      <div class="pedestal-center-hub"></div>
+                      <div class="pedestal-marker-notch"></div>
+                    </div>
+                    <div class="pedestal-cylinder-wall"></div>
+                  </div>
+
+                </div>
+
+                <!-- Ground Ambient Drop Shadow (Stationary studio floor contact) -->
+                <div class="turntable-ambient-shadow" aria-hidden="true"></div>
+              </div>
+            </div>
+            
+            <div class="turntable-footer-badge">
+              <span id="turntableAngleLabel">3D MODEL: 0°</span>
+              <span class="turntable-rot-icon">✦ 360° AUTO-SPIN</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Middle Column: Hello, Bio & Education -->
+        <div class="about-col about-col-center">
+          <div class="about-heading-block">
+            <h2 class="section-title-huge">HELLO</h2>
+            <p class="about-greeting">Hi, I'm <strong class="highlight-text">Taqi Haider</strong>.</p>
+          </div>
+
+          <div class="about-bio-text">
+            <p>
+              Creative Director with <strong>4+ years of experience</strong> in animation, branding, and digital content. Co-founder at <em>IKIAKI Studios</em> and Creative Lead at <em>Vision Building Future</em>.
+            </p>
+            <p>
+              Delivering high-impact designs for global brands, educational ecosystems, and youth empowerment campaigns through culturally resonant, boundary-pushing storytelling.
+            </p>
+            <p>
+              Specializing in the fusion of bold streetwear typography, dynamic 2D vector animation, and scalable motion identity systems.
+            </p>
+          </div>
+
+          <!-- Education Sub-block -->
+          <div class="about-education-block">
+            <h3 class="subheading-bold">EDUCATION</h3>
+            <div class="education-entry">
+              <div class="degree-title">Bachelor of Computer Arts (BCA Animations)</div>
+              <div class="degree-institute">Foundation University Rawalpindi Campus</div>
+              <div class="degree-year">Graduated July 2026</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Skills & Experience Timeline -->
+        <div class="about-col about-col-right">
+          
+          <!-- Skills Area -->
+          <div class="about-skills-block">
+            <h3 class="subheading-bold">SKILLS</h3>
+            
+            <!-- Software Icon Badges -->
+            <div class="software-badges-grid">
+              <div class="soft-badge badge-ps" title="Adobe Photoshop"><span>Ps</span></div>
+              <div class="soft-badge badge-ai" title="Adobe Illustrator"><span>Ai</span></div>
+              <div class="soft-badge badge-ae" title="Adobe After Effects"><span>Ae</span></div>
+              <div class="soft-badge badge-pr" title="Adobe Premiere Pro"><span>Pr</span></div>
+              <div class="soft-badge badge-canva" title="Canva"><span>Cv</span></div>
+              <div class="soft-badge badge-capcut" title="CapCut"><span>Cc</span></div>
+              <div class="soft-badge badge-ai-tool" title="NanoBanana AI"><span>🍌</span></div>
+            </div>
+
+            <!-- Text Discipline Tags -->
+            <div class="discipline-tags-cloud">
+              <span class="tag-pill">Graphic Design</span>
+              <span class="tag-pill">Motion Design</span>
+              <span class="tag-pill">2D Animation</span>
+              <span class="tag-pill">Branding</span>
+              <span class="tag-pill">Promotional Design</span>
+              <span class="tag-pill">YouTube Explainers</span>
+              <span class="tag-pill">Product Creatives</span>
+              <span class="tag-pill">Visual Content Creation</span>
+              <span class="tag-pill">Typography</span>
+            </div>
+          </div>
+
+          <!-- Experience Timeline -->
+          <div class="about-experience-block">
+            <h3 class="subheading-bold">EXPERIENCE</h3>
+            
+            <div class="experience-timeline">
+              
+              <!-- Role 1 -->
+              <div class="exp-item">
+                <div class="exp-header">
+                  <span class="exp-period">2024 – Present</span>
+                  <h4 class="exp-role">Creative Lead & Graphic Designer</h4>
+                  <div class="exp-company">Vision Building Future</div>
+                </div>
+                <p class="exp-details">
+                  Youth empowerment campaigns, digital educational content, event branding for <em>Access Summit</em> and <em>TEA</em>, social campaigns, community projects like <em>"Iftaar with Pyaar"</em>, posters, booklets, merchandise, and digital illustrations.
+                </p>
+              </div>
+
+              <!-- Role 2 -->
+              <div class="exp-item">
+                <div class="exp-header">
+                  <span class="exp-period">2021 – Present</span>
+                  <h4 class="exp-role">Co-Founder & Creative Director</h4>
+                  <div class="exp-company">IKIAKI Studios</div>
+                </div>
+                <p class="exp-details">
+                  Led cross-functional creative teams across branding, animation, and digital content; developed e-learning animated courses and SCORM/EPUB-ready LMS content for Grade 4 education aligned with MoFE&PT & ACT standards; notable project: <em>Ma'an (UAE)</em> — animated course content for social contribution programs.
+                </p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </div> <!-- End Page Container (Light Section) -->
+
+
+  <!-- =================================================================== -->
+  <!-- SECTION 3: TORN TRANSITION / DARK FEATURE PORTRAIT SECTION          -->
+  <!-- =================================================================== -->
+  <section class="feature-dark-section" id="feature">
+    
+    <!-- Top Torn Paper Edge (SVG Jagged Rip Transition from Light to Dark) -->
+    <div class="torn-paper-edge top-edge" aria-hidden="true">
+      <svg viewBox="0 0 1440 70" preserveAspectRatio="none" class="torn-svg">
+        <!-- Exposed raw white paper fibrous rip line -->
+        <path d="M 0,0 L 0,35.0 L 17.0,42.3 L 28.8,47.0 L 47.1,55.2 L 67.6,53.2 L 81.5,54.1 L 92.6,59.0 L 100.9,56.3 L 118.0,59.0 L 129.1,58.6 L 148.5,51.3 L 167.7,55.0 L 180.5,48.3 L 201.9,47.2 L 211.2,44.0 L 231.1,47.0 L 250.4,47.5 L 265.9,49.8 L 279.2,46.4 L 298.8,47.9 L 318.9,48.7 L 336.7,44.7 L 347.9,47.0 L 357.0,46.5 L 366.4,46.6 L 383.3,46.1 L 396.5,43.2 L 408.3,47.8 L 425.3,41.5 L 435.7,40.1 L 446.0,34.4 L 467.9,30.9 L 483.7,27.1 L 503.5,23.2 L 514.7,14.2 L 527.1,14.3 L 538.0,19.1 L 558.3,12.2 L 575.5,13.2 L 596.3,15.6 L 608.0,15.2 L 623.9,17.9 L 640.0,26.5 L 653.6,22.9 L 675.6,29.2 L 684.9,26.3 L 694.4,32.6 L 713.5,32.4 L 722.4,32.4 L 744.3,33.9 L 765.9,36.1 L 774.1,34.4 L 791.6,31.7 L 803.4,32.0 L 812.9,29.7 L 827.3,34.0 L 847.5,28.0 L 862.5,28.1 L 883.3,36.5 L 895.5,36.2 L 912.0,34.7 L 930.7,41.7 L 949.6,45.2 L 957.6,44.8 L 965.9,51.5 L 986.2,53.2 L 998.5,47.2 L 1018.8,55.4 L 1028.0,50.9 L 1037.0,52.6 L 1055.7,44.4 L 1070.3,45.5 L 1082.0,45.9 L 1096.0,36.6 L 1111.5,37.4 L 1122.3,31.0 L 1144.3,29.1 L 1158.4,25.3 L 1168.1,21.2 L 1180.8,23.0 L 1192.0,18.8 L 1201.0,22.1 L 1212.2,24.4 L 1232.3,17.4 L 1243.6,23.5 L 1254.6,19.4 L 1275.7,25.1 L 1290.3,28.1 L 1309.6,23.8 L 1319.0,26.2 L 1332.9,26.5 L 1351.1,27.7 L 1372.9,20.9 L 1386.5,21.6 L 1406.6,18.5 L 1417.3,19.1 L 1431.2,16.2 L 1440,21.4 L 1440,0 Z" class="torn-deckle-fringe" />
+        <!-- Main ripped paper body fill -->
+        <path d="M 0,0 L 0,35.0 L 17.0,42.3 L 28.8,47.0 L 47.1,55.2 L 67.6,53.2 L 81.5,54.1 L 92.6,59.0 L 100.9,56.3 L 118.0,59.0 L 129.1,58.6 L 148.5,51.3 L 167.7,55.0 L 180.5,48.3 L 201.9,47.2 L 211.2,44.0 L 231.1,47.0 L 250.4,47.5 L 265.9,49.8 L 279.2,46.4 L 298.8,47.9 L 318.9,48.7 L 336.7,44.7 L 347.9,47.0 L 357.0,46.5 L 366.4,46.6 L 383.3,46.1 L 396.5,43.2 L 408.3,47.8 L 425.3,41.5 L 435.7,40.1 L 446.0,34.4 L 467.9,30.9 L 483.7,27.1 L 503.5,23.2 L 514.7,14.2 L 527.1,14.3 L 538.0,19.1 L 558.3,12.2 L 575.5,13.2 L 596.3,15.6 L 608.0,15.2 L 623.9,17.9 L 640.0,26.5 L 653.6,22.9 L 675.6,29.2 L 684.9,26.3 L 694.4,32.6 L 713.5,32.4 L 722.4,32.4 L 744.3,33.9 L 765.9,36.1 L 774.1,34.4 L 791.6,31.7 L 803.4,32.0 L 812.9,29.7 L 827.3,34.0 L 847.5,28.0 L 862.5,28.1 L 883.3,36.5 L 895.5,36.2 L 912.0,34.7 L 930.7,41.7 L 949.6,45.2 L 957.6,44.8 L 965.9,51.5 L 986.2,53.2 L 998.5,47.2 L 1018.8,55.4 L 1028.0,50.9 L 1037.0,52.6 L 1055.7,44.4 L 1070.3,45.5 L 1082.0,45.9 L 1096.0,36.6 L 1111.5,37.4 L 1122.3,31.0 L 1144.3,29.1 L 1158.4,25.3 L 1168.1,21.2 L 1180.8,23.0 L 1192.0,18.8 L 1201.0,22.1 L 1212.2,24.4 L 1232.3,17.4 L 1243.6,23.5 L 1254.6,19.4 L 1275.7,25.1 L 1290.3,28.1 L 1309.6,23.8 L 1319.0,26.2 L 1332.9,26.5 L 1351.1,27.7 L 1372.9,20.9 L 1386.5,21.6 L 1406.6,18.5 L 1417.3,19.1 L 1431.2,16.2 L 1440,21.4 L 1440,0 Z" class="torn-fill-light" />
+      </svg>
+    </div>
+
+    <!-- Inner Dark Content Container -->
+    <div class="dark-content-wrapper">
+      
+      <!-- Continuous Looping Kinetic Typography Marquee -->
+      <div class="marquee-scroller-wrap" aria-hidden="true">
+        <div class="marquee-track slow-marquee">
+          <span class="marquee-item">CREATIVE DIRECTOR ✦ 2026 ✦ ANIMATION ✦ BRANDING ✦ </span>
+          <span class="marquee-item">CREATIVE DIRECTOR ✦ 2026 ✦ ANIMATION ✦ BRANDING ✦ </span>
+          <span class="marquee-item">CREATIVE DIRECTOR ✦ 2026 ✦ ANIMATION ✦ BRANDING ✦ </span>
+          <span class="marquee-item">CREATIVE DIRECTOR ✦ 2026 ✦ ANIMATION ✦ BRANDING ✦ </span>
+        </div>
+      </div>
+
+      <!-- Centered Spotlight Hero Feature Portrait with Layered Red Halo Glow -->
+      <div class="feature-portrait-container">
+        <!-- Multi-layered Red Streetwear Outlines & Glow -->
+        <div class="red-glow-layer layer-1"></div>
+        <div class="red-glow-layer layer-2"></div>
+        <div class="red-glow-layer layer-3"></div>
+
+        <!-- Portrait Image Mask -->
+        <div class="portrait-frame">
+          <div class="portrait-image-placeholder">
+            <!-- Stencil Art Silhouette of Taqi -->
+            <div class="feature-stencil-avatar">
+              <svg viewBox="0 0 300 360" class="feature-avatar-svg" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="150" cy="180" r="140" fill="#151515" />
+                <path d="M70 330 C 70 240, 100 210, 150 210 C 200 210, 230 240, 230 330 Z" fill="#090909" />
+                <path d="M100 130 C 95 90, 205 90, 200 130 C 200 190, 185 230, 150 240 C 115 230, 100 190, 100 130 Z" fill="#242424" />
+                <!-- Curly Hair -->
+                <path d="M80 120 C 70 60, 120 40, 150 40 C 180 40, 230 60, 220 120 C 205 100, 180 90, 150 95 C 120 90, 95 100, 80 120 Z" fill="#000" />
+                <!-- Glasses -->
+                <circle cx="125" cy="145" r="22" stroke="#fff" stroke-width="4" fill="none" />
+                <circle cx="175" cy="145" r="22" stroke="#fff" stroke-width="4" fill="none" />
+                <line x1="147" y1="145" x2="153" y2="145" stroke="#fff" stroke-width="4" />
+                <!-- Eyes -->
+                <circle cx="125" cy="145" r="6" fill="#fff" />
+                <circle cx="175" cy="145" r="6" fill="#fff" />
+                <!-- Beard -->
+                <path d="M120 185 Q 150 195 180 185 Q 150 230 120 185 Z" fill="#000" />
+              </svg>
+            </div>
+            <div class="portrait-badge">TAQI HAIDER</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating "Available for Hire" Notification Toast Card -->
+      <div class="hire-toast-card" id="hireToast">
+        <div class="toast-avatar">
+          <span class="avatar-status-dot"></span>
+          <span class="avatar-initial">T</span>
+        </div>
+        <div class="toast-content">
+          <div class="toast-title">Taqi is available for hire</div>
+          <div class="toast-subtitle">Open for freelance & art direction</div>
+        </div>
+        <a href="mailto:mtaqi5771@gmail.com" class="toast-btn">Hire Taqi</a>
+        <button class="toast-close-btn" id="toastCloseBtn" aria-label="Close notification">×</button>
+      </div>
+
+    </div>
+
+    <!-- Bottom Torn Paper Edge (SVG Jagged Rip Transition back to Light) -->
+    <div class="torn-paper-edge bottom-edge" aria-hidden="true">
+      <svg viewBox="0 0 1440 70" preserveAspectRatio="none" class="torn-svg">
+        <!-- Exposed raw white paper fibrous rip line -->
+        <path d="M 0,70 L 0,35.0 L 14.2,58.8 L 29.9,50.1 L 51.9,53.7 L 73.5,50.1 L 93.3,38.7 L 108.1,35.7 L 121.8,31.5 L 135.1,37.4 L 146.8,33.8 L 161.1,28.8 L 182.6,32.6 L 198.3,29.9 L 208.5,26.3 L 230.1,29.7 L 245.7,32.1 L 254.5,31.1 L 269.5,34.1 L 279.7,35.3 L 288.8,28.4 L 305.1,32.5 L 316.4,26.9 L 336.9,26.1 L 353.2,27.3 L 367.1,24.9 L 382.4,25.6 L 393.3,21.9 L 404.6,17.3 L 422.0,14.3 L 434.4,17.2 L 443.5,14.1 L 465.4,19.1 L 474.5,12.6 L 486.2,20.3 L 506.5,23.1 L 519.7,19.4 L 539.4,29.1 L 555.9,36.1 L 573.1,31.8 L 592.5,39.0 L 609.8,48.1 L 619.7,42.2 L 629.2,47.3 L 641.0,48.7 L 659.0,45.6 L 675.9,45.8 L 690.8,50.6 L 710.6,41.5 L 724.5,41.8 L 732.6,45.4 L 749.5,39.4 L 767.9,40.9 L 781.9,35.6 L 790.9,43.5 L 811.6,41.1 L 831.3,42.8 L 841.3,39.6 L 853.7,47.7 L 872.8,49.1 L 893.4,44.6 L 904.9,44.0 L 923.8,50.8 L 937.5,47.5 L 947.7,49.2 L 967.8,46.4 L 987.1,41.4 L 995.5,38.1 L 1008.1,36.6 L 1027.3,30.9 L 1046.7,20.7 L 1065.7,15.2 L 1085.9,18.9 L 1097.0,17.5 L 1111.5,12.2 L 1130.6,11.9 L 1138.9,12.2 L 1151.5,19.5 L 1173.1,17.2 L 1190.1,21.1 L 1211.8,25.9 L 1232.9,25.2 L 1254.5,27.9 L 1276.0,29.7 L 1285.5,31.3 L 1303.7,29.9 L 1320.2,30.9 L 1333.6,30.8 L 1345.2,31.4 L 1353.2,33.0 L 1368.7,30.8 L 1387.1,30.5 L 1400.2,25.7 L 1417.5,29.6 L 1429.9,35.9 L 1440,32.6 L 1440,70 Z" class="torn-deckle-fringe" />
+        <!-- Main ripped paper body fill -->
+        <path d="M 0,70 L 0,35.0 L 14.2,58.8 L 29.9,50.1 L 51.9,53.7 L 73.5,50.1 L 93.3,38.7 L 108.1,35.7 L 121.8,31.5 L 135.1,37.4 L 146.8,33.8 L 161.1,28.8 L 182.6,32.6 L 198.3,29.9 L 208.5,26.3 L 230.1,29.7 L 245.7,32.1 L 254.5,31.1 L 269.5,34.1 L 279.7,35.3 L 288.8,28.4 L 305.1,32.5 L 316.4,26.9 L 336.9,26.1 L 353.2,27.3 L 367.1,24.9 L 382.4,25.6 L 393.3,21.9 L 404.6,17.3 L 422.0,14.3 L 434.4,17.2 L 443.5,14.1 L 465.4,19.1 L 474.5,12.6 L 486.2,20.3 L 506.5,23.1 L 519.7,19.4 L 539.4,29.1 L 555.9,36.1 L 573.1,31.8 L 592.5,39.0 L 609.8,48.1 L 619.7,42.2 L 629.2,47.3 L 641.0,48.7 L 659.0,45.6 L 675.9,45.8 L 690.8,50.6 L 710.6,41.5 L 724.5,41.8 L 732.6,45.4 L 749.5,39.4 L 767.9,40.9 L 781.9,35.6 L 790.9,43.5 L 811.6,41.1 L 831.3,42.8 L 841.3,39.6 L 853.7,47.7 L 872.8,49.1 L 893.4,44.6 L 904.9,44.0 L 923.8,50.8 L 937.5,47.5 L 947.7,49.2 L 967.8,46.4 L 987.1,41.4 L 995.5,38.1 L 1008.1,36.6 L 1027.3,30.9 L 1046.7,20.7 L 1065.7,15.2 L 1085.9,18.9 L 1097.0,17.5 L 1111.5,12.2 L 1130.6,11.9 L 1138.9,12.2 L 1151.5,19.5 L 1173.1,17.2 L 1190.1,21.1 L 1211.8,25.9 L 1232.9,25.2 L 1254.5,27.9 L 1276.0,29.7 L 1285.5,31.3 L 1303.7,29.9 L 1320.2,30.9 L 1333.6,30.8 L 1345.2,31.4 L 1353.2,33.0 L 1368.7,30.8 L 1387.1,30.5 L 1400.2,25.7 L 1417.5,29.6 L 1429.9,35.9 L 1440,32.6 L 1440,70 Z" class="torn-fill-light" />
+      </svg>
+    </div>
+
+  </section>
+
+
+  <!-- =================================================================== -->
+  <!-- SECTION 4: THE STUDIO / POLAROID SIDE PROJECTS                      -->
+  <!-- =================================================================== -->
+  <div class="page-container studio-wrapper">
+    <section class="studio-section" id="studio">
+      
+      <div class="studio-header">
+        <h2 class="section-title-huge studio-title">THE STUDIO</h2>
+        <div class="studio-subtitle">GLIMPSES FROM THE WORKSPACE & CREATIVE EXPERIMENTS</div>
+      </div>
+
+      <!-- Scattered Streetwear Polaroid Cards Container -->
+      <div class="polaroid-scatter-grid">
+
+        <!-- Polaroid 1 -->
+        <div class="polaroid-card polaroid-1" data-tilt="-4">
+          <div class="tape-strip tape-top"></div>
+          <div class="polaroid-photo-frame">
+            <div class="polaroid-image-mock photo-desk">
+              <div class="photo-inner-badge">ANIMATION RIG / 01</div>
+              <div class="mock-workspace-icon">🖥️ ✦ 🎨</div>
+            </div>
+          </div>
+          <div class="polaroid-caption">
+            <p class="handwritten-quote">"You can't compete with someone who is having fun."</p>
+            <span class="quote-author">— Taqi Studio Note</span>
+          </div>
+        </div>
+
+        <!-- Polaroid 2 (Center Focus) -->
+        <div class="polaroid-card polaroid-2" data-tilt="2.5">
+          <div class="tape-strip tape-corner"></div>
+          <div class="polaroid-photo-frame">
+            <div class="polaroid-image-mock photo-portrait">
+              <div class="photo-inner-badge">IKIAKI DIRECTIVE / 02</div>
+              <div class="mock-workspace-icon">💡 ✦ 🎞️</div>
+            </div>
+          </div>
+          <div class="polaroid-caption">
+            <p class="handwritten-quote">"He who is brave again, never quit, speak to sail."</p>
+            <span class="quote-author">— Creative Creed</span>
+          </div>
+        </div>
+
+        <!-- Polaroid 3 -->
+        <div class="polaroid-card polaroid-3" data-tilt="-3">
+          <div class="tape-strip tape-top-right"></div>
+          <div class="polaroid-photo-frame">
+            <div class="polaroid-image-mock photo-night">
+              <div class="photo-inner-badge">LATE NIGHT KEYFRAMES / 03</div>
+              <div class="mock-workspace-icon">⚡ ✦ 🎧</div>
+            </div>
+          </div>
+          <div class="polaroid-caption">
+            <p class="handwritten-quote">"I know of no better life purpose than to perish in attempting the great and the impossible."</p>
+            <span class="quote-author">— Studio Philosophy</span>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+  </div>
+
+
+  <!-- =================================================================== -->
+  <!-- SECTION 5: CONTACT & FOOTER                                         -->
+  <!-- =================================================================== -->
+  <footer class="footer-section" id="contact">
+    <div class="footer-container">
+      
+      <!-- Contact Details Grid -->
+      <div class="contact-grid">
+        
+        <!-- Left: Quick Contact & Status -->
+        <div class="contact-col contact-col-info">
+          <div class="contact-tag">GET IN TOUCH</div>
+          <h3 class="contact-headline">LET'S BUILD SOMETHING ICONIC.</h3>
+          <p class="contact-bio">
+            Have a project in mind, an animation series to direct, or an educational brand to elevate? Let's talk.
+          </p>
+
+          <div class="contact-direct-box">
+            <a href="mailto:mtaqi5771@gmail.com" class="email-link-main" id="copyEmailBtn" title="Click to copy email">
+              <span class="email-text">mtaqi5771@gmail.com</span>
+              <span class="copy-tooltip" id="copyTooltip">Copy</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Social Links & Meta Info -->
+        <div class="contact-col contact-col-meta">
+          
+          <div class="meta-group">
+            <span class="meta-label">CONNECT</span>
+            <div class="social-links-list">
+              <a href="https://www.behance.net/taqii" target="_blank" rel="noopener noreferrer" class="social-pill">
+                <span>Behance</span>
+                <span class="arrow-up-right">↗</span>
+              </a>
+              <a href="https://www.linkedin.com/in/taqi-haider-27625127b/" target="_blank" rel="noopener noreferrer" class="social-pill">
+                <span>LinkedIn</span>
+                <span class="arrow-up-right">↗</span>
+              </a>
+              <a href="mailto:mtaqi5771@gmail.com" class="social-pill">
+                <span>Email</span>
+                <span class="arrow-up-right">↗</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="meta-group-row">
+            <div class="meta-subgroup">
+              <span class="meta-label">LOCATION</span>
+              <span class="meta-value">Islamabad, Pakistan</span>
+            </div>
+
+            <div class="meta-subgroup">
+              <span class="meta-label">LANGUAGES</span>
+              <span class="meta-value">English (Professional)</span>
+              <span class="meta-value">Urdu (Professional)</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Copyright & Credits Bar -->
+      <div class="footer-bottom-bar">
+        <span class="credit-text">© 2026 TAQI HAIDER — CREATIVE DIRECTOR / ANIMATOR</span>
+        <span class="credit-badge">IKIAKI STUDIOS ✦ VISION BUILDING FUTURE</span>
+      </div>
+
+    </div>
+
+    <!-- Full-Width Seamless Bottom Marquee Bar -->
+    <div class="bottom-marquee-bar" aria-hidden="true">
+      <div class="marquee-track bottom-track">
+        <span class="marquee-chunk">LOGOS & MARKS ✦ LOGOS & MARKS ✦ LOGOS & MARKS ✦ </span>
+        <span class="marquee-chunk">LOGOS & MARKS ✦ LOGOS & MARKS ✦ LOGOS & MARKS ✦ </span>
+        <span class="marquee-chunk">LOGOS & MARKS ✦ LOGOS & MARKS ✦ LOGOS & MARKS ✦ </span>
+        <span class="marquee-chunk">LOGOS & MARKS ✦ LOGOS & MARKS ✦ LOGOS & MARKS ✦ </span>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+</body>
+</html>
