@@ -1715,7 +1715,7 @@ body.streetwear-theme {
   justify-content: space-between;
   align-items: center;
   padding: 1.2rem 0;
-  border-bottom: 2px solid #191b1b;
+  border-bottom: 1.5px solid rgba(0, 0, 0, 0.14);
   margin-bottom: 3.5rem;
 }
 
@@ -1730,18 +1730,19 @@ body.streetwear-theme {
   color: #191b1b;
   text-decoration: none;
   padding: 0.55rem 1.15rem;
-  border: 2px solid #191b1b;
-  background: #ffffff;
+  border: 1.5px solid rgba(0, 0, 0, 0.18);
+  background: rgba(255, 255, 255, 0.85);
   border-radius: 4px;
-  box-shadow: 3.5px 3.5px 0 #191b1b;
-  transition: all 0.22s var(--ease-smooth);
+  box-shadow: none;
+  transition: all 0.25s var(--ease-smooth);
 }
 
 .back-link:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 #191b1b;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   background: #191b1b;
   color: #ffffff;
+  border-color: #191b1b;
 }
 
 .back-arrow {
@@ -1758,11 +1759,11 @@ body.streetwear-theme {
   font-weight: 700;
   font-size: 0.82rem;
   letter-spacing: 0.12em;
-  color: #666666;
-  background: #eceae3;
+  color: #777777;
+  background: rgba(255, 255, 255, 0.6);
   padding: 0.4rem 0.9rem;
   border-radius: 3px;
-  border: 1.5px solid #d8d5cb;
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
 }
 
 /* Project Header Section */
@@ -1804,7 +1805,7 @@ body.streetwear-theme {
 }
 
 /* ==========================================================================
-   PROJECTS SHOWCASE GRID (Clean 3-column rows matching homepage card size)
+   PROJECTS SHOWCASE GRID (Matching original page aesthetic)
    ========================================================================== */
 
 .project-showcase-grid {
@@ -1818,18 +1819,20 @@ body.streetwear-theme {
 .project-grid-card {
   display: flex;
   flex-direction: column;
-  background: #ffffff;
-  border: 2px solid #191b1b;
-  border-radius: 6px;
-  box-shadow: 5px 5px 0 #191b1b;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1.5px solid rgba(0, 0, 0, 0.14);
+  border-radius: 8px;
+  box-shadow: none;
   overflow: hidden;
-  transition: transform 0.28s var(--ease-smooth), box-shadow 0.28s var(--ease-smooth);
+  transition: all 0.3s var(--ease-smooth);
   position: relative;
 }
 
 .project-grid-card:hover {
-  transform: translate(-3px, -3px);
-  box-shadow: 9px 9px 0 #191b1b;
+  background: #ffffff;
+  transform: translateY(-3px);
+  border-color: rgba(0, 0, 0, 0.38);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
 }
 
 /* Square Thumbnail Container */
@@ -1846,7 +1849,7 @@ body.streetwear-theme {
   aspect-ratio: 1 / 1;
   overflow: hidden;
   background: #ebe9e1;
-  border-bottom: 2px solid #191b1b;
+  border-bottom: 1.5px solid rgba(0, 0, 0, 0.12);
 }
 
 .project-card-img {
@@ -1903,9 +1906,9 @@ body.streetwear-theme {
   font-size: 0.78rem;
   letter-spacing: 0.08em;
   padding: 0.6rem 1.2rem;
-  border: 2px solid #191b1b;
+  border: 1.5px solid rgba(0, 0, 0, 0.2);
   border-radius: 4px;
-  box-shadow: 3.5px 3.5px 0 #191b1b;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
   transform: translateY(10px);
   transition: transform 0.28s var(--ease-smooth), background-color 0.2s ease, color 0.2s ease;
 }
@@ -1917,6 +1920,7 @@ body.streetwear-theme {
 .overlay-action-btn:hover {
   background: #191b1b;
   color: #ffffff;
+  border-color: #191b1b;
 }
 
 /* Card Body Content */
@@ -1926,7 +1930,7 @@ body.streetwear-theme {
   flex-direction: column;
   flex-grow: 1;
   gap: 0.6rem;
-  background: #ffffff;
+  background: transparent;
 }
 
 .project-card-meta-top {
@@ -1940,11 +1944,12 @@ body.streetwear-theme {
 }
 
 .project-card-category {
+  font-family: var(--font-heading);
   color: var(--accent-red);
-}
-
-.project-card-year {
-  color: #888888;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .project-card-title {
@@ -1986,9 +1991,9 @@ body.streetwear-theme {
   font-family: 'Space Grotesk', monospace;
   font-size: 0.68rem;
   font-weight: 600;
-  color: #444444;
-  background: #f4f3ee;
-  border: 1px solid #dcd9cf;
+  color: #555555;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   padding: 0.18rem 0.5rem;
   border-radius: 2px;
   text-transform: uppercase;
@@ -1997,7 +2002,7 @@ body.streetwear-theme {
 .project-card-footer {
   margin-top: auto;
   padding-top: 0.85rem;
-  border-top: 1.5px dashed #e6e4dc;
+  border-top: 1px dashed rgba(0, 0, 0, 0.12);
   display: flex;
   justify-content: flex-end;
 }
@@ -2013,16 +2018,19 @@ body.streetwear-theme {
   color: #191b1b;
   text-decoration: none;
   padding: 0.42rem 0.9rem;
-  border: 1.5px solid #191b1b;
+  border: 1.5px solid rgba(0, 0, 0, 0.15);
   border-radius: 3px;
-  background: #f4f3ee;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: none;
   transition: all 0.2s ease;
 }
 
 .card-behance-btn:hover {
   background: #191b1b;
   color: #ffffff;
-  transform: translate(-1px, -1px);
+  border-color: #191b1b;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .arrow-up-right {
@@ -2041,7 +2049,7 @@ body.streetwear-theme {
   justify-content: space-between;
   align-items: center;
   padding: 2.2rem 0;
-  border-top: 2px solid #191b1b;
+  border-top: 1.5px solid rgba(0, 0, 0, 0.14);
   margin-top: 3.5rem;
   margin-bottom: 2rem;
 }
@@ -2052,18 +2060,19 @@ body.streetwear-theme {
   text-decoration: none;
   color: #191b1b;
   padding: 0.75rem 1.4rem;
-  border: 2px solid #191b1b;
+  border: 1.5px solid rgba(0, 0, 0, 0.14);
   border-radius: 4px;
-  background: #ffffff;
-  box-shadow: 4px 4px 0 #191b1b;
-  transition: all 0.2s var(--ease-smooth);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: none;
+  transition: all 0.25s var(--ease-smooth);
 }
 
 .pagi-btn:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 #191b1b;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
   background: #191b1b;
   color: #ffffff;
+  border-color: #191b1b;
 }
 
 .pagi-dir {
@@ -2114,4 +2123,5 @@ body.streetwear-theme {
     margin-bottom: 2.2rem;
   }
 }
+
 
