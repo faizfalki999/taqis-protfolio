@@ -413,18 +413,18 @@ body.streetwear-theme {
   margin-top: 0.2rem;
 }
 
-/* Column 3: Right Column (Skills & Experience) */
+/* Column 3: Right Column (Tools, Skills & Experience) */
 .about-col-right {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 2rem;
 }
 
 .software-badges-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
-  margin-bottom: 1.2rem;
+  margin-bottom: 0;
 }
 
 .soft-badge {
