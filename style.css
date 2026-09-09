@@ -1804,13 +1804,13 @@ body.streetwear-theme {
 }
 
 /* ==========================================================================
-   PROJECTS SHOWCASE GRID (Clean rows of square cards)
+   PROJECTS SHOWCASE GRID (Clean 3-column rows matching homepage card size)
    ========================================================================== */
 
 .project-showcase-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2.5rem 2.2rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.8rem;
   margin-bottom: 5rem;
   width: 100%;
 }
@@ -1819,9 +1819,9 @@ body.streetwear-theme {
   display: flex;
   flex-direction: column;
   background: #ffffff;
-  border: 2.5px solid #191b1b;
+  border: 2px solid #191b1b;
   border-radius: 6px;
-  box-shadow: 6px 6px 0 #191b1b;
+  box-shadow: 5px 5px 0 #191b1b;
   overflow: hidden;
   transition: transform 0.28s var(--ease-smooth), box-shadow 0.28s var(--ease-smooth);
   position: relative;
@@ -1829,7 +1829,7 @@ body.streetwear-theme {
 
 .project-grid-card:hover {
   transform: translate(-3px, -3px);
-  box-shadow: 10px 10px 0 #191b1b;
+  box-shadow: 9px 9px 0 #191b1b;
 }
 
 /* Square Thumbnail Container */
@@ -1846,7 +1846,7 @@ body.streetwear-theme {
   aspect-ratio: 1 / 1;
   overflow: hidden;
   background: #ebe9e1;
-  border-bottom: 2.5px solid #191b1b;
+  border-bottom: 2px solid #191b1b;
 }
 
 .project-card-img {
@@ -1864,16 +1864,16 @@ body.streetwear-theme {
 
 .project-card-badge {
   position: absolute;
-  top: 1rem;
-  left: 1rem;
+  top: 0.85rem;
+  left: 0.85rem;
   z-index: 2;
   background: rgba(25, 27, 27, 0.92);
   color: #ffffff;
   font-family: 'Space Grotesk', monospace;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.1em;
-  padding: 0.32rem 0.75rem;
+  padding: 0.28rem 0.65rem;
   border-radius: 3px;
   backdrop-filter: blur(4px);
   border: 1px solid rgba(255, 255, 255, 0.22);
@@ -1900,13 +1900,13 @@ body.streetwear-theme {
   color: #191b1b;
   font-family: 'Space Grotesk', var(--font-heading);
   font-weight: 800;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   letter-spacing: 0.08em;
-  padding: 0.7rem 1.4rem;
+  padding: 0.6rem 1.2rem;
   border: 2px solid #191b1b;
   border-radius: 4px;
-  box-shadow: 4px 4px 0 #191b1b;
-  transform: translateY(12px);
+  box-shadow: 3.5px 3.5px 0 #191b1b;
+  transform: translateY(10px);
   transition: transform 0.28s var(--ease-smooth), background-color 0.2s ease, color 0.2s ease;
 }
 
@@ -1921,11 +1921,11 @@ body.streetwear-theme {
 
 /* Card Body Content */
 .project-card-body {
-  padding: 1.6rem 1.6rem 1.4rem 1.6rem;
+  padding: 1.35rem 1.35rem 1.2rem 1.35rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  gap: 0.7rem;
+  gap: 0.6rem;
   background: #ffffff;
 }
 
@@ -1934,7 +1934,7 @@ body.streetwear-theme {
   justify-content: space-between;
   align-items: center;
   font-family: 'Space Grotesk', monospace;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
 }
@@ -1950,8 +1950,8 @@ body.streetwear-theme {
 .project-card-title {
   font-family: 'BB Torsos Pro', 'Archivo', sans-serif;
   font-weight: 900;
-  font-size: 1.4rem;
-  line-height: 1.1;
+  font-size: 1.22rem;
+  line-height: 1.15;
   letter-spacing: -0.01em;
   text-transform: uppercase;
   margin: 0;
@@ -1968,9 +1968,9 @@ body.streetwear-theme {
 }
 
 .project-card-subtitle {
-  font-size: 0.92rem;
+  font-size: 0.86rem;
   color: #555555;
-  line-height: 1.46;
+  line-height: 1.44;
   font-weight: 500;
   margin: 0;
 }
@@ -1978,25 +1978,25 @@ body.streetwear-theme {
 .project-card-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 0.35rem;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
 }
 
 .card-tag {
   font-family: 'Space Grotesk', monospace;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 600;
   color: #444444;
   background: #f4f3ee;
   border: 1px solid #dcd9cf;
-  padding: 0.22rem 0.6rem;
+  padding: 0.18rem 0.5rem;
   border-radius: 2px;
   text-transform: uppercase;
 }
 
 .project-card-footer {
   margin-top: auto;
-  padding-top: 1rem;
+  padding-top: 0.85rem;
   border-top: 1.5px dashed #e6e4dc;
   display: flex;
   justify-content: flex-end;
@@ -2005,14 +2005,14 @@ body.streetwear-theme {
 .card-behance-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.4rem;
   font-family: 'Space Grotesk', var(--font-heading);
   font-weight: 700;
-  font-size: 0.84rem;
+  font-size: 0.78rem;
   letter-spacing: 0.04em;
   color: #191b1b;
   text-decoration: none;
-  padding: 0.48rem 1.05rem;
+  padding: 0.42rem 0.9rem;
   border: 1.5px solid #191b1b;
   border-radius: 3px;
   background: #f4f3ee;
@@ -2026,7 +2026,7 @@ body.streetwear-theme {
 }
 
 .arrow-up-right {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   display: inline-block;
   transition: transform 0.2s ease;
 }
@@ -2093,17 +2093,25 @@ body.streetwear-theme {
 }
 
 /* Responsive Grid Rules */
-@media (max-width: 900px) {
+@media (max-width: 1080px) {
+  .project-showcase-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.6rem;
+  }
+}
+
+@media (max-width: 680px) {
   .project-showcase-grid {
     grid-template-columns: 1fr;
-    gap: 2.2rem;
+    gap: 2rem;
   }
   
   .project-nav-bar {
-    margin-bottom: 2.5rem;
+    margin-bottom: 2.2rem;
   }
   
   .project-header-section {
-    margin-bottom: 2.5rem;
+    margin-bottom: 2.2rem;
   }
 }
+
