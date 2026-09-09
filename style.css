@@ -330,10 +330,11 @@ body.streetwear-theme {
 }
 
 /* Column 1: Left Column (Hello / Bio / Education) */
-.about-col-left {
+.about-heading-block {
   display: flex;
   flex-direction: column;
-  gap: 1.8rem;
+  align-items: flex-start;
+  text-align: left;
 }
 
 .section-title-huge {
@@ -341,10 +342,12 @@ body.streetwear-theme {
   font-size: clamp(3rem, 5vw, 4.5rem);
   font-weight: 900;
   line-height: 0.95;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   text-transform: uppercase;
   color: var(--text-main);
   margin-bottom: 0.5rem;
+  margin-left: -0.035em;
+  text-align: left;
 }
 
 .about-greeting {
@@ -352,6 +355,7 @@ body.streetwear-theme {
   font-size: 1.15rem;
   font-weight: 700;
   color: var(--text-main);
+  text-align: left;
 }
 
 .highlight-text {
@@ -1137,28 +1141,34 @@ body.streetwear-theme {
 @media (max-width: 768px) {
   .page-container {
     padding: 0 1rem;
+    overflow-x: hidden;
   }
 
   .hero-section {
-    padding: 2.5rem 0 1.5rem 0;
+    padding: 2.2rem 0 1.2rem 0;
+    width: 100%;
+    overflow: hidden;
   }
 
   .hero-title-container {
-    margin: 1.2rem 0 3.2rem 0;
+    margin: 1rem 0 3rem 0;
+    width: 100%;
+    max-width: 100%;
   }
 
   .hero-title {
-    font-size: clamp(2.6rem, 13.5vw, 6.2rem);
+    font-size: clamp(2rem, 11vw, 5.2rem);
+    max-width: 100%;
   }
 
   .hero-tagline {
-    font-size: clamp(0.92rem, 2.6vw, 1.35rem);
-    bottom: calc(100% + 0.32em);
+    font-size: clamp(0.78rem, 2.3vw, 1.25rem);
+    bottom: calc(100% + 0.3em);
   }
 
   .hero-character-label {
     top: 98%;
-    width: clamp(130px, 28vw, 210px);
+    width: clamp(120px, 25vw, 190px);
   }
 
   .decorative-separator {
@@ -1211,37 +1221,43 @@ body.streetwear-theme {
 
 @media (max-width: 480px) {
   .page-container {
-    padding: 0 0.65rem;
+    padding: 0 0.6rem;
+    overflow-x: hidden;
   }
 
   .hero-section {
-    padding: 2.2rem 0 1.2rem 0;
+    padding: 1.8rem 0 0.8rem 0;
+    width: 100%;
+    overflow: hidden;
   }
 
   .hero-title-container {
-    margin: 1rem 0 3.5rem 0;
+    margin: 0.8rem 0 3rem 0;
+    width: 100%;
+    max-width: 100%;
   }
 
   .hero-title {
-    font-size: clamp(2.4rem, 14.2vw, 4.2rem);
+    font-size: clamp(1.75rem, 10.4vw, 3.4rem);
+    max-width: 100%;
   }
 
   .hero-tagline {
-    font-size: clamp(0.85rem, 3.6vw, 1.15rem);
+    font-size: clamp(0.72rem, 2.5vw, 0.95rem);
     bottom: calc(100% + 0.3em);
   }
 
   .hero-character-label {
     top: 98%;
-    width: clamp(125px, 34vw, 170px);
+    width: clamp(110px, 30vw, 150px);
   }
 
   .decorative-separator {
-    gap: 1.6rem;
-    margin: 2.8rem 0 1rem 0;
+    gap: 1.4rem;
+    margin: 2.4rem 0 1rem 0;
   }
 
-  .symbol-star { font-size: 2.1rem; }
-  .symbol-diamond { font-size: 1.65rem; }
-  .symbol-club { font-size: 1.95rem; }
+  .symbol-star { font-size: 1.85rem; }
+  .symbol-diamond { font-size: 1.45rem; }
+  .symbol-club { font-size: 1.7rem; }
 }
