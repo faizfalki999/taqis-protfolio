@@ -252,5 +252,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // =========================================================================
+  // 7. VIDEO CARD HOVER PREVIEWS
+  // =========================================================================
+  const videoCards = document.querySelectorAll('.project-grid-card');
+  videoCards.forEach(card => {
+    const video = card.querySelector('video.project-card-video');
+    if (video) {
+      let playPromise = null;
+      card.addEventListener('mouseenter', () => {
+        playPromise = video.play();
+      });
+      card.addEventListener('mouseleave', () => {
+        if (playPromise !== null) {
+          playPromise.then(() => {
+            video.pause();
+            video.currentTime = 0;
+          }).catch(() => {});
+        } else {
+          video.pause();
+          video.currentTime = 0;
+        }
+      });
+    }
+  });
+
 });
 
