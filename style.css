@@ -176,8 +176,8 @@ body.streetwear-theme {
 }
 
 .title-wing {
-  flex: 1 1 0;
-  display: flex;
+  flex: 0 0 auto;
+  display: inline-flex;
   align-items: flex-end;
   position: relative;
 }
@@ -1151,14 +1151,22 @@ body.streetwear-theme {
   }
 
   .hero-title-container {
-    margin: 1rem 0 3rem 0;
+    margin: 1rem auto 3rem auto;
     width: 100%;
-    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
 
   .hero-title {
-    font-size: clamp(2rem, 11vw, 5.2rem);
+    font-size: clamp(2.1rem, 11.8vw, 5.2rem);
+    display: inline-flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: auto;
     max-width: 100%;
+    margin: 0 auto;
   }
 
   .hero-tagline {
@@ -1232,18 +1240,26 @@ body.streetwear-theme {
   }
 
   .hero-title-container {
-    margin: 0.8rem 0 3rem 0;
+    margin: 0.8rem auto 3rem auto;
     width: 100%;
-    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
 
   .hero-title {
-    font-size: clamp(1.75rem, 10.4vw, 3.4rem);
+    font-size: clamp(1.85rem, 11.5vw, 3.4rem);
+    display: inline-flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: auto;
     max-width: 100%;
+    margin: 0 auto;
   }
 
   .hero-tagline {
-    font-size: clamp(0.72rem, 2.5vw, 0.95rem);
+    font-size: clamp(0.72rem, 2.7vw, 0.95rem);
     bottom: calc(100% + 0.3em);
   }
 
