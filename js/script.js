@@ -164,4 +164,93 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+
+  // =========================================================================
+  // 6. PORTFOLIO VIDEO MODAL LIGHTBOX CONTROLLER
+  // =========================================================================
+  let videoModal = document.getElementById('portfolioVideoModal');
+  
+  // Create modal element if not present in DOM
+  if (!videoModal && document.querySelector('.project-video-trigger')) {
+    videoModal = document.createElement('div');
+    videoModal.id = 'portfolioVideoModal';
+    videoModal.className = 'video-modal-backdrop';
+    videoModal.innerHTML = `
+      <div class="video-modal-container" role="dialog" aria-modal="true">
+        <div class="video-modal-header">
+          <div class="video-modal-title-wrap">
+            <span class="video-modal-category" id="videoModalCategory">PROJECT VIDEO</span>
+            <h3 class="video-modal-title" id="videoModalTitle">Video Title</h3>
+          </div>
+          <button class="video-modal-close-btn" id="videoModalCloseBtn" aria-label="Close Video">×</button>
+        </div>
+        <div class="video-modal-video-wrap">
+          <video id="videoModalPlayer" controls playsinline preload="metadata">
+            <source src="" type="video/mp4">
+            Your browser does not support HTML5 video.
+          </video>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(videoModal);
+  }
+
+  if (videoModal) {
+    const player = document.getElementById('videoModalPlayer');
+    const titleEl = document.getElementById('videoModalTitle');
+    const catEl = document.getElementById('videoModalCategory');
+    const closeBtn = document.getElementById('videoModalCloseBtn');
+
+    function openVideoModal(videoSrc, title, category) {
+      if (!player) return;
+      if (titleEl) titleEl.textContent = title || 'PROJECT PREVIEW';
+      if (catEl) catEl.textContent = category || 'VIDEO';
+
+      player.src = videoSrc;
+      videoModal.classList.add('is-active');
+      document.body.style.overflow = 'hidden';
+
+      player.play().catch(() => {});
+    }
+
+    function closeVideoModal() {
+      if (!player) return;
+      videoModal.classList.remove('is-active');
+      player.pause();
+      player.currentTime = 0;
+      player.src = '';
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('.project-video-trigger');
+      if (trigger) {
+        e.preventDefault();
+        const videoSrc = trigger.getAttribute('data-video-src');
+        const title = trigger.getAttribute('data-title');
+        const cat = trigger.getAttribute('data-category');
+        if (videoSrc) {
+          openVideoModal(videoSrc, title, cat);
+        }
+      }
+    });
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeVideoModal);
+    }
+
+    videoModal.addEventListener('click', (e) => {
+      if (e.target === videoModal) {
+        closeVideoModal();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && videoModal.classList.contains('is-active')) {
+        closeVideoModal();
+      }
+    });
+  }
+
 });
+
