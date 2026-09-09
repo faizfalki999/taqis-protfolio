@@ -1073,6 +1073,148 @@ body.streetwear-theme {
   font-weight: 800;
 }
 
+/* ==========================================================================
+   PROJECT SHOWCASE FEED (MODULAR CASE STUDIES)
+   ========================================================================== */
+.project-showcase-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+  margin-bottom: 4.5rem;
+}
+
+.project-feed-item {
+  background: #ffffff;
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+  transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
+}
+
+.project-feed-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
+}
+
+.project-feed-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.8rem 2.2rem 1.4rem 2.2rem;
+  border-bottom: 1.5px solid rgba(0, 0, 0, 0.06);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.project-feed-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.project-feed-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.8vw, 2.2rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--text-main);
+  line-height: 1.1;
+}
+
+.project-feed-subtitle {
+  font-family: var(--font-heading);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.project-feed-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--text-main);
+  color: #ffffff;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  letter-spacing: 0.06em;
+}
+
+.project-feed-visual {
+  width: 100%;
+  background: #f8f8f8;
+  position: relative;
+  overflow: hidden;
+  display: block;
+}
+
+.project-feed-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.4s var(--ease-smooth);
+}
+
+.project-feed-item:hover .project-feed-img {
+  transform: scale(1.015);
+}
+
+.project-feed-meta {
+  padding: 1.6rem 2.2rem 2rem 2.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  background: #ffffff;
+  border-top: 1.5px solid rgba(0, 0, 0, 0.06);
+}
+
+.project-feed-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.project-feed-tag {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: #f4f3ee;
+  color: var(--text-main);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 0.3rem 0.75rem;
+  border-radius: 4px;
+  letter-spacing: 0.03em;
+}
+
+.behance-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #0057ff;
+  color: #ffffff;
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 0.65rem 1.4rem;
+  border-radius: 30px;
+  letter-spacing: 0.04em;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0, 87, 255, 0.25);
+}
+
+.behance-btn:hover {
+  background: #0044cc;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 87, 255, 0.35);
+}
+
 /* Project Pagination Bar */
 .project-pagination-bar {
   display: flex;
