@@ -1136,25 +1136,39 @@ body.streetwear-theme {
 
 @media (max-width: 768px) {
   .page-container {
-    padding: 0 1.2rem;
+    padding: 0 1rem;
   }
 
   .hero-section {
-    padding: 2.2rem 0 1.2rem 0;
+    padding: 2.5rem 0 1.5rem 0;
   }
 
   .hero-title-container {
-    margin: 0.8rem 0 3rem 0;
+    margin: 1.2rem 0 3.2rem 0;
   }
 
   .hero-title {
-    font-size: clamp(2rem, 11.5vw, 5.5rem);
+    font-size: clamp(2.6rem, 13.5vw, 6.2rem);
+  }
+
+  .hero-tagline {
+    font-size: clamp(0.92rem, 2.6vw, 1.35rem);
+    bottom: calc(100% + 0.32em);
   }
 
   .hero-character-label {
-    top: 100%;
-    width: clamp(120px, 24vw, 180px);
+    top: 98%;
+    width: clamp(130px, 28vw, 210px);
   }
+
+  .decorative-separator {
+    gap: clamp(1.5rem, 4.5vw, 2.2rem);
+    margin: clamp(2.5rem, 5vw, 3.5rem) 0 1.2rem 0;
+  }
+
+  .symbol-star { font-size: clamp(2rem, 5vw, 2.4rem); }
+  .symbol-diamond { font-size: clamp(1.6rem, 4vw, 1.95rem); }
+  .symbol-club { font-size: clamp(1.9rem, 4.8vw, 2.25rem); }
 
   .about-grid {
     grid-template-columns: 1fr;
@@ -1197,23 +1211,37 @@ body.streetwear-theme {
 
 @media (max-width: 480px) {
   .page-container {
-    padding: 0 0.85rem;
+    padding: 0 0.65rem;
   }
 
   .hero-section {
-    padding: 1.6rem 0 0.8rem 0;
+    padding: 2.2rem 0 1.2rem 0;
   }
 
   .hero-title-container {
-    margin: 0.6rem 0 2.8rem 0;
+    margin: 1rem 0 3.5rem 0;
   }
 
   .hero-title {
-    font-size: clamp(1.85rem, 11vw, 3.4rem);
+    font-size: clamp(2.4rem, 14.2vw, 4.2rem);
+  }
+
+  .hero-tagline {
+    font-size: clamp(0.85rem, 3.6vw, 1.15rem);
+    bottom: calc(100% + 0.3em);
   }
 
   .hero-character-label {
-    top: 100%;
-    width: clamp(95px, 26vw, 140px);
+    top: 98%;
+    width: clamp(125px, 34vw, 170px);
   }
+
+  .decorative-separator {
+    gap: 1.6rem;
+    margin: 2.8rem 0 1rem 0;
+  }
+
+  .symbol-star { font-size: 2.1rem; }
+  .symbol-diamond { font-size: 1.65rem; }
+  .symbol-club { font-size: 1.95rem; }
 }
