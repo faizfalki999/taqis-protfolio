@@ -4,8 +4,8 @@
 
 @font-face {
   font-family: 'BB Torsos Pro';
-  src: url('fonts/bb-torsos-pro/bbtorsospro-ultra.otf') format('opentype'),
-       url('fonts/bb-torsos-pro/bbtorsospro-ultra.ttf') format('truetype');
+  src: url('../assets/fonts/bb-torsos-pro/bbtorsospro-ultra.otf') format('opentype'),
+       url('../assets/fonts/bb-torsos-pro/bbtorsospro-ultra.ttf') format('truetype');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -13,8 +13,8 @@
 
 @font-face {
   font-family: 'BB Torsos Pro';
-  src: url('fonts/bb-torsos-pro/bbtorsospro-semiultra.otf') format('opentype'),
-       url('fonts/bb-torsos-pro/bbtorsospro-semiultra.ttf') format('truetype');
+  src: url('../assets/fonts/bb-torsos-pro/bbtorsospro-semiultra.otf') format('opentype'),
+       url('../assets/fonts/bb-torsos-pro/bbtorsospro-semiultra.ttf') format('truetype');
   font-weight: 800;
   font-style: normal;
   font-display: swap;
@@ -22,8 +22,8 @@
 
 @font-face {
   font-family: 'BB Torsos Pro';
-  src: url('fonts/bb-torsos-pro/bbtorsospro-bold.otf') format('opentype'),
-       url('fonts/bb-torsos-pro/bbtorsospro-bold.ttf') format('truetype');
+  src: url('../assets/fonts/bb-torsos-pro/bbtorsospro-bold.otf') format('opentype'),
+       url('../assets/fonts/bb-torsos-pro/bbtorsospro-bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -31,8 +31,8 @@
 
 @font-face {
   font-family: 'BB Torsos Pro';
-  src: url('fonts/bb-torsos-pro/bbtorsospro-regular.otf') format('opentype'),
-       url('fonts/bb-torsos-pro/bbtorsospro-regular.ttf') format('truetype');
+  src: url('../assets/fonts/bb-torsos-pro/bbtorsospro-regular.otf') format('opentype'),
+       url('../assets/fonts/bb-torsos-pro/bbtorsospro-regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -118,7 +118,7 @@ body.streetwear-theme {
   z-index: 9999;
   opacity: 0.35;
   mix-blend-mode: multiply;
-  background-image: url("paper_texture.png");
+  background-image: url("../assets/images/paper_texture.png");
   background-repeat: repeat;
   background-size: 380px 380px;
 }
