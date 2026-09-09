@@ -227,7 +227,8 @@ body.streetwear-theme {
   flex-shrink: 0;
   vertical-align: bottom;
   align-self: flex-end;
-  margin-bottom: -0.03em;
+  margin-bottom: -0.14em;
+  top: 0.06em;
 }
 
 .character-wrapper {
