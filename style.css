@@ -1197,7 +1197,7 @@ body.streetwear-theme {
   display: inline-block;
 }
 
-.email-link-main {
+.download-cv-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.8rem;
@@ -1205,29 +1205,36 @@ body.streetwear-theme {
   border: 1.5px solid rgba(255, 255, 255, 0.2);
   color: #fff;
   text-decoration: none;
-  padding: 0.8rem 1.4rem;
+  padding: 0.85rem 1.6rem;
   border-radius: 40px;
   font-family: var(--font-heading);
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   font-weight: 800;
+  letter-spacing: 0.04em;
   transition: all 0.25s ease;
   position: relative;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-.email-link-main:hover {
+.download-cv-btn:hover {
   background: var(--accent-red);
   border-color: var(--accent-red);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px var(--accent-red-glow);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px var(--accent-red-glow);
 }
 
-.copy-tooltip {
-  font-size: 0.75rem;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 0.2rem 0.5rem;
-  border-radius: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+.cv-btn-icon {
+  font-size: 1.1rem;
+}
+
+.cv-btn-arrow {
+  font-size: 1.1rem;
+  font-weight: 900;
+  transition: transform 0.25s ease;
+}
+
+.download-cv-btn:hover .cv-btn-arrow {
+  transform: translateY(3px);
 }
 
 /* Meta & Social Column */
