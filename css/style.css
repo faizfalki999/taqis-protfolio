@@ -133,11 +133,132 @@ body.streetwear-theme {
 }
 
 /* ==========================================================================
+   TOP SITE NAVIGATION & HEADER LOGO
+   ========================================================================== */
+
+.site-nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.6rem 0 1.2rem 0;
+  width: 100%;
+  border-bottom: 1.5px solid rgba(0, 0, 0, 0.08);
+  position: relative;
+  z-index: 20;
+}
+
+.header-logo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease;
+}
+
+.header-logo-link:hover {
+  transform: translateY(-1px);
+}
+
+.header-avatar-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffffff; /* Crisp white background */
+  border: 1.5px solid rgba(0, 0, 0, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+  transition: transform 0.25s var(--ease-spring), border-color 0.2s ease, box-shadow 0.2s ease;
+  flex-shrink: 0;
+}
+
+.header-logo-link:hover .header-avatar-logo {
+  transform: scale(1.08) rotate(-3deg);
+  border-color: var(--accent-red);
+  box-shadow: 0 6px 16px rgba(230, 57, 70, 0.22);
+}
+
+.header-avatar-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: #ffffff;
+}
+
+.header-brand-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.header-brand-name {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--text-main);
+}
+
+.header-brand-sub {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.header-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+}
+
+.header-nav-link {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-main);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.header-nav-link:hover {
+  color: var(--accent-red);
+}
+
+.header-nav-cta {
+  background: #191b1b;
+  color: #ffffff !important;
+  padding: 0.45rem 1rem;
+  border-radius: 4px;
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.header-nav-cta:hover {
+  background: var(--accent-red);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(230, 57, 70, 0.28);
+}
+
+.project-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+}
+
+/* ==========================================================================
    SECTION 1: HERO SECTION
    ========================================================================== */
 
 .hero-section {
-  padding: 3.5rem 0 2rem 0;
+  padding: 2.2rem 0 2rem 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -654,33 +775,38 @@ body.streetwear-theme {
 }
 
 .toast-avatar {
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background: #252525;
-  border: 2px solid var(--accent-red);
+  background: #ffffff; /* Crisp white background */
+  border: 2px solid rgba(255, 255, 255, 0.65);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
 }
 
-.avatar-initial {
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  color: #fff;
+.toast-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #ffffff;
+  display: block;
 }
 
 .avatar-status-dot {
   position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 10px;
-  height: 10px;
+  bottom: -1px;
+  right: -1px;
+  width: 11px;
+  height: 11px;
   background: #00e676;
-  border: 2px solid #000;
+  border: 2px solid #141414;
   border-radius: 50%;
+  z-index: 2;
 }
 
 .toast-content {
@@ -2289,6 +2415,29 @@ body.streetwear-theme {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+@media (max-width: 768px) {
+  .site-nav-bar {
+    padding: 1.2rem 0 0.8rem 0;
+  }
+  .header-brand-sub,
+  .header-nav-link:not(.header-nav-cta) {
+    display: none;
+  }
+  .header-avatar-logo {
+    width: 38px;
+    height: 38px;
+  }
+  .header-brand-name {
+    font-size: 0.88rem;
+  }
+}
 
-
-
+@media (max-width: 600px) {
+  .project-nav-right .project-nav-tag {
+    display: none;
+  }
+  .project-nav-bar {
+    padding: 1.5rem 0 1.2rem 0;
+    margin-bottom: 1.8rem;
+  }
+}
