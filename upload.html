@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#060305">
+  <title>Project Upload Portal | Taqi Haider Admin</title>
+  <meta name="description" content="Administrative project and asset upload console for Taqi Haider's portfolio.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Archivo:wdth,wght@62.5..125,400..900&family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=Syne:wght@700;800&family=Unbounded:wght@700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/images/taqi_avatar_circle.png">
+  <link rel="shortcut icon" href="assets/images/taqi_avatar_circle.png">
+  <link rel="apple-touch-icon" href="assets/images/taqi_avatar_circle.png">
+
+  <!-- Base Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+
+  <!-- Additional Upload Form Styles (Dark Maroon / Black Streetwear Aesthetic) -->
+  <style>
+    .upload-main-wrap {
+      width: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+      position: relative;
+      z-index: 20;
+    }
+
+    .upload-card {
+      background: var(--adm-card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--adm-card-border);
+      border-radius: 12px;
+      padding: 2.5rem;
+      box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(120, 16, 34, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .upload-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--adm-maroon-mid), var(--adm-crimson-bright), var(--adm-maroon-mid), transparent);
+    }
+
+    .upload-grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .upload-select {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      background-color: var(--adm-input-bg);
+      border: 1.5px solid var(--adm-input-border);
+      border-radius: 6px;
+      color: var(--adm-text-primary);
+      font-family: var(--font-adm-body);
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+      cursor: pointer;
+    }
+
+    .upload-select option {
+      background: #120a0d;
+      color: #ffffff;
+    }
+
+    .upload-select:focus {
+      border-color: var(--adm-crimson-bright);
+      box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.18);
+    }
+
+    .upload-textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 0.85rem 1rem;
+      background-color: var(--adm-input-bg);
+      border: 1.5px solid var(--adm-input-border);
+      border-radius: 6px;
+      color: var(--adm-text-primary);
+      font-family: var(--font-adm-body);
+      font-size: 0.92rem;
+      outline: none;
+      resize: vertical;
+      transition: border-color 0.2s ease;
+    }
+
+    .upload-textarea:focus {
+      border-color: var(--adm-crimson-bright);
+      box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.18);
+    }
+
+    /* Media Dropzone */
+    .upload-dropzone {
+      border: 2px dashed rgba(229, 9, 20, 0.35);
+      border-radius: 8px;
+      padding: 2.2rem 1.5rem;
+      text-align: center;
+      background: rgba(44, 7, 16, 0.25);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .upload-dropzone:hover,
+    .upload-dropzone.dragover {
+      border-color: var(--adm-crimson-bright);
+      background: rgba(72, 11, 24, 0.4);
+      box-shadow: 0 0 24px rgba(229, 9, 20, 0.25);
+    }
+
+    .dropzone-icon {
+      width: 44px;
+      height: 44px;
+      color: var(--adm-crimson-bright);
+      margin-bottom: 0.8rem;
+      transition: transform 0.2s ease;
+    }
+
+    .upload-dropzone:hover .dropzone-icon {
+      transform: translateY(-3px) scale(1.05);
+    }
+
+    .dropzone-title {
+      font-family: var(--font-adm-heading);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--adm-text-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .dropzone-sub {
+      font-size: 0.78rem;
+      color: var(--adm-text-muted);
+    }
+
+    .dropzone-file-input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* File Preview Container */
+    .dropzone-preview-wrap {
+      display: none;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 0.85rem;
+    }
+
+    .preview-media-box {
+      width: 100%;
+      max-height: 260px;
+      background: #000000;
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .preview-media-box img,
+    .preview-media-box video {
+      max-width: 100%;
+      max-height: 260px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .file-preview-pill {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 0.95rem;
+      background: rgba(44, 7, 16, 0.8);
+      border: 1px solid rgba(229, 9, 20, 0.35);
+      border-radius: 4px;
+      font-family: var(--font-adm-mono);
+      font-size: 0.76rem;
+      color: #ff99a2;
+    }
+
+    .clear-file-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      font-family: var(--font-adm-mono);
+      font-size: 0.68rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .clear-file-btn:hover {
+      background: var(--adm-crimson-bright);
+      border-color: var(--adm-crimson-bright);
+    }
+
+    /* Upload Progress Bar */
+    .upload-progress-wrap {
+      display: none;
+      margin-top: 1.25rem;
+      padding: 1.1rem 1.2rem;
+      background: rgba(12, 6, 8, 0.95);
+      border: 1.5px solid rgba(229, 9, 20, 0.35);
+      border-radius: 6px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-adm-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--adm-text-secondary);
+      margin-bottom: 0.55rem;
+    }
+
+    .progress-percent {
+      color: #ff4a58;
+      font-weight: 800;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--adm-maroon-mid), var(--adm-maroon-accent), var(--adm-crimson-bright));
+      border-radius: 4px;
+      box-shadow: 0 0 12px rgba(229, 9, 20, 0.6);
+      transition: width 0.15s ease-out;
+    }
+
+    /* Dedicated Loading Spinner Overlay */
+    .upload-spinner-overlay {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2.8rem 1.8rem;
+      margin: 1.5rem 0;
+      background: rgba(13, 6, 9, 0.96);
+      border: 1.5px solid rgba(229, 9, 20, 0.45);
+      border-radius: 10px;
+      box-shadow: 
+        0 15px 40px rgba(0, 0, 0, 0.8),
+        0 0 35px rgba(229, 9, 20, 0.25),
+        inset 0 0 30px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      gap: 1.2rem;
+      position: relative;
+      overflow: hidden;
+      animation: adminSlideDown 0.25s ease-out;
+    }
+
+    .upload-spinner-overlay::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--adm-crimson-bright), transparent);
+    }
+
+    .spinner-core {
+      position: relative;
+      width: 68px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .spinner-ring {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 3.5px solid rgba(229, 9, 20, 0.18);
+      border-top-color: var(--adm-crimson-bright);
+      border-right-color: #ff3344;
+      box-shadow: 0 0 20px rgba(229, 9, 20, 0.55);
+      animation: adminSpin 0.8s linear infinite;
+    }
+
+    .spinner-inner-dot {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
+      animation: adminPulse 1.4s ease-in-out infinite;
+    }
+
+    .spinner-headline {
+      font-family: var(--font-adm-heading);
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: #ffffff;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .spinner-sub {
+      font-family: var(--font-adm-mono);
+      font-size: 0.78rem;
+      color: #ff858f;
+      margin: 0.35rem 0 0 0;
+    }
+
+    /* Firestore Success Banner with New Project Title */
+    .firestore-success-toast {
+      display: none;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 2rem;
+      background: linear-gradient(135deg, rgba(8, 30, 16, 0.96) 0%, rgba(14, 48, 25, 0.96) 100%);
+      border: 1.5px solid rgba(34, 197, 94, 0.55);
+      border-radius: 10px;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7), 0 0 30px rgba(34, 197, 94, 0.25);
+      animation: adminSlideDown 0.35s ease-out;
+    }
+
+    .toast-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(34, 197, 94, 0.2);
+      border: 2px solid #22c55e;
+      color: #22c55e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 900;
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+      flex-shrink: 0;
+    }
+
+    .toast-tag {
+      font-family: var(--font-adm-mono);
+      font-size: 0.66rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      color: #86efac;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+
+    .toast-title {
+      font-family: var(--font-adm-display);
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      margin: 0.1rem 0 0.25rem 0;
+    }
+
+    .toast-title .highlight-name {
+      color: #4ade80;
+      text-shadow: 0 0 14px rgba(74, 222, 128, 0.45);
+    }
+
+    .toast-desc {
+      font-size: 0.82rem;
+      color: #d1fae5;
+      margin: 0;
+      font-family: var(--font-adm-body);
+    }
+
+    .code-pill {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      font-family: var(--font-adm-mono);
+      font-size: 0.74rem;
+      color: #86efac;
+    }
+
+    /* Actions Row */
+    .upload-actions-row {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.8rem;
+    }
+
+    .btn-secondary {
+      padding: 0.85rem 1.4rem;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--adm-text-secondary);
+      font-family: var(--font-adm-heading);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+
+    .admin-signout-btn {
+      background: transparent;
+      border: 1px solid rgba(229, 9, 20, 0.35);
+      color: #ff858f;
+      padding: 0.42rem 0.9rem;
+      border-radius: 4px;
+      font-family: var(--font-adm-heading);
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .admin-signout-btn:hover {
+      background: var(--adm-crimson-bright);
+      color: #ffffff;
+      border-color: var(--adm-crimson-bright);
+    }
+
+    /* Success Card Showcase (Revealed after upload) */
+    .upload-success-card {
+      display: none;
+      margin-top: 2rem;
+      padding: 1.8rem;
+      background: rgba(14, 22, 16, 0.95);
+      border: 1.5px solid rgba(34, 197, 94, 0.4);
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(34, 197, 94, 0.15);
+      animation: adminSlideDown 0.3s ease-out;
+    }
+
+    .success-badge-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .success-pill {
+      font-family: var(--font-adm-mono);
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: #4ade80;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      padding: 0.3rem 0.75rem;
+      border-radius: 4px;
+    }
+
+    .success-content-grid {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .success-media-frame {
+      width: 100%;
+      height: 160px;
+      border-radius: 6px;
+      background: #000000;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .success-media-frame img,
+    .success-media-frame video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .success-details-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .success-proj-title {
+      font-family: var(--font-adm-display);
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin: 0;
+    }
+
+    .success-proj-category {
+      font-family: var(--font-adm-mono);
+      font-size: 0.72rem;
+      color: #a7f3d0;
+      text-transform: uppercase;
+    }
+
+    .cdn-link-box {
+      margin-top: 0.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .cdn-url-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .cdn-input {
+      flex: 1;
+      padding: 0.55rem 0.8rem;
+      background: #080d09;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      border-radius: 4px;
+      color: #d1fae5;
+      font-family: var(--font-adm-mono);
+      font-size: 0.75rem;
+    }
+
+    .btn-copy {
+      padding: 0.55rem 0.9rem;
+      background: rgba(34, 197, 94, 0.2);
+      border: 1px solid rgba(34, 197, 94, 0.4);
+      color: #86efac;
+      font-family: var(--font-adm-heading);
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-copy:hover {
+      background: #22c55e;
+      color: #000000;
+    }
+
+    .btn-open-cdn {
+      padding: 0.55rem 0.9rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      font-family: var(--font-adm-heading);
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: 4px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    .btn-open-cdn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    @media (max-width: 768px) {
+      .upload-grid-2col {
+        grid-template-columns: 1fr;
+      }
+      .upload-card {
+        padding: 1.8rem 1.2rem;
+      }
+      .success-content-grid {
+        grid-template-columns: 1fr;
+      }
+      .success-media-frame {
+        height: 180px;
+      }
+      .cdn-url-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+
+  <!-- Firebase SDK Import Map -->
+  <script type="importmap">
+  {
+    "imports": {
+      "firebase/app": "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js",
+      "firebase/auth": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
+      "firebase/firestore": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js",
+      "firebase/analytics": "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js"
+    }
+  }
+  </script>
+</head>
+
+<body class="admin-theme">
+
+  <div class="paper-grain-overlay" aria-hidden="true"></div>
+
+  <!-- Top Navigation Header -->
+  <header class="admin-navbar">
+    <a href="index.html" class="admin-logo-link" aria-label="Return to Taqi Haider Portfolio">
+      <div class="admin-avatar-frame">
+        <img src="assets/images/taqi_avatar_circle.png" alt="Taqi Haider Avatar">
+      </div>
+      <div class="admin-brand-info">
+        <span class="admin-brand-name">TAQI HAIDER</span>
+        <span class="admin-brand-sub">ADMIN CONSOLE // CLOUDINARY UPLOAD</span>
+      </div>
+    </a>
+
+    <div class="admin-nav-right">
+      <div class="admin-status-pill" id="userEmailBadge">
+        <span class="admin-status-dot"></span>
+        <span id="userEmailText">AUTHENTICATED</span>
+      </div>
+      <button type="button" class="admin-signout-btn" id="signOutBtn">
+        SIGN OUT ✕
+      </button>
+      <a href="index.html" class="admin-back-btn">
+        <span>←</span>
+        <span>PORTFOLIO</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Upload Content -->
+  <main class="upload-main-wrap">
+    
+    <div class="admin-ambient-glow" aria-hidden="true"></div>
+
+    <div class="upload-card">
+      <span class="admin-corner-bracket admin-corner-tl" aria-hidden="true"></span>
+      <span class="admin-corner-bracket admin-corner-tr" aria-hidden="true"></span>
+      <span class="admin-corner-bracket admin-corner-bl" aria-hidden="true"></span>
+      <span class="admin-corner-bracket admin-corner-br" aria-hidden="true"></span>
+
+      <div class="admin-card-header" style="text-align: left; margin-bottom: 1.8rem;">
+        <div class="admin-badge-strip">
+          <span class="admin-symbol-row" aria-hidden="true">✦ ◆ ♣</span>
+          <span class="admin-category-pill">CONTENT PUBLISHER // CLOUDINARY</span>
+        </div>
+        <h1 class="admin-title" style="font-size: 2.1rem;">UPLOAD <span class="glow-accent">PROJECT</span></h1>
+        <p class="admin-subtitle" style="margin: 0; max-width: 100%;">
+          Upload artwork, 2D animations, motion assets, and case study metadata to Cloudinary (<span style="color: #ff525e; font-family: var(--font-adm-mono);">cloud: pea1wjtw</span>).
+        </p>
+      </div>
+
+      <!-- Feedback Alert -->
+      <div class="admin-alert-banner" id="uploadAlert" role="alert">
+        <svg class="admin-alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <div class="admin-alert-content" id="uploadAlertText"></div>
+        <button type="button" class="admin-alert-dismiss" id="uploadAlertDismiss">&times;</button>
+      </div>
+
+      <!-- Upload Form -->
+      <form class="admin-form" id="projectUploadForm">
+
+        <div class="upload-grid-2col">
+          <!-- Project Title -->
+          <div class="admin-form-group">
+            <label for="projectTitle" class="admin-label">Project Title *</label>
+            <input
+              type="text"
+              id="projectTitle"
+              name="title"
+              class="admin-input"
+              style="padding-left: 1rem;"
+              placeholder="e.g. Spark 360 Bootcamp"
+              required
+            >
+          </div>
+
+          <!-- Category -->
+          <div class="admin-form-group">
+            <label for="projectCategory" class="admin-label">Portfolio Category *</label>
+            <select id="projectCategory" name="category" class="upload-select" required>
+              <option value="Branding &amp; Identity">Branding &amp; Identity</option>
+              <option value="2D Animation &amp; Motion">2D Animation &amp; Motion</option>
+              <option value="Graphic Design">Graphic Design</option>
+              <option value="Video Editing &amp; Reel">Video Editing &amp; Reel</option>
+              <option value="Editorial &amp; Art Series">Editorial &amp; Art Series</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="upload-grid-2col">
+          <!-- Subtitle / Meta -->
+          <div class="admin-form-group">
+            <label for="projectSubtitle" class="admin-label">Short Subtitle</label>
+            <input
+              type="text"
+              id="projectSubtitle"
+              name="subtitle"
+              class="admin-input"
+              style="padding-left: 1rem;"
+              placeholder="e.g. Comprehensive identity and visual brand system"
+            >
+          </div>
+
+          <!-- Behance / Live URL -->
+          <div class="admin-form-group">
+            <label for="projectUrl" class="admin-label">Behance or Showcase Link</label>
+            <input
+              type="url"
+              id="projectUrl"
+              name="url"
+              class="admin-input"
+              style="padding-left: 1rem;"
+              placeholder="https://www.behance.net/gallery/..."
+            >
+          </div>
+        </div>
+
+        <!-- Tags -->
+        <div class="admin-form-group">
+          <label for="projectTags" class="admin-label">Tags (comma-separated)</label>
+          <input
+            type="text"
+            id="projectTags"
+            name="tags"
+            class="admin-input"
+            style="padding-left: 1rem;"
+            placeholder="Branding, Illustrator, Motion Design, After Effects, Typography"
+          >
+        </div>
+
+        <!-- Media Upload Dropzone -->
+        <div class="admin-form-group">
+          <label class="admin-label">Cover Image or Animation / Video Media *</label>
+          <div class="upload-dropzone" id="dropzone">
+            <input
+              type="file"
+              id="mediaFile"
+              name="media"
+              accept="image/*,video/*"
+              class="dropzone-file-input"
+              required
+            >
+            <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <div class="dropzone-title">Click to browse or drag &amp; drop media file</div>
+            <div class="dropzone-sub">PNG, JPG, WebP, GIF, MP4, or WebM (Direct to Cloudinary)</div>
+          </div>
+
+          <!-- Local Preview Box -->
+          <div class="dropzone-preview-wrap" id="dropzonePreviewWrap">
+            <div class="preview-media-box" id="previewMediaBox"></div>
+            <div class="file-preview-pill">
+              <span id="fileNameDisplay">Selected: file.png</span>
+              <button type="button" id="clearFileBtn" class="clear-file-btn">REMOVE ✕</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Case Study Description -->
+        <div class="admin-form-group">
+          <label for="projectDescription" class="admin-label">Case Study Description</label>
+          <textarea
+            id="projectDescription"
+            name="description"
+            class="upload-textarea"
+            placeholder="Outline client context, art direction, typography decisions, motion workflow, and creative deliverables..."
+          ></textarea>
+        </div>
+
+        <!-- Real-Time Upload Progress Bar -->
+        <div class="upload-progress-wrap" id="uploadProgressWrap">
+          <div class="progress-header">
+            <span id="progressLabel">UPLOADING MEDIA TO CLOUDINARY...</span>
+            <span class="progress-percent" id="progressPercent">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="upload-actions-row">
+          <button type="button" class="btn-secondary" id="saveDraftBtn">SAVE DRAFT</button>
+          <button type="submit" class="admin-submit-btn" id="publishBtn" style="width: auto; margin-top: 0; min-width: 240px;">
+            <span class="btn-text">UPLOAD TO CLOUDINARY</span>
+            <span class="admin-btn-arrow">↗</span>
+            <span class="btn-spinner" aria-hidden="true"></span>
+          </button>
+        </div>
+
+      </form>
+
+      <!-- Dedicated Upload Loading Spinner Overlay -->
+      <div class="upload-spinner-overlay" id="uploadSpinnerOverlay">
+        <div class="spinner-core">
+          <div class="spinner-ring"></div>
+          <div class="spinner-inner-dot"></div>
+        </div>
+        <div>
+          <h4 class="spinner-headline" id="spinnerHeadline">STREAMING ASSET TO CLOUDINARY...</h4>
+          <p class="spinner-sub" id="spinnerSub">Uploading media to secure cloud storage (0%)</p>
+        </div>
+        <div class="progress-track" style="width: 280px; max-width: 100%; margin: 0.2rem auto 0;">
+          <div class="progress-fill" id="overlayProgressFill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Prominent Firestore Success Banner with New Project Title -->
+      <div class="firestore-success-toast" id="firestoreSuccessToast">
+        <div class="toast-icon">✓</div>
+        <div class="toast-body">
+          <span class="toast-tag">FIRESTORE RECORD SAVED // LIVE</span>
+          <h4 class="toast-title">"<span class="highlight-name" id="toastProjectTitle"></span>" SAVED SUCCESSFULLY!</h4>
+          <p class="toast-desc">
+            Project published to collection <code class="code-pill">projects</code> with document ID <span id="toastDocId" style="font-family: var(--font-adm-mono); color: #86efac; font-weight: 700;">#...</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Success Card (Revealed upon successful Cloudinary upload & Firestore save) -->
+      <div class="upload-success-card" id="uploadSuccessCard">
+        <div class="success-badge-row">
+          <span class="success-pill">✓ SAVED TO FIRESTORE // ASSET LIVE</span>
+          <span class="success-pill" id="firestoreDocBadge" style="background: rgba(229, 9, 20, 0.15); border-color: rgba(229, 9, 20, 0.4); color: #ff858f;">
+            DOC: #PENDING
+          </span>
+          <span class="success-timestamp" id="successTimestamp" style="font-family: var(--font-adm-mono); font-size: 0.72rem; color: #a7f3d0;"></span>
+        </div>
+
+        <div class="success-content-grid">
+          <div>
+            <div class="success-media-frame" id="successMediaFrame"></div>
+            <div id="thumbPreviewWrap" style="margin-top: 0.6rem; display: none;">
+              <span class="admin-label" style="font-size: 0.65rem; color: #86efac; display: block; margin-bottom: 0.25rem;">AUTO-THUMBNAIL</span>
+              <div style="width: 100%; height: 90px; border-radius: 4px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.12); background: #000;">
+                <img id="autoThumbImg" src="" alt="Thumbnail" style="width: 100%; height: 100%; object-fit: cover;">
+              </div>
+            </div>
+          </div>
+
+          <div class="success-details-wrap">
+            <h3 class="success-proj-title" id="successTitle">PROJECT TITLE</h3>
+            <div class="success-proj-category" id="successCategoryMeta">CATEGORY // TAGS</div>
+
+            <!-- Media URL -->
+            <div class="cdn-link-box">
+              <label class="admin-label" style="font-size: 0.68rem; color: #86efac;">CLOUDINARY MEDIA URL</label>
+              <div class="cdn-url-row">
+                <input type="text" readonly id="cloudinaryUrlInput" class="cdn-input">
+                <button type="button" id="copyUrlBtn" class="btn-copy">COPY URL</button>
+                <a href="#" target="_blank" rel="noopener noreferrer" id="openCdnLink" class="btn-open-cdn">OPEN ↗</a>
+              </div>
+            </div>
+
+            <!-- Auto-Thumbnail URL -->
+            <div class="cdn-link-box" style="margin-top: 0.5rem;">
+              <label class="admin-label" style="font-size: 0.68rem; color: #ff99a2;">AUTO-THUMBNAIL URL</label>
+              <div class="cdn-url-row">
+                <input type="text" readonly id="thumbnailUrlInput" class="cdn-input" style="border-color: rgba(229, 9, 20, 0.3); color: #ffd1d6;">
+                <button type="button" id="copyThumbBtn" class="btn-copy" style="background: rgba(229, 9, 20, 0.2); border-color: rgba(229, 9, 20, 0.4); color: #ff858f;">COPY THUMB</button>
+                <a href="#" target="_blank" rel="noopener noreferrer" id="openThumbLink" class="btn-open-cdn">OPEN ↗</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.4rem; display: flex; justify-content: flex-end;">
+          <button type="button" id="uploadAnotherBtn" class="btn-secondary" style="background: rgba(255, 255, 255, 0.1); color: #ffffff;">
+            + UPLOAD ANOTHER PROJECT
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Page Footer Bar -->
+  <footer class="admin-footer-bar">
+    <div class="admin-footer-left">
+      © 2026 TAQI HAIDER — ADMIN CONSOLE // ASSET PIPELINE
+    </div>
+    <div class="admin-footer-right">
+      CLOUDINARY CLOUD: pea1wjtw // PRESET: ozgarxqn
+    </div>
+  </footer>
+
+  <!-- Firebase Auth Guard, Cloudinary Upload & Firestore Pipeline -->
+  <script type="module">
+    import { initializeApp } from "firebase/app";
+    import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
+    import { getAnalytics } from "firebase/analytics";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDJ1j32rlyrcpPfvx8jSFhDf-6J_hWRGsY",
+      authDomain: "portfolio-63983.firebaseapp.com",
+      projectId: "portfolio-63983",
+      storageBucket: "portfolio-63983.firebasestorage.app",
+      messagingSenderId: "1060924242634",
+      appId: "1:1060924242634:web:260479fb57f64a79ec5233",
+      measurementId: "G-JNQJ3CCL0Q"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    try {
+      getAnalytics(app);
+    } catch (e) {
+      console.warn("Analytics initialization skipped:", e.message);
+    }
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Cloudinary configuration
+    const CLOUDINARY_CLOUD_NAME = "pea1wjtw";
+    const CLOUDINARY_UPLOAD_PRESET = "ozgarxqn";
+    const CLOUDINARY_AUTO_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`;
+
+    // DOM Elements
+    const userEmailText = document.getElementById('userEmailText');
+    const signOutBtn = document.getElementById('signOutBtn');
+    const uploadForm = document.getElementById('projectUploadForm');
+    const publishBtn = document.getElementById('publishBtn');
+    const saveDraftBtn = document.getElementById('saveDraftBtn');
+    const uploadAlert = document.getElementById('uploadAlert');
+    const uploadAlertText = document.getElementById('uploadAlertText');
+    const uploadAlertDismiss = document.getElementById('uploadAlertDismiss');
+    
+    // File elements
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('mediaFile');
+    const dropzonePreviewWrap = document.getElementById('dropzonePreviewWrap');
+    const previewMediaBox = document.getElementById('previewMediaBox');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+    const clearFileBtn = document.getElementById('clearFileBtn');
+
+    // Spinner Overlay & Progress elements
+    const uploadSpinnerOverlay = document.getElementById('uploadSpinnerOverlay');
+    const spinnerHeadline = document.getElementById('spinnerHeadline');
+    const spinnerSub = document.getElementById('spinnerSub');
+    const overlayProgressFill = document.getElementById('overlayProgressFill');
+    const uploadProgressWrap = document.getElementById('uploadProgressWrap');
+    const progressLabel = document.getElementById('progressLabel');
+    const progressPercent = document.getElementById('progressPercent');
+    const progressFill = document.getElementById('progressFill');
+
+    // Firestore Success Toast with New Project Title
+    const firestoreSuccessToast = document.getElementById('firestoreSuccessToast');
+    const toastProjectTitle = document.getElementById('toastProjectTitle');
+    const toastDocId = document.getElementById('toastDocId');
+
+    // Success Card elements
+    const uploadSuccessCard = document.getElementById('uploadSuccessCard');
+    const firestoreDocBadge = document.getElementById('firestoreDocBadge');
+    const successTimestamp = document.getElementById('successTimestamp');
+    const successMediaFrame = document.getElementById('successMediaFrame');
+    const thumbPreviewWrap = document.getElementById('thumbPreviewWrap');
+    const autoThumbImg = document.getElementById('autoThumbImg');
+    const successTitle = document.getElementById('successTitle');
+    const successCategoryMeta = document.getElementById('successCategoryMeta');
+    const cloudinaryUrlInput = document.getElementById('cloudinaryUrlInput');
+    const copyUrlBtn = document.getElementById('copyUrlBtn');
+    const openCdnLink = document.getElementById('openCdnLink');
+    const thumbnailUrlInput = document.getElementById('thumbnailUrlInput');
+    const copyThumbBtn = document.getElementById('copyThumbBtn');
+    const openThumbLink = document.getElementById('openThumbLink');
+    const uploadAnotherBtn = document.getElementById('uploadAnotherBtn');
+
+    // Currently selected file
+    let selectedFile = null;
+
+    // Helper: Show Alert
+    function showUploadAlert(msg, isSuccess = false) {
+      if (!uploadAlert || !uploadAlertText) return;
+      uploadAlertText.textContent = msg;
+      uploadAlert.classList.remove('is-success');
+      if (isSuccess) uploadAlert.classList.add('is-success');
+      uploadAlert.classList.add('is-visible');
+    }
+
+    if (uploadAlertDismiss) {
+      uploadAlertDismiss.addEventListener('click', () => {
+        uploadAlert.classList.remove('is-visible', 'is-success');
+      });
+    }
+
+    // 1. Firebase Auth Guard
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = 'admin.html';
+      } else {
+        if (userEmailText) {
+          userEmailText.textContent = user.email || 'AUTHENTICATED';
+        }
+      }
+    });
+
+    // Sign Out
+    if (signOutBtn) {
+      signOutBtn.addEventListener('click', async () => {
+        try {
+          await signOut(auth);
+          window.location.href = 'admin.html';
+        } catch (err) {
+          console.error('Sign out error:', err);
+        }
+      });
+    }
+
+    // 2. Drag & Drop and File Selection Handling
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.add('dragover');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.remove('dragover');
+      });
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      if (dt && dt.files && dt.files[0]) {
+        handleFileSelection(dt.files[0]);
+      }
+    });
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files && fileInput.files[0]) {
+        handleFileSelection(fileInput.files[0]);
+      }
+    });
+
+    function handleFileSelection(file) {
+      selectedFile = file;
+      const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      fileNameDisplay.textContent = `Selected: ${file.name} (${sizeMB} MB)`;
+      
+      previewMediaBox.innerHTML = '';
+      const isVideo = file.type.startsWith('video/');
+      const fileUrl = URL.createObjectURL(file);
+
+      if (isVideo) {
+        const videoEl = document.createElement('video');
+        videoEl.src = fileUrl;
+        videoEl.controls = true;
+        videoEl.muted = true;
+        videoEl.playsInline = true;
+        previewMediaBox.appendChild(videoEl);
+      } else {
+        const imgEl = document.createElement('img');
+        imgEl.src = fileUrl;
+        imgEl.alt = file.name;
+        previewMediaBox.appendChild(imgEl);
+      }
+
+      dropzonePreviewWrap.style.display = 'flex';
+      uploadAlert.classList.remove('is-visible');
+    }
+
+    if (clearFileBtn) {
+      clearFileBtn.addEventListener('click', () => {
+        selectedFile = null;
+        fileInput.value = '';
+        previewMediaBox.innerHTML = '';
+        dropzonePreviewWrap.style.display = 'none';
+      });
+    }
+
+    // 3. Save / Load Draft in LocalStorage
+    if (saveDraftBtn) {
+      saveDraftBtn.addEventListener('click', () => {
+        const draft = {
+          title: document.getElementById('projectTitle').value,
+          category: document.getElementById('projectCategory').value,
+          subtitle: document.getElementById('projectSubtitle').value,
+          url: document.getElementById('projectUrl').value,
+          tags: document.getElementById('projectTags').value,
+          description: document.getElementById('projectDescription').value,
+          savedAt: new Date().toLocaleTimeString()
+        };
+        localStorage.setItem('taqi_portfolio_draft', JSON.stringify(draft));
+        showUploadAlert(`Draft saved locally at ${draft.savedAt}.`, true);
+      });
+
+      const savedDraftJson = localStorage.getItem('taqi_portfolio_draft');
+      if (savedDraftJson) {
+        try {
+          const draft = JSON.parse(savedDraftJson);
+          if (draft.title && !document.getElementById('projectTitle').value) {
+            document.getElementById('projectTitle').value = draft.title || '';
+            document.getElementById('projectCategory').value = draft.category || 'Branding & Identity';
+            document.getElementById('projectSubtitle').value = draft.subtitle || '';
+            document.getElementById('projectUrl').value = draft.url || '';
+            document.getElementById('projectTags').value = draft.tags || '';
+            document.getElementById('projectDescription').value = draft.description || '';
+          }
+        } catch (e) {}
+      }
+    }
+
+    // 4. Form Submission: Cloudinary Media Upload -> Firestore Document Creation
+    if (uploadForm) {
+      uploadForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const title = document.getElementById('projectTitle').value.trim();
+        const category = document.getElementById('projectCategory').value;
+        const subtitle = document.getElementById('projectSubtitle').value.trim();
+        const projectUrl = document.getElementById('projectUrl').value.trim();
+        const tags = document.getElementById('projectTags').value.trim();
+        const description = document.getElementById('projectDescription').value.trim();
+
+        if (!title) {
+          showUploadAlert('Please enter a project title.');
+          return;
+        }
+
+        if (!selectedFile) {
+          showUploadAlert('Please select or drop a media file to upload.');
+          return;
+        }
+
+        // Activate Loading Spinners & Indicators
+        publishBtn.classList.add('is-loading');
+        uploadAlert.classList.remove('is-visible');
+        firestoreSuccessToast.style.display = 'none';
+        
+        // Dim form while uploading
+        uploadForm.style.opacity = '0.35';
+        uploadForm.style.pointerEvents = 'none';
+
+        // Display Loading Spinner Overlay
+        uploadSpinnerOverlay.style.display = 'flex';
+        spinnerHeadline.textContent = 'STREAMING ASSET TO CLOUDINARY...';
+        spinnerSub.textContent = `Uploading media for "${title}" (0%)`;
+        overlayProgressFill.style.width = '0%';
+
+        // Also update the bottom progress bar
+        uploadProgressWrap.style.display = 'block';
+        progressFill.style.width = '0%';
+        progressPercent.textContent = '0%';
+        progressLabel.textContent = 'STEP 1/2: STREAMING TO CLOUDINARY...';
+
+        // Prepare FormData for Cloudinary unsigned upload
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+        formData.append('cloud_name', CLOUDINARY_CLOUD_NAME);
+        formData.append('folder', 'taqi_portfolio');
+
+        // Use XMLHttpRequest for live byte transfer tracking
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', CLOUDINARY_AUTO_URL, true);
+
+        xhr.upload.onprogress = (event) => {
+          if (event.lengthComputable) {
+            const percent = Math.round((event.loaded / event.total) * 100);
+            progressFill.style.width = `${percent}%`;
+            progressPercent.textContent = `${percent}%`;
+            overlayProgressFill.style.width = `${percent}%`;
+            
+            const loadedMB = (event.loaded / (1024 * 1024)).toFixed(1);
+            const totalMB = (event.total / (1024 * 1024)).toFixed(1);
+            const progressText = `Uploading "${title}" (${loadedMB}MB / ${totalMB}MB - ${percent}%)`;
+            progressLabel.textContent = `STEP 1/2: ${progressText}`;
+            spinnerSub.textContent = progressText;
+          }
+        };
+
+        xhr.onload = async () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            try {
+              const resData = JSON.parse(xhr.responseText);
+              console.log('Cloudinary Upload Success:', resData);
+
+              // Generate Auto-Thumbnail URL
+              let autoThumbnail = resData.secure_url;
+              if (resData.resource_type === 'video') {
+                // Cloudinary automatic video frame snapshot poster (.jpg)
+                autoThumbnail = resData.secure_url.replace(/\.[^/.]+$/, ".jpg");
+              } else if (resData.resource_type === 'image') {
+                // Optimized image display thumbnail
+                autoThumbnail = resData.secure_url.replace('/upload/', '/upload/c_scale,w_800/');
+              }
+
+              // Update Loading Spinner State for Step 2 (Firestore)
+              spinnerHeadline.textContent = 'SAVING TO FIRESTORE DATABASE...';
+              spinnerSub.textContent = `Committing "${title}" record into collection "projects"...`;
+              progressLabel.textContent = 'STEP 2/2: SAVING RECORD TO FIRESTORE (projects)...';
+              progressFill.style.width = '100%';
+              progressPercent.textContent = '100%';
+              overlayProgressFill.style.width = '100%';
+
+              // Assemble complete project document payload
+              const projectRecord = {
+                title: title,
+                category: category,
+                subtitle: subtitle,
+                url: projectUrl,
+                tags: tags.split(',').map(t => t.trim()).filter(Boolean),
+                description: description,
+                mediaUrl: resData.secure_url,
+                thumbnailUrl: autoThumbnail,
+                mediaType: resData.resource_type, // 'image' or 'video'
+                cloudinaryPublicId: resData.public_id,
+                format: resData.format || '',
+                fileBytes: resData.bytes || 0,
+                width: resData.width || null,
+                height: resData.height || null,
+                authorEmail: auth.currentUser?.email || 'admin@taqihaider.com',
+                authorUid: auth.currentUser?.uid || '',
+                createdAt: serverTimestamp(),
+                publishedAt: new Date().toISOString()
+              };
+
+              // Save new document to Firestore collection 'projects'
+              const docRef = await addDoc(collection(db, "projects"), projectRecord);
+              console.log("Firestore Document created with ID: ", docRef.id);
+
+              // Cache locally as backup
+              const existingProjects = JSON.parse(localStorage.getItem('taqi_portfolio_projects') || '[]');
+              existingProjects.unshift({ ...projectRecord, firestoreId: docRef.id });
+              localStorage.setItem('taqi_portfolio_projects', JSON.stringify(existingProjects));
+
+              // Clean up draft & loading states
+              localStorage.removeItem('taqi_portfolio_draft');
+              publishBtn.classList.remove('is-loading');
+              uploadProgressWrap.style.display = 'none';
+              uploadSpinnerOverlay.style.display = 'none';
+
+              // Reveal Prominent Success Banner with Project Title
+              toastProjectTitle.textContent = title;
+              toastDocId.textContent = `#${docRef.id}`;
+              firestoreSuccessToast.style.display = 'flex';
+
+              // Reveal Success Card with Firestore Doc ID and URLs
+              displayUploadSuccess(projectRecord, resData, autoThumbnail, docRef.id);
+
+            } catch (err) {
+              console.error('Firestore or parsing error:', err);
+              publishBtn.classList.remove('is-loading');
+              uploadProgressWrap.style.display = 'none';
+              uploadSpinnerOverlay.style.display = 'none';
+              uploadForm.style.opacity = '1';
+              uploadForm.style.pointerEvents = 'auto';
+              showUploadAlert(`Cloudinary uploaded, but Firestore failed: ${err.message}`);
+            }
+          } else {
+            publishBtn.classList.remove('is-loading');
+            uploadProgressWrap.style.display = 'none';
+            uploadSpinnerOverlay.style.display = 'none';
+            uploadForm.style.opacity = '1';
+            uploadForm.style.pointerEvents = 'auto';
+            let errorMsg = `Cloudinary upload failed (HTTP ${xhr.status})`;
+            try {
+              const errData = JSON.parse(xhr.responseText);
+              if (errData.error && errData.error.message) {
+                errorMsg = `Cloudinary Error: ${errData.error.message}`;
+              }
+            } catch (e) {}
+            showUploadAlert(errorMsg);
+          }
+        };
+
+        xhr.onerror = () => {
+          publishBtn.classList.remove('is-loading');
+          uploadProgressWrap.style.display = 'none';
+          uploadSpinnerOverlay.style.display = 'none';
+          uploadForm.style.opacity = '1';
+          uploadForm.style.pointerEvents = 'auto';
+          showUploadAlert('Network error: Unable to reach Cloudinary. Check your internet connection.');
+        };
+
+        // Dispatch upload payload to Cloudinary
+        xhr.send(formData);
+      });
+    }
+
+    // 5. Display Upload Success UI
+    function displayUploadSuccess(project, cdnData, thumbnailUrl, firestoreDocId) {
+      showUploadAlert(`✓ Success: "${project.title}" saved to Firestore collection "projects"!`, true);
+
+      firestoreDocBadge.textContent = `DOC: #${firestoreDocId}`;
+      successTitle.textContent = project.title;
+      successCategoryMeta.textContent = `${project.category} // ${project.tags.join(', ') || 'No tags'}`;
+      successTimestamp.textContent = new Date().toLocaleTimeString();
+      
+      cloudinaryUrlInput.value = cdnData.secure_url;
+      openCdnLink.href = cdnData.secure_url;
+
+      thumbnailUrlInput.value = thumbnailUrl;
+      openThumbLink.href = thumbnailUrl;
+
+      // Render media in success frame
+      successMediaFrame.innerHTML = '';
+      if (cdnData.resource_type === 'video') {
+        const videoEl = document.createElement('video');
+        videoEl.src = cdnData.secure_url;
+        videoEl.controls = true;
+        videoEl.muted = true;
+        videoEl.autoplay = true;
+        videoEl.loop = true;
+        videoEl.playsInline = true;
+        successMediaFrame.appendChild(videoEl);
+
+        // Show auto-generated video poster thumbnail
+        autoThumbImg.src = thumbnailUrl;
+        thumbPreviewWrap.style.display = 'block';
+      } else {
+        const imgEl = document.createElement('img');
+        imgEl.src = cdnData.secure_url;
+        imgEl.alt = project.title;
+        successMediaFrame.appendChild(imgEl);
+        thumbPreviewWrap.style.display = 'none';
+      }
+
+      // Hide upload form and reveal success card
+      uploadForm.style.display = 'none';
+      uploadSuccessCard.style.display = 'block';
+    }
+
+    // Copy Cloudinary Media URL
+    if (copyUrlBtn) {
+      copyUrlBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(cloudinaryUrlInput.value);
+          const orig = copyUrlBtn.textContent;
+          copyUrlBtn.textContent = 'COPIED!';
+          setTimeout(() => copyUrlBtn.textContent = orig, 1800);
+        } catch (err) {
+          cloudinaryUrlInput.select();
+          document.execCommand('copy');
+          copyUrlBtn.textContent = 'COPIED!';
+          setTimeout(() => copyUrlBtn.textContent = 'COPY URL', 1800);
+        }
+      });
+    }
+
+    // Copy Auto-Thumbnail URL
+    if (copyThumbBtn) {
+      copyThumbBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(thumbnailUrlInput.value);
+          const orig = copyThumbBtn.textContent;
+          copyThumbBtn.textContent = 'COPIED!';
+          setTimeout(() => copyThumbBtn.textContent = orig, 1800);
+        } catch (err) {
+          thumbnailUrlInput.select();
+          document.execCommand('copy');
+          copyThumbBtn.textContent = 'COPIED!';
+          setTimeout(() => copyThumbBtn.textContent = 'COPY THUMB', 1800);
+        }
+      });
+    }
+
+    // Reset & Upload Another Project
+    if (uploadAnotherBtn) {
+      uploadAnotherBtn.addEventListener('click', () => {
+        uploadForm.reset();
+        selectedFile = null;
+        fileInput.value = '';
+        previewMediaBox.innerHTML = '';
+        dropzonePreviewWrap.style.display = 'none';
+        firestoreSuccessToast.style.display = 'none';
+        uploadSuccessCard.style.display = 'none';
+        uploadForm.style.display = 'flex';
+        uploadForm.style.opacity = '1';
+        uploadForm.style.pointerEvents = 'auto';
+        uploadAlert.classList.remove('is-visible', 'is-success');
+      });
+    }
+  </script>
+
+</body>
+
+</html>

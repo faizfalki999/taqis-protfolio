@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#060305">
+  <title>Admin Authentication | Taqi Haider</title>
+  <meta name="description"
+    content="Restricted administrative portal for Taqi Haider's creative portfolio and digital archives.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Archivo:wdth,wght@62.5..125,400..900&family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=Syne:wght@700;800&family=Unbounded:wght@700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/images/taqi_avatar_circle.png">
+  <link rel="shortcut icon" href="assets/images/taqi_avatar_circle.png">
+  <link rel="apple-touch-icon" href="assets/images/taqi_avatar_circle.png">
+
+  <!-- Base Stylesheet (Custom Fonts & Global Resets) & Admin Dark Maroon Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+
+  <!-- Firebase SDK Import Map -->
+  <script type="importmap">
+  {
+    "imports": {
+      "firebase/app": "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js",
+      "firebase/auth": "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js",
+      "firebase/analytics": "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js"
+    }
+  }
+  </script>
+</head>
+
+<body class="admin-theme">
+
+  <!-- Organic Paper Grain & Fiber Noise Overlay -->
+  <div class="paper-grain-overlay" aria-hidden="true"></div>
+
+  <!-- Top Navigation Header -->
+  <header class="admin-navbar">
+    <a href="index.html" class="admin-logo-link" aria-label="Return to Taqi Haider Portfolio">
+      <div class="admin-avatar-frame">
+        <img src="assets/images/taqi_avatar_circle.png" alt="Taqi Haider Avatar">
+      </div>
+      <div class="admin-brand-info">
+        <span class="admin-brand-name">TAQI HAIDER</span>
+        <span class="admin-brand-sub">ADMIN CONSOLE // V1.0</span>
+      </div>
+    </a>
+
+    <div class="admin-nav-right">
+      <div class="admin-status-pill" aria-label="System status indicator">
+        <span class="admin-status-dot"></span>
+        <span>PORTAL SECURE</span>
+      </div>
+      <a href="index.html" class="admin-back-btn">
+        <span>←</span>
+        <span>BACK TO PORTFOLIO</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Login Section -->
+  <main class="admin-main-wrap">
+    
+    <!-- Ambient Maroon / Crimson Glow Backdrop Effect -->
+    <div class="admin-ambient-glow" aria-hidden="true"></div>
+
+    <div class="admin-card-container">
+      
+      <div class="admin-card">
+        <!-- Streetwear Corner Brackets -->
+        <span class="admin-corner-bracket admin-corner-tl" aria-hidden="true"></span>
+        <span class="admin-corner-bracket admin-corner-tr" aria-hidden="true"></span>
+        <span class="admin-corner-bracket admin-corner-bl" aria-hidden="true"></span>
+        <span class="admin-corner-bracket admin-corner-br" aria-hidden="true"></span>
+
+        <!-- Card Header -->
+        <div class="admin-card-header">
+          <div class="admin-badge-strip">
+            <span class="admin-symbol-row" aria-hidden="true">✦ ◆ ♣</span>
+            <span class="admin-category-pill">AUTHENTICATION // 01</span>
+          </div>
+          <h1 class="admin-title">ADMIN <span class="glow-accent">ACCESS</span></h1>
+          <p class="admin-subtitle">
+            Enter authorized credentials to manage portfolio projects, media showcases, and studio assets.
+          </p>
+        </div>
+
+        <!-- Alert Notification (Dynamic error or success feedback) -->
+        <div class="admin-alert-banner" id="adminAlert" role="alert" aria-live="polite">
+          <svg class="admin-alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <div class="admin-alert-content" id="adminAlertText">
+            Invalid credentials. Please verify your email and password.
+          </div>
+          <button type="button" class="admin-alert-dismiss" id="adminAlertDismiss" aria-label="Dismiss alert">&times;</button>
+        </div>
+
+        <!-- Login Form -->
+        <form class="admin-form" id="adminLoginForm" novalidate>
+          
+          <!-- Email Field -->
+          <div class="admin-form-group">
+            <div class="admin-label-row">
+              <label for="adminEmail" class="admin-label">Email Address</label>
+            </div>
+            <div class="admin-input-wrapper">
+              <span class="admin-field-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </span>
+              <input
+                type="email"
+                id="adminEmail"
+                name="email"
+                class="admin-input"
+                placeholder="taqi@ikiakistudios.com"
+                autocomplete="email"
+                required
+              >
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="admin-form-group">
+            <div class="admin-label-row">
+              <label for="adminPassword" class="admin-label">Master Password</label>
+              <a href="#" class="admin-forgot-link" id="forgotPasswordLink">Forgot?</a>
+            </div>
+            <div class="admin-input-wrapper">
+              <span class="admin-field-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+              </span>
+              <input
+                type="password"
+                id="adminPassword"
+                name="password"
+                class="admin-input"
+                placeholder="••••••••••••"
+                autocomplete="current-password"
+                required
+              >
+              <button
+                type="button"
+                class="admin-password-toggle"
+                id="passwordToggleBtn"
+                aria-label="Toggle password visibility"
+                title="Toggle password visibility"
+              >
+                <!-- Eye Open Icon -->
+                <svg id="eyeIconShow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <!-- Eye Crossed Icon (Hidden by default) -->
+                <svg id="eyeIconHide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                  <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Options Row: Remember Device & Encryption Badge -->
+          <div class="admin-options-row">
+            <label class="admin-checkbox-label">
+              <input type="checkbox" id="rememberMe" name="remember" class="admin-checkbox-input">
+              <span class="admin-custom-checkbox">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              <span>Remember this session</span>
+            </label>
+
+            <span class="admin-secure-tag">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              <span>256-BIT SSL</span>
+            </span>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="admin-submit-btn" id="submitLoginBtn">
+            <span class="btn-text">AUTHENTICATE &amp; ENTER</span>
+            <span class="admin-btn-arrow">↗</span>
+            <span class="btn-spinner" aria-hidden="true"></span>
+          </button>
+
+        </form>
+
+        <!-- Card Footer -->
+        <div class="admin-card-footer">
+          <span class="admin-legal-notice">RESTRICTED TO AUTHORIZED PERSONNEL ONLY // ALL ACCESS LOGGED</span>
+          <div class="admin-help-links">
+            <a href="mailto:mtaqi5771@gmail.com" class="admin-help-link">Need Help? Contact Taqi</a>
+            <a href="index.html" class="admin-help-link">Portfolio Home</a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Page Footer Bar -->
+  <footer class="admin-footer-bar">
+    <div class="admin-footer-left">
+      © 2026 TAQI HAIDER — CREATIVE DIRECTOR // ADMIN CONSOLE
+    </div>
+    <div class="admin-footer-right">
+      SYS_ID: #TH-ADM-2026-SECURE
+    </div>
+  </footer>
+
+  <!-- Firebase Authentication & Application Logic -->
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "firebase/app";
+    import { 
+      getAuth, 
+      signInWithEmailAndPassword,
+      setPersistence,
+      browserLocalPersistence,
+      browserSessionPersistence,
+      onAuthStateChanged,
+      sendPasswordResetEmail
+    } from "firebase/auth";
+    import { getAnalytics } from "firebase/analytics";
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyDJ1j32rlyrcpPfvx8jSFhDf-6J_hWRGsY",
+      authDomain: "portfolio-63983.firebaseapp.com",
+      projectId: "portfolio-63983",
+      storageBucket: "portfolio-63983.firebasestorage.app",
+      messagingSenderId: "1060924242634",
+      appId: "1:1060924242634:web:260479fb57f64a79ec5233",
+      measurementId: "G-JNQJ3CCL0Q"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    
+    // Initialize Analytics if supported in environment
+    try {
+      getAnalytics(app);
+    } catch (err) {
+      console.warn("Firebase Analytics could not be initialized in this environment:", err.message);
+    }
+
+    // Initialize Firebase Authentication
+    const auth = getAuth(app);
+
+    // DOM Elements
+    const emailInput = document.getElementById('adminEmail');
+    const passwordInput = document.getElementById('adminPassword');
+    const passwordToggleBtn = document.getElementById('passwordToggleBtn');
+    const eyeIconShow = document.getElementById('eyeIconShow');
+    const eyeIconHide = document.getElementById('eyeIconHide');
+    const loginForm = document.getElementById('adminLoginForm');
+    const submitBtn = document.getElementById('submitLoginBtn');
+    const alertBanner = document.getElementById('adminAlert');
+    const alertText = document.getElementById('adminAlertText');
+    const alertDismiss = document.getElementById('adminAlertDismiss');
+    const forgotLink = document.getElementById('forgotPasswordLink');
+    const rememberCheckbox = document.getElementById('rememberMe');
+
+    // Helper: Display Alert Banner
+    function showAlert(message, isSuccess = false) {
+      if (!alertBanner || !alertText) return;
+      alertText.textContent = message;
+      alertBanner.classList.remove('is-success');
+      if (isSuccess) {
+        alertBanner.classList.add('is-success');
+      }
+      alertBanner.classList.add('is-visible');
+    }
+
+    // Helper: Map Firebase error codes to readable streetwear messages
+    function getFriendlyErrorMessage(error) {
+      switch (error.code) {
+        case 'auth/invalid-credential':
+        case 'auth/wrong-password':
+        case 'auth/user-not-found':
+          return 'Access Denied: Invalid email or master password.';
+        case 'auth/invalid-email':
+          return 'Please provide a properly formatted email address.';
+        case 'auth/user-disabled':
+          return 'This administrator account has been disabled.';
+        case 'auth/too-many-requests':
+          return 'Access temporarily locked due to multiple failed attempts. Please wait.';
+        case 'auth/network-request-failed':
+          return 'Network error: Check your internet connection and try again.';
+        case 'auth/internal-error':
+          return 'Authentication server error. Please try again in a few moments.';
+        default:
+          return error.message || 'Authentication error encountered. Please check credentials.';
+      }
+    }
+
+    // Password Visibility Toggle
+    if (passwordToggleBtn && passwordInput) {
+      passwordToggleBtn.addEventListener('click', () => {
+        const isPassword = passwordInput.getAttribute('type') === 'password';
+        passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+        eyeIconShow.style.display = isPassword ? 'none' : 'block';
+        eyeIconHide.style.display = isPassword ? 'block' : 'none';
+        passwordToggleBtn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+      });
+    }
+
+    // Dismiss Alert
+    if (alertDismiss && alertBanner) {
+      alertDismiss.addEventListener('click', () => {
+        alertBanner.classList.remove('is-visible', 'is-success');
+      });
+    }
+
+    // Check if an authorized session already exists
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        showAlert(`Active session detected for ${user.email}. Redirecting to upload portal...`, true);
+        setTimeout(() => {
+          window.location.href = 'upload.html';
+        }, 1200);
+      }
+    });
+
+    // Forgot Password Handler via Firebase
+    if (forgotLink) {
+      forgotLink.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const email = emailInput ? emailInput.value.trim() : '';
+        if (!email) {
+          showAlert('Please type your administrator email address above first, then click "Forgot?".');
+          emailInput?.focus();
+          return;
+        }
+
+        try {
+          await sendPasswordResetEmail(auth, email);
+          showAlert(`Password reset link dispatched to ${email}. Check your inbox.`, true);
+        } catch (err) {
+          console.error('Password reset error:', err);
+          showAlert(getFriendlyErrorMessage(err), false);
+        }
+      });
+    }
+
+    // Form Submit Handler with Firebase signInWithEmailAndPassword
+    if (loginForm) {
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const email = emailInput ? emailInput.value.trim() : '';
+        const password = passwordInput ? passwordInput.value : '';
+        const remember = rememberCheckbox ? rememberCheckbox.checked : false;
+
+        // Basic Client Validation
+        if (!email || !password) {
+          showAlert('Please enter both email address and password to authenticate.');
+          return;
+        }
+
+        // Set Loading State
+        submitBtn.classList.add('is-loading');
+        alertBanner.classList.remove('is-visible');
+
+        try {
+          // Set session persistence based on checkbox
+          try {
+            await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
+          } catch (pErr) {
+            console.warn('Persistence configuration warning:', pErr);
+          }
+
+          // Sign in using Firebase Authentication
+          const userCredential = await signInWithEmailAndPassword(auth, email, password);
+          const user = userCredential.user;
+
+          // Success Notification
+          showAlert(`Authentication successful! Access granted to ${user.email}. Redirecting to upload form...`, true);
+
+          // Redirect to upload form if correct
+          setTimeout(() => {
+            window.location.href = 'upload.html';
+          }, 800);
+
+        } catch (error) {
+          console.error('Firebase sign-in error:', error);
+          submitBtn.classList.remove('is-loading');
+          
+          // Show error message
+          showAlert(getFriendlyErrorMessage(error), false);
+        }
+      });
+    }
+  </script>
+
+</body>
+
+</html>
