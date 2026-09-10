@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <button class="video-modal-close-btn" id="videoModalCloseBtn" aria-label="Close Video">×</button>
         </div>
         <div class="video-modal-video-wrap">
-          <video id="videoModalPlayer" controls playsinline preload="metadata">
+          <video id="videoModalPlayer" controls controlslist="nodownload noplaybackrate" disablepictureinpicture playsinline preload="metadata" oncontextmenu="return false;">
             <source src="" type="video/mp4">
             Your browser does not support HTML5 video.
           </video>
@@ -248,6 +248,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && videoModal.classList.contains('is-active')) {
         closeVideoModal();
+      }
+    });
+
+    // Disable right-click context menu on all video elements to prevent "Save video as..."
+    document.addEventListener('contextmenu', (e) => {
+      if (e.target && (e.target.tagName === 'VIDEO' || e.target.closest('video') || e.target.closest('.video-modal-video-wrap'))) {
+        e.preventDefault();
       }
     });
   }

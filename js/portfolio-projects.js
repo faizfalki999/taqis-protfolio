@@ -142,7 +142,7 @@ function buildVideoCardHtml(project) {
          data-category="${category}"
          aria-label="Play ${title} Video">
         <div class="project-card-thumb-wrap">
-          <video class="project-card-video" src="${videoUrl}" poster="${posterUrl}" muted loop playsinline preload="metadata"></video>
+          <video class="project-card-video" src="${videoUrl}" poster="${posterUrl}" muted loop playsinline preload="metadata" controlslist="nodownload" disablepictureinpicture oncontextmenu="return false;"></video>
           <div class="project-card-overlay">
             <span class="play-btn-circle">▶</span>
             <span class="overlay-action-btn">WATCH VIDEO ▶</span>
