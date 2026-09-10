@@ -1,25 +1,19 @@
 /**
- * TAQI HAIDER PORTFOLIO — DYNAMIC FIRESTORE PROJECTS SHOWCASE
- * - Fetches real-time documents from Firestore collection "projects"
- * - Renders rich editorial streetwear project cards
- * - Real-time onSnapshot listener for instantaneous updates
- * - Dynamic category filtering with counts
- * - Supports video cards (with auto-preview & video modal) & image cards (with lightbox)
- * - LocalStorage caching for instant rendering
+ * TAQI HAIDER PORTFOLIO — DYNAMIC FIRESTORE PROJECTS INTEGRATION
+ * - Syncs real-time documents from Firestore collection "projects"
+ * - Prepends newly published work dynamically to the corresponding category page
+ * - Never overrides or replaces existing curated project cards
+ * - Zero empty states or admin upload banners shown to public visitors
  */
 
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { 
   getFirestore, 
   collection, 
-  getDocs,
   onSnapshot 
 } from "firebase/firestore";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDJ1j32rlyrcpPfvx8jSFhDf-6J_hWRGsY",
   authDomain: "portfolio-63983.firebaseapp.com",
@@ -30,32 +24,11 @@ const firebaseConfig = {
   measurementId: "G-JNQJ3CCL0Q"
 };
 
-// Initialize Firebase
+// Initialize Firebase & Firestore
 const app = initializeApp(firebaseConfig);
-let analytics;
-try {
-  analytics = getAnalytics(app);
-} catch (e) {
-  console.warn("Analytics notice:", e.message);
-}
-
-// Initialize Firestore
 const db = getFirestore(app);
 
-// DOM Elements
-const projectsGrid = document.getElementById('projectsShowcaseGrid');
-const filterBar = document.getElementById('projectsFilterBar');
-const imageModal = document.getElementById('portfolioImageModal');
-const imageModalImg = document.getElementById('imageLightboxImg');
-const imageModalCaption = document.getElementById('imageLightboxCaption');
-const imageModalClose = document.getElementById('imageLightboxClose');
-
-// State
-let allProjects = [];
-let activeCategory = 'ALL';
-let isLoadingFirestore = true;
-
-// Helper: Escape HTML to avoid injection
+// Helper: Escape HTML
 function escapeHtml(str) {
   if (!str) return '';
   return String(str)
@@ -64,23 +37,6 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
-}
-
-// Helper: Format Date
-function formatProjectDate(timestamp, isoString) {
-  try {
-    if (timestamp && typeof timestamp.toDate === 'function') {
-      const date = timestamp.toDate();
-      return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }).toUpperCase();
-    }
-    if (isoString) {
-      const date = new Date(isoString);
-      if (!isNaN(date)) {
-        return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }).toUpperCase();
-      }
-    }
-  } catch (e) {}
-  return 'SELECTED WORK';
 }
 
 // Category Normalization & Matching
@@ -101,7 +57,7 @@ function matchesCategory(projectCategory, sectionCategory) {
   return p.includes(s) || s.includes(p);
 }
 
-// Build Card HTML for an Image Project (Matching site's exact card HTML structure)
+// Build Card HTML for an Image Project
 function buildImageCardHtml(project) {
   const title = escapeHtml(project.title || 'Untitled Project');
   const category = escapeHtml(project.category || 'Visual Design');
@@ -119,7 +75,7 @@ function buildImageCardHtml(project) {
   const overlayText = isExternal ? 'VIEW ON BEHANCE ↗' : 'VIEW IMAGE ↗';
 
   return `
-    <article class="project-grid-card" data-category="${escapeHtml(normalizeCategory(project.category))}">
+    <article class="project-grid-card">
       <a href="${linkHref}" ${linkAttrs} class="project-card-link-wrapper" aria-label="${title}">
         <div class="project-card-thumb-wrap">
           <img src="${thumbUrl}" alt="${title}" class="project-card-img" loading="lazy">
@@ -131,6 +87,7 @@ function buildImageCardHtml(project) {
       <div class="project-card-body">
         <div class="project-card-meta-top">
           <span class="project-card-category">${category}</span>
+          <span class="dynamic-drop-badge">NEW</span>
         </div>
         <h2 class="project-card-title">
           <a href="${linkHref}" ${linkAttrs}>${title}</a>
@@ -154,7 +111,7 @@ function buildImageCardHtml(project) {
   `;
 }
 
-// Build Card HTML for a Video Project (Matching site's exact card HTML structure)
+// Build Card HTML for a Video Project
 function buildVideoCardHtml(project) {
   const title = escapeHtml(project.title || 'Untitled Video');
   const category = escapeHtml(project.category || 'Animation');
@@ -165,7 +122,7 @@ function buildVideoCardHtml(project) {
   const tagsHtml = (project.tags || []).map(t => `<span class="card-tag">${escapeHtml(t)}</span>`).join('');
 
   return `
-    <article class="project-grid-card" data-category="${escapeHtml(normalizeCategory(project.category))}">
+    <article class="project-grid-card">
       <a href="#" class="project-card-link-wrapper project-video-trigger" 
          data-video-src="${videoUrl}" 
          data-title="${title}" 
@@ -182,6 +139,7 @@ function buildVideoCardHtml(project) {
       <div class="project-card-body">
         <div class="project-card-meta-top">
           <span class="project-card-category">${category}</span>
+          <span class="dynamic-drop-badge">NEW</span>
         </div>
         <h2 class="project-card-title">
           <a href="#" class="project-video-trigger" data-video-src="${videoUrl}" data-title="${title}" data-category="${category}">${title}</a>
@@ -205,147 +163,13 @@ function buildVideoCardHtml(project) {
   `;
 }
 
-// Render projects strictly into each matching section
-function renderProjects() {
-  // 1. Filter projects strictly by section category
-  const graphicProjects = allProjects.filter(p => matchesCategory(p.category, 'GRAPHIC DESIGN'));
-  const animationProjects = allProjects.filter(p => matchesCategory(p.category, 'ANIMATION'));
-  const videoProjects = allProjects.filter(p => matchesCategory(p.category, 'VIDEO EDITING'));
-
-  // 2. Update category counts in filter pills
-  const countAll = document.getElementById('countAll');
-  const countGraphic = document.getElementById('countGraphicDesign');
-  const countAnimation = document.getElementById('countAnimation');
-  const countVideo = document.getElementById('countVideoEditing');
-
-  if (countAll) countAll.textContent = `(${allProjects.length})`;
-  if (countGraphic) countGraphic.textContent = `(${graphicProjects.length})`;
-  if (countAnimation) countAnimation.textContent = `(${animationProjects.length})`;
-  if (countVideo) countVideo.textContent = `(${videoProjects.length})`;
-
-  // 3. Render helper for each section grid
-  function renderGrid(gridId, sectionProjects, sectionName, categoryUrl) {
-    const grid = document.getElementById(gridId);
-    if (!grid) return;
-
-    // While Firestore data is loading, show loading spinner & skeleton placeholders
-    if (isLoadingFirestore) {
-      grid.innerHTML = `
-        <div class="section-skeleton-loader" aria-hidden="true">
-          <div class="skeleton-pulse-banner">
-            <div class="section-loading-spinner" style="width:14px;height:14px;border-width:2px;"></div>
-            <span class="pulse-text">LOADING ${escapeHtml(sectionName)} ARCHIVE...</span>
-          </div>
-        </div>
-        <div class="project-card-skeleton" aria-hidden="true"><div class="skeleton-thumb"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line title"></div><div class="skeleton-line desc"></div><div class="skeleton-line desc-short"></div></div></div>
-        <div class="project-card-skeleton" aria-hidden="true"><div class="skeleton-thumb"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line title"></div><div class="skeleton-line desc"></div><div class="skeleton-line desc-short"></div></div></div>
-        <div class="project-card-skeleton" aria-hidden="true"><div class="skeleton-thumb"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line title"></div><div class="skeleton-line desc"></div><div class="skeleton-line desc-short"></div></div></div>
-      `;
-      return;
-    }
-
-    if (sectionProjects.length === 0) {
-      grid.innerHTML = `
-        <div class="projects-empty-state">
-          <div class="empty-state-icon">✦</div>
-          <h3 class="empty-state-title">NO ${escapeHtml(sectionName)} PROJECTS YET</h3>
-          <p class="empty-state-text">
-            New projects uploaded in "${escapeHtml(sectionName)}" from the admin portal will appear here in real-time.
-          </p>
-          <a href="admin.html" class="empty-state-btn">
-            <span>UPLOAD VIA ADMIN</span>
-            <span>→</span>
-          </a>
-        </div>
-      `;
-      return;
-    }
-
-    grid.innerHTML = sectionProjects.map(project => {
-      return project.mediaType === 'video'
-        ? buildVideoCardHtml(project)
-        : buildImageCardHtml(project);
-    }).join('');
-  }
-
-  // 4. Render each section strictly with its own projects
-  renderGrid('gridGraphicDesign', graphicProjects, 'GRAPHIC DESIGN', 'graphic-design.html');
-  renderGrid('gridAnimation', animationProjects, 'ANIMATION', 'animation.html');
-  renderGrid('gridVideoEditing', videoProjects, 'VIDEO EDITING', 'video-editing.html');
-
-  // Also support single-category pages if present (e.g., graphic-design.html, animation.html, video-editing.html)
-  document.querySelectorAll('.project-showcase-grid[data-category]').forEach(grid => {
-    if (grid.id !== 'gridGraphicDesign' && grid.id !== 'gridAnimation' && grid.id !== 'gridVideoEditing') {
-      const cat = grid.getAttribute('data-category');
-      const matching = allProjects.filter(p => matchesCategory(p.category, cat));
-      renderGrid(grid.id, matching, cat);
-    }
-  });
-
-  // 5. Attach video card hover auto-play
-  document.querySelectorAll('.project-grid-card').forEach(card => {
-    const video = card.querySelector('video.project-card-video');
-    if (video) {
-      let playPromise = null;
-      card.addEventListener('mouseenter', () => {
-        playPromise = video.play();
-      });
-      card.addEventListener('mouseleave', () => {
-        if (playPromise !== null) {
-          playPromise.then(() => {
-            video.pause();
-            video.currentTime = 0;
-          }).catch(() => {});
-        } else {
-          video.pause();
-          video.currentTime = 0;
-        }
-      });
-    }
-  });
-}
-
-// Setup Section Filter Tabs
-function setupFilterTabs() {
-  const filterButtons = document.querySelectorAll('#projectsFilterBar .filter-pill');
-  const graphicSec = document.getElementById('graphicDesignSection');
-  const animSec = document.getElementById('animationSection');
-  const videoSec = document.getElementById('videoEditingSection');
-
-  filterButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const filter = btn.getAttribute('data-filter');
-
-      // Update active button state
-      filterButtons.forEach(b => {
-        b.classList.toggle('is-active', b === btn);
-        b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
-      });
-
-      // Show only matching section, or show all
-      if (filter === 'ALL') {
-        if (graphicSec) graphicSec.style.display = '';
-        if (animSec) animSec.style.display = '';
-        if (videoSec) videoSec.style.display = '';
-      } else if (filter === 'GRAPHIC DESIGN') {
-        if (graphicSec) { graphicSec.style.display = ''; graphicSec.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-        if (animSec) animSec.style.display = 'none';
-        if (videoSec) videoSec.style.display = 'none';
-      } else if (filter === 'ANIMATION') {
-        if (graphicSec) graphicSec.style.display = 'none';
-        if (animSec) { animSec.style.display = ''; animSec.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-        if (videoSec) videoSec.style.display = 'none';
-      } else if (filter === 'VIDEO EDITING') {
-        if (graphicSec) graphicSec.style.display = 'none';
-        if (animSec) animSec.style.display = 'none';
-        if (videoSec) { videoSec.style.display = ''; videoSec.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-      }
-    });
-  });
-}
-
-// Lightbox Modal Setup for Image Projects
+// Image Lightbox Modal Setup
 function setupImageLightbox() {
+  const imageModal = document.getElementById('portfolioImageModal');
+  const imageModalImg = document.getElementById('imageLightboxImg');
+  const imageModalCaption = document.getElementById('imageLightboxCaption');
+  const imageModalClose = document.getElementById('imageLightboxClose');
+
   if (!imageModal) return;
 
   function openImageModal(imgSrc, title) {
@@ -367,7 +191,6 @@ function setupImageLightbox() {
     document.body.style.overflow = '';
   }
 
-  // Delegated click for image preview triggers
   document.addEventListener('click', (e) => {
     const trigger = e.target.closest('.image-preview-trigger');
     if (trigger) {
@@ -397,55 +220,73 @@ function setupImageLightbox() {
   });
 }
 
-// Initialize and Fetch from Firestore
-function initFirestoreProjects() {
+// Category Page Dynamic Loader
+function initCategoryLoader() {
+  const dynamicContainer = document.getElementById('dynamicProjectsList');
+  const showcaseGrid = document.querySelector('.project-showcase-grid[data-category]') || document.querySelector('.project-showcase-grid');
+  if (!dynamicContainer || !showcaseGrid) return;
+
+  const targetCategory = showcaseGrid.getAttribute('data-category') || '';
+  if (!targetCategory) return;
+
   setupImageLightbox();
-  setupFilterTabs();
 
-  // Show loading spinner & skeleton placeholders while waiting for Firestore
-  isLoadingFirestore = true;
-  renderProjects();
-
-  // Real-time Firestore query on collection "projects"
   const projectsCol = collection(db, "projects");
 
   onSnapshot(projectsCol, (snapshot) => {
-    const loadedProjects = [];
-
+    const docs = [];
     snapshot.forEach(doc => {
-      const data = doc.data();
-      loadedProjects.push({
-        id: doc.id,
-        ...data
-      });
+      docs.push({ id: doc.id, ...doc.data() });
     });
 
-    // Client-side sort by newest first
-    loadedProjects.sort((a, b) => {
+    // Sort newest first
+    docs.sort((a, b) => {
       const timeA = a.createdAt?.toMillis?.() || (a.publishedAt ? Date.parse(a.publishedAt) : 0) || 0;
       const timeB = b.createdAt?.toMillis?.() || (b.publishedAt ? Date.parse(b.publishedAt) : 0) || 0;
       return timeB - timeA;
     });
 
-    allProjects = loadedProjects;
-    isLoadingFirestore = false;
+    // Filter strictly for this category
+    const matchingDocs = docs.filter(p => matchesCategory(p.category, targetCategory));
 
-    // Cache to localStorage
-    try {
-      localStorage.setItem('taqi_portfolio_cache', JSON.stringify(loadedProjects));
-    } catch (e) {}
+    if (matchingDocs.length === 0) {
+      dynamicContainer.innerHTML = '';
+      return;
+    }
 
-    renderProjects();
-  }, (error) => {
-    console.error('Firestore onSnapshot error:', error);
-    isLoadingFirestore = false;
-    renderProjects();
+    dynamicContainer.innerHTML = matchingDocs.map(p => {
+      return p.mediaType === 'video' ? buildVideoCardHtml(p) : buildImageCardHtml(p);
+    }).join('');
+
+    // Attach video hover autoplay
+    dynamicContainer.querySelectorAll('.project-grid-card').forEach(card => {
+      const video = card.querySelector('video.project-card-video');
+      if (video) {
+        let playPromise = null;
+        card.addEventListener('mouseenter', () => {
+          playPromise = video.play();
+        });
+        card.addEventListener('mouseleave', () => {
+          if (playPromise !== null) {
+            playPromise.then(() => {
+              video.pause();
+              video.currentTime = 0;
+            }).catch(() => {});
+          } else {
+            video.pause();
+            video.currentTime = 0;
+          }
+        });
+      }
+    });
+  }, (err) => {
+    console.warn("Firestore category live sync notice:", err);
   });
 }
 
-// Auto-run when DOM is ready
+// Auto-run on DOM ready
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initFirestoreProjects);
+  document.addEventListener('DOMContentLoaded', initCategoryLoader);
 } else {
-  initFirestoreProjects();
+  initCategoryLoader();
 }

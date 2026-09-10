@@ -23,6 +23,16 @@
   <link rel="apple-touch-icon" href="assets/images/taqi_avatar_circle.png">
 
   <link rel="stylesheet" href="css/style.css">
+
+  <!-- Firebase JS SDK ES Module Import Map -->
+  <script type="importmap">
+    {
+      "imports": {
+        "firebase/app": "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js",
+        "firebase/firestore": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"
+      }
+    }
+  </script>
 </head>
 
 <body class="streetwear-theme project-page">
@@ -66,7 +76,9 @@
     </section>
 
     <!-- Projects Showcase Grid (Square cards in rows) -->
-    <section class="project-showcase-grid">
+    <section class="project-showcase-grid" id="gridGraphicDesign" data-category="GRAPHIC DESIGN">
+      <!-- Dynamic Live Projects (Prepended here from Firestore) -->
+      <div id="dynamicProjectsList" style="display:contents"></div>
 
       <!-- Card 1: Spark 360 Bootcamp -->
       <article class="project-grid-card">
@@ -226,12 +238,30 @@
   <!-- Footer -->
   <footer class="footer-section">
     <div class="footer-container">
+      <!-- Footer Bottom Bar -->
       <div class="footer-bottom-bar">
         <span class="credit-text">© 2026 TAQI HAIDER — MULTI MEDIA DESIGNER</span>
-        <a href="index.html" class="back-home-btn">Return to Home ↗</a>
+        <div style="display:inline-flex; align-items:center; gap:0.8rem;">
+          <a href="admin.html" class="admin-sign-link" title="Admin Portal" aria-label="Admin Portal">
+            <span class="admin-sign-lock">🔒</span>
+            <span>ADMIN</span>
+          </a>
+          <a href="index.html" class="back-home-btn">Return to Home ↗</a>
+        </div>
       </div>
     </div>
   </footer>
 
+  <!-- Image Lightbox Modal -->
+  <div class="image-lightbox-modal" id="portfolioImageModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="image-lightbox-wrap">
+      <button class="image-lightbox-close" id="imageLightboxClose" aria-label="Close Image Preview">×</button>
+      <img src="" alt="" id="imageLightboxImg" class="image-lightbox-img">
+      <div class="image-lightbox-caption" id="imageLightboxCaption"></div>
+    </div>
+  </div>
+
+  <!-- Dynamic Firestore Projects Loader -->
+  <script type="module" src="js/portfolio-projects.js"></script>
 </body>
 </html>

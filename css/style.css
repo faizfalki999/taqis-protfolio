@@ -2842,3 +2842,49 @@ body.streetwear-theme {
   transform: translateY(-1px);
 }
 
+/* Subtle Admin Sign Link for Public Views */
+.admin-sign-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.45);
+  text-decoration: none;
+  padding: 0.28rem 0.65rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  transition: all 0.2s ease;
+}
+
+.admin-sign-link:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+.admin-sign-link .admin-sign-lock {
+  font-size: 0.72rem;
+  opacity: 0.75;
+}
+
+/* Dynamic Live Drop Badge for Firestore Projects */
+.dynamic-drop-badge {
+  display: inline-block;
+  background: var(--accent-red);
+  color: #ffffff;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 3px;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+

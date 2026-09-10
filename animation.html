@@ -23,6 +23,16 @@
   <link rel="apple-touch-icon" href="assets/images/taqi_avatar_circle.png">
 
   <link rel="stylesheet" href="css/style.css">
+
+  <!-- Firebase JS SDK ES Module Import Map -->
+  <script type="importmap">
+    {
+      "imports": {
+        "firebase/app": "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js",
+        "firebase/firestore": "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"
+      }
+    }
+  </script>
 </head>
 
 <body class="streetwear-theme project-page">
@@ -66,7 +76,9 @@
     </section>
 
     <!-- Projects Showcase Grid (3-Column Square Cards in Rows) -->
-    <section class="project-showcase-grid">
+    <section class="project-showcase-grid" id="gridAnimation" data-category="ANIMATION">
+      <!-- Dynamic Live Projects (Prepended here from Firestore) -->
+      <div id="dynamicProjectsList" style="display:contents"></div>
 
       <!-- Card 1: Pankula Animation -->
       <article class="project-grid-card">
@@ -497,17 +509,24 @@
   </div>
 
   <!-- Footer -->
-  <footer class="footer-section">
-    <div class="footer-container">
+      <!-- Footer Bottom Bar -->
       <div class="footer-bottom-bar">
         <span class="credit-text">© 2026 TAQI HAIDER — MULTI MEDIA DESIGNER</span>
-        <a href="index.html" class="back-home-btn">Return to Home ↗</a>
+        <div style="display:inline-flex; align-items:center; gap:0.8rem;">
+          <a href="admin.html" class="admin-sign-link" title="Admin Portal" aria-label="Admin Portal">
+            <span class="admin-sign-lock">🔒</span>
+            <span>ADMIN</span>
+          </a>
+          <a href="index.html" class="back-home-btn">Return to Home ↗</a>
+        </div>
       </div>
     </div>
   </footer>
 
   <!-- Scripts -->
   <script src="js/script.js"></script>
+  <!-- Dynamic Firestore Projects Loader -->
+  <script type="module" src="js/portfolio-projects.js"></script>
 </body>
 
 </html>
