@@ -610,6 +610,147 @@
       background: rgba(255, 255, 255, 0.15);
     }
 
+    /* Project Management Section */
+    .manage-projects-card {
+      margin-top: 2.5rem;
+      background: var(--adm-card-bg);
+      border: 1px solid var(--adm-border);
+      border-radius: 8px;
+      padding: 1.75rem;
+      box-shadow: var(--adm-shadow);
+    }
+    .manage-projects-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--adm-border);
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .manage-projects-title {
+      font-family: var(--font-adm-heading);
+      font-size: 1.15rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .manage-projects-count {
+      font-size: 0.75rem;
+      color: var(--adm-crimson-bright);
+      background: rgba(220, 38, 38, 0.15);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .manage-projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+    .manage-project-item {
+      background: rgba(13, 13, 13, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.2s ease;
+    }
+    .manage-project-item:hover {
+      border-color: rgba(220, 38, 38, 0.4);
+      transform: translateY(-2px);
+    }
+    .manage-project-thumb {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      background: #000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .manage-project-body {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .manage-project-category {
+      font-size: 0.68rem;
+      color: var(--adm-crimson-bright);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.35rem;
+    }
+    .manage-project-name {
+      font-family: var(--font-adm-heading);
+      font-size: 1rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+    .manage-project-desc {
+      font-size: 0.78rem;
+      color: var(--adm-text-muted);
+      line-height: 1.4;
+      margin-bottom: 0.75rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      flex: 1;
+    }
+    .manage-project-actions {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: auto;
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .btn-delete-project {
+      flex: 1;
+      padding: 0.55rem 0.8rem;
+      background: rgba(220, 38, 38, 0.15);
+      border: 1px solid rgba(220, 38, 38, 0.4);
+      color: #f87171;
+      font-family: var(--font-adm-heading);
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+    .btn-delete-project:hover {
+      background: #dc2626;
+      color: #ffffff;
+    }
+    .btn-view-project {
+      padding: 0.55rem 0.8rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      font-family: var(--font-adm-heading);
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: 4px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+    .btn-view-project:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
     @media (max-width: 768px) {
       .upload-grid-2col {
         grid-template-columns: 1fr;
@@ -925,6 +1066,24 @@
         </div>
       </div>
 
+      <!-- Manage Uploaded Projects -->
+      <div class="manage-projects-card" id="manageProjectsSection">
+        <div class="manage-projects-header">
+          <div class="manage-projects-title">
+            <span style="color: var(--adm-crimson-bright);">⚡</span>
+            <span>MANAGE UPLOADED PROJECTS</span>
+            <span class="manage-projects-count" id="projectCountBadge">0 PROJECTS</span>
+          </div>
+          <button type="button" id="refreshProjectsBtn" class="btn-secondary" style="font-size: 0.72rem; padding: 0.45rem 0.85rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #fff; cursor: pointer; border-radius: 4px;">
+            ↻ REFRESH LIST
+          </button>
+        </div>
+        <div id="manageProjectsLoading" style="color: var(--adm-text-muted); font-size: 0.85rem; padding: 1.5rem; text-align: center;">
+          Loading projects from Firestore...
+        </div>
+        <div class="manage-projects-grid" id="manageProjectsGrid" style="display: none;"></div>
+      </div>
+
     </div>
 
   </main>
@@ -943,7 +1102,7 @@
   <script type="module">
     import { initializeApp } from "firebase/app";
     import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
+    import { getFirestore, collection, addDoc, serverTimestamp, deleteDoc, doc, onSnapshot, getDocs } from "firebase/firestore";
     import { getAnalytics } from "firebase/analytics";
 
     // Firebase configuration
@@ -1041,13 +1200,16 @@
     }
 
     // 1. Firebase Auth Guard
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = 'admin.html';
       } else {
         if (userEmailText) {
           userEmailText.textContent = user.email || 'AUTHENTICATED';
         }
+        // Purge test uploads and initialize real-time projects manager
+        await purgeSpecificTestProjects();
+        initProjectsManager();
       }
     });
 
@@ -1430,6 +1592,157 @@
         uploadForm.style.opacity = '1';
         uploadForm.style.pointerEvents = 'auto';
         uploadAlert.classList.remove('is-visible', 'is-success');
+      });
+    }
+
+    // ============================================
+    // 6. Project Manager & Real-Time Deletion
+    // ============================================
+    const manageProjectsSection = document.getElementById('manageProjectsSection');
+    const manageProjectsLoading = document.getElementById('manageProjectsLoading');
+    const manageProjectsGrid = document.getElementById('manageProjectsGrid');
+    const projectCountBadge = document.getElementById('projectCountBadge');
+    const refreshProjectsBtn = document.getElementById('refreshProjectsBtn');
+
+    // List of test document IDs and titles to purge immediately
+    const PURGE_TARGET_IDS = ['IqYwWvwLots1pNkmeSB0', 'LchYBpFDeKXpOZmvZaEg', 'tQgx9L172XzBEHFVjcta'];
+    const PURGE_TARGET_TITLES = ['uga booga', 'sdas', 'Poster'];
+
+    async function purgeSpecificTestProjects() {
+      for (const testId of PURGE_TARGET_IDS) {
+        try {
+          await deleteDoc(doc(db, 'projects', testId));
+          console.log('[Purge] Purged test project ID:', testId);
+        } catch (e) {
+          // Ignore if already deleted
+        }
+      }
+      try {
+        localStorage.removeItem('taqi_portfolio_cache');
+      } catch (e) {}
+    }
+
+    function initProjectsManager() {
+      const projectsCol = collection(db, 'projects');
+      
+      onSnapshot(projectsCol, (snapshot) => {
+        renderProjectList(snapshot.docs);
+      }, (err) => {
+        console.warn('Snapshot listener error, falling back to getDocs:', err);
+        loadProjectsManual();
+      });
+
+      if (refreshProjectsBtn) {
+        refreshProjectsBtn.addEventListener('click', () => {
+          loadProjectsManual();
+        });
+      }
+    }
+
+    async function loadProjectsManual() {
+      if (manageProjectsLoading) {
+        manageProjectsLoading.style.display = 'block';
+        manageProjectsLoading.textContent = 'Refreshing projects...';
+      }
+      try {
+        const querySnapshot = await getDocs(collection(db, 'projects'));
+        renderProjectList(querySnapshot.docs);
+      } catch (err) {
+        console.error('Failed to load projects:', err);
+        if (manageProjectsLoading) {
+          manageProjectsLoading.textContent = 'Failed to load projects: ' + err.message;
+        }
+      }
+    }
+
+    function renderProjectList(docs) {
+      if (!manageProjectsGrid) return;
+
+      const activeProjects = [];
+      docs.forEach(docSnap => {
+        const data = docSnap.data();
+        const id = docSnap.id;
+        const title = (data.title || '').trim();
+        if (PURGE_TARGET_IDS.includes(id) || PURGE_TARGET_TITLES.includes(title)) {
+          // Permanently delete test record from Firestore
+          deleteDoc(doc(db, 'projects', id)).catch(() => {});
+          return;
+        }
+        activeProjects.push({ id, ...data });
+      });
+
+      if (projectCountBadge) {
+        projectCountBadge.textContent = `${activeProjects.length} PROJECT${activeProjects.length === 1 ? '' : 'S'}`;
+      }
+
+      if (manageProjectsLoading) {
+        manageProjectsLoading.style.display = 'none';
+      }
+
+      if (activeProjects.length === 0) {
+        manageProjectsGrid.style.display = 'block';
+        manageProjectsGrid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem 1rem; color: var(--adm-text-muted);">
+            <p style="font-size: 0.95rem; margin-bottom: 0.5rem; color: #fff;">No active projects in Firestore</p>
+            <p style="font-size: 0.8rem;">Projects you upload will appear here with an option to permanently delete them at any time.</p>
+          </div>
+        `;
+        return;
+      }
+
+      manageProjectsGrid.style.display = 'grid';
+      manageProjectsGrid.innerHTML = activeProjects.map(proj => {
+        const thumb = proj.thumbnailUrl || proj.mediaUrl || 'https://via.placeholder.com/400x250?text=No+Preview';
+        const title = proj.title || 'Untitled Project';
+        const category = proj.category || 'General';
+        const desc = proj.description || 'No description provided';
+        const mediaUrl = proj.mediaUrl || '#';
+
+        return `
+          <div class="manage-project-item" id="proj-card-${proj.id}">
+            <img src="${thumb}" alt="${title}" class="manage-project-thumb" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250?text=No+Image';">
+            <div class="manage-project-body">
+              <span class="manage-project-category">${category}</span>
+              <h4 class="manage-project-name">${title}</h4>
+              <p class="manage-project-desc">${desc}</p>
+              <div class="manage-project-actions">
+                <a href="${mediaUrl}" target="_blank" rel="noopener noreferrer" class="btn-view-project">VIEW ↗</a>
+                <button type="button" class="btn-delete-project" data-id="${proj.id}" data-title="${title.replace(/"/g, '&quot;')}">
+                  <span>🗑</span>
+                  <span>DELETE</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Attach Delete Handlers
+      manageProjectsGrid.querySelectorAll('.btn-delete-project').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const docId = btn.getAttribute('data-id');
+          const docTitle = btn.getAttribute('data-title') || 'this project';
+          
+          if (!confirm(`Are you sure you want to permanently delete "${docTitle}"?\n\nThis will remove it from Firestore and all portfolio pages.`)) {
+            return;
+          }
+
+          btn.disabled = true;
+          btn.innerHTML = '<span>DELETING...</span>';
+
+          try {
+            await deleteDoc(doc(db, 'projects', docId));
+            try {
+              localStorage.removeItem('taqi_portfolio_cache');
+            } catch (e) {}
+            showUploadAlert(`Project "${docTitle}" successfully deleted!`, true);
+          } catch (err) {
+            console.error('Delete error:', err);
+            btn.disabled = false;
+            btn.innerHTML = '<span>🗑</span><span>DELETE</span>';
+            showUploadAlert(`Failed to delete project: ${err.message}`);
+          }
+        });
       });
     }
   </script>

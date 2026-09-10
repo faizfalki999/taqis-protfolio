@@ -28,6 +28,19 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// Test project IDs and titles to permanently exclude from portfolio display
+const TEST_PROJECT_IDS = new Set([
+  'IqYwWvwLots1pNkmeSB0', // sdas
+  'LchYBpFDeKXpOZmvZaEg', // uga booga
+  'tQgx9L172XzBEHFVjcta'  // Poster
+]);
+
+const TEST_TITLES = new Set([
+  'uga booga',
+  'sdas',
+  'poster'
+]);
+
 // Helper: Escape HTML
 function escapeHtml(str) {
   if (!str) return '';
@@ -246,8 +259,13 @@ function initCategoryLoader() {
       return timeB - timeA;
     });
 
-    // Filter strictly for this category
-    const matchingDocs = docs.filter(p => matchesCategory(p.category, targetCategory));
+    // Filter strictly for this category, excluding deleted test projects
+    const matchingDocs = docs.filter(p => {
+      if (TEST_PROJECT_IDS.has(p.id)) return false;
+      const titleClean = (p.title || '').trim().toLowerCase();
+      if (TEST_TITLES.has(titleClean)) return false;
+      return matchesCategory(p.category, targetCategory);
+    });
 
     if (matchingDocs.length === 0) {
       dynamicContainer.innerHTML = '';
