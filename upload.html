@@ -750,10 +750,11 @@
     .btn-view-project:hover {
       background: rgba(255, 255, 255, 0.15);
     }
+    .btn-edit-project,
     .btn-edit-thumb-project {
-      padding: 0.55rem 0.8rem;
+      padding: 0.55rem 0.85rem;
       background: rgba(59, 130, 246, 0.15);
-      border: 1px solid rgba(59, 130, 246, 0.4);
+      border: 1px solid rgba(59, 130, 246, 0.45);
       color: #93c5fd;
       font-family: var(--font-adm-heading);
       font-size: 0.72rem;
@@ -765,9 +766,12 @@
       align-items: center;
       gap: 0.35rem;
     }
+    .btn-edit-project:hover,
     .btn-edit-thumb-project:hover {
       background: #2563eb;
       color: #ffffff;
+      border-color: #2563eb;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
     }
     .manage-project-tag-pill {
       display: inline-block;
@@ -782,11 +786,12 @@
       margin-left: 0.4rem;
       letter-spacing: 0.05em;
     }
-    /* Edit Thumbnail Modal */
-    .edit-thumb-modal-backdrop {
+    /* Edit Project & Thumbnail Modal */
+    .edit-thumb-modal-backdrop,
+    .edit-project-modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.82);
+      background: rgba(0, 0, 0, 0.85);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       z-index: 10000;
@@ -794,17 +799,31 @@
       align-items: center;
       justify-content: center;
       padding: 1.5rem;
+      overflow-y: auto;
     }
-    .edit-thumb-modal-card {
+    .edit-thumb-modal-card,
+    .edit-project-modal-card {
       background: #11070a;
-      border: 1.5px solid rgba(229, 9, 20, 0.35);
+      border: 1.5px solid rgba(229, 9, 20, 0.4);
       border-radius: 12px;
       width: 100%;
-      max-width: 560px;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(120, 16, 34, 0.3);
-      overflow: hidden;
+      max-width: 680px;
+      max-height: 90vh;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(120, 16, 34, 0.35);
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
+    }
+    .edit-project-grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 640px) {
+      .edit-project-grid-2col {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
     }
     .edit-thumb-header {
       display: flex;
@@ -1327,65 +1346,105 @@
 
     </div>
 
-    <!-- Edit Thumbnail & Badge Modal -->
-    <div class="edit-thumb-modal-backdrop" id="editThumbModal" style="display: none;">
-      <div class="edit-thumb-modal-card">
+    <!-- Edit Project Details Modal -->
+    <div class="edit-project-modal-backdrop" id="editProjectModal" style="display: none;">
+      <div class="edit-project-modal-card">
         <div class="edit-thumb-header">
           <div>
-            <h3 class="edit-thumb-title">EDIT THUMBNAIL &amp; CUSTOM TAG</h3>
-            <p class="edit-thumb-sub" id="editModalProjTitle">Project Name</p>
+            <h3 class="edit-thumb-title">EDIT PROJECT DETAILS</h3>
+            <p class="edit-thumb-sub" id="editModalProjTitle">Update title, category, tags, and media cover</p>
           </div>
-          <button type="button" class="edit-thumb-close-btn" id="closeEditThumbModalBtn" aria-label="Close modal">×</button>
+          <button type="button" class="edit-thumb-close-btn" id="closeEditProjectModalBtn" aria-label="Close modal">×</button>
         </div>
 
         <div class="edit-thumb-body">
-          <!-- Current Thumbnail Preview -->
-          <div class="edit-thumb-preview-section">
-            <label class="admin-label">Current Thumbnail</label>
-            <div class="edit-thumb-img-frame">
-              <img id="editModalCurrentThumb" src="" alt="Thumbnail preview" onerror="this.src='https://via.placeholder.com/400x250?text=No+Thumbnail';">
-            </div>
-          </div>
+          <form id="editProjectForm">
+            <div class="edit-project-grid-2col" style="margin-bottom: 1rem;">
+              <!-- Project Title -->
+              <div class="admin-form-group">
+                <label for="editProjectTitle" class="admin-label">Project Title *</label>
+                <input type="text" id="editProjectTitle" class="admin-input" style="padding-left: 1rem;" required>
+              </div>
 
-          <form id="editThumbForm">
-            <!-- Option A: Upload New Image -->
+              <!-- Portfolio Category -->
+              <div class="admin-form-group">
+                <label for="editProjectCategory" class="admin-label">Portfolio Category *</label>
+                <select id="editProjectCategory" class="upload-select" required>
+                  <option value="2D Animation & Motion">2D Animation &amp; Motion</option>
+                  <option value="Graphic Design">Graphic Design</option>
+                  <option value="Video Editing & Reel">Video Editing &amp; Reel</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="edit-project-grid-2col" style="margin-bottom: 1rem;">
+              <!-- Custom Card Tag / Badge -->
+              <div class="admin-form-group">
+                <label for="editCategoryTagInput" class="admin-label">Custom Badge / Tag (e.g. LOGO IDENT)</label>
+                <input type="text" id="editCategoryTagInput" class="admin-input" style="padding-left: 1rem;" placeholder="e.g. LOGO IDENT, BRANDING // IDENTITY">
+              </div>
+
+              <!-- Subtitle -->
+              <div class="admin-form-group">
+                <label for="editProjectSubtitle" class="admin-label">Short Subtitle</label>
+                <input type="text" id="editProjectSubtitle" class="admin-input" style="padding-left: 1rem;" placeholder="e.g. Comprehensive identity and brand system">
+              </div>
+            </div>
+
+            <div class="edit-project-grid-2col" style="margin-bottom: 1rem;">
+              <!-- Behance / Live URL -->
+              <div class="admin-form-group">
+                <label for="editProjectUrl" class="admin-label">Behance or Showcase Link</label>
+                <input type="url" id="editProjectUrl" class="admin-input" style="padding-left: 1rem;" placeholder="https://www.behance.net/gallery/...">
+              </div>
+
+              <!-- Tags -->
+              <div class="admin-form-group">
+                <label for="editProjectTags" class="admin-label">Tags (comma-separated)</label>
+                <input type="text" id="editProjectTags" class="admin-input" style="padding-left: 1rem;" placeholder="INTRO IDENT, BRAND SYSTEM, KINETIC">
+              </div>
+            </div>
+
+            <!-- Description -->
             <div class="admin-form-group" style="margin-bottom: 1.1rem;">
-              <label for="editThumbFileInput" class="admin-label">Upload New Thumbnail Image (JPG, PNG, WebP)</label>
-              <input type="file" id="editThumbFileInput" accept="image/*" class="admin-input" style="padding: 0.6rem 1rem;">
-              <span style="font-size: 0.7rem; color: #a1a1aa; margin-top: 0.25rem; display: block;">
-                Select a new cover picture or video poster. Auto-uploaded to Cloudinary when saved.
-              </span>
+              <label for="editProjectDescription" class="admin-label">Case Study Description</label>
+              <textarea id="editProjectDescription" class="upload-textarea" rows="2" placeholder="Project context, workflow, and notes..."></textarea>
             </div>
 
-            <!-- Option B: Direct Image URL -->
-            <div class="admin-form-group" style="margin-bottom: 1.1rem;">
-              <label for="editThumbUrlInput" class="admin-label">Or Direct Thumbnail URL</label>
-              <input type="url" id="editThumbUrlInput" class="admin-input" style="padding-left: 1rem;" placeholder="https://res.cloudinary.com/... or image link">
-            </div>
-
-            <!-- Custom Card Tag / Badge -->
-            <div class="admin-form-group" style="margin-bottom: 1.3rem;">
-              <label for="editCategoryTagInput" class="admin-label">Custom Card Badge / Tag (e.g. BRANDING // IDENTITY)</label>
-              <input type="text" id="editCategoryTagInput" class="admin-input" style="padding-left: 1rem;" placeholder="e.g. BRANDING // IDENTITY, 2D EXPLAINER, REEL">
-              <span style="font-size: 0.7rem; color: #a1a1aa; margin-top: 0.25rem; display: block;">
-                Updates the &lt;span class="project-card-category"&gt; badge displayed at the top of this project card.
-              </span>
+            <!-- Thumbnail / Cover Section -->
+            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px; padding: 1rem; margin-bottom: 1.2rem;">
+              <label class="admin-label" style="margin-bottom: 0.5rem; display: block;">Cover / Thumbnail Poster</label>
+              <div style="display: flex; gap: 1rem; align-items: flex-start; flex-wrap: wrap;">
+                <div class="edit-thumb-img-frame" style="width: 130px; height: 85px; margin-bottom: 0; flex-shrink: 0;">
+                  <img id="editModalCurrentThumb" src="" alt="Thumbnail preview" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://via.placeholder.com/400x250?text=No+Thumbnail';">
+                </div>
+                <div style="flex: 1; min-width: 220px;">
+                  <div class="admin-form-group" style="margin-bottom: 0.5rem;">
+                    <label for="editThumbFileInput" class="admin-label" style="font-size: 0.7rem;">Upload New Cover Image (Optional)</label>
+                    <input type="file" id="editThumbFileInput" accept="image/*" class="admin-input" style="padding: 0.35rem 0.6rem; font-size: 0.75rem;">
+                  </div>
+                  <div class="admin-form-group" style="margin-bottom: 0;">
+                    <label for="editThumbUrlInput" class="admin-label" style="font-size: 0.7rem;">Or Direct Cover Image URL</label>
+                    <input type="url" id="editThumbUrlInput" class="admin-input" style="padding: 0.35rem 0.6rem; font-size: 0.75rem;" placeholder="https://res.cloudinary.com/... or image link">
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- Progress / Loading state -->
-            <div id="editThumbProgressWrap" style="display: none; margin-bottom: 1rem;">
+            <div id="editProjectProgressWrap" style="display: none; margin-bottom: 1rem;">
               <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.35rem; color: #60a5fa;">
-                <span id="editThumbProgressText">Uploading thumbnail...</span>
-                <span id="editThumbProgressPercent" style="font-family: var(--font-adm-mono);">0%</span>
+                <span id="editProjectProgressText">Updating project...</span>
+                <span id="editProjectProgressPercent" style="font-family: var(--font-adm-mono);">0%</span>
               </div>
               <div class="progress-track">
-                <div class="progress-fill" id="editThumbProgressBar" style="width: 0%; background: #3b82f6;"></div>
+                <div class="progress-fill" id="editProjectProgressBar" style="width: 0%; background: #3b82f6;"></div>
               </div>
             </div>
 
             <div style="display: flex; justify-content: flex-end; gap: 0.8rem;">
-              <button type="button" id="cancelEditThumbBtn" class="btn-secondary" style="background: rgba(255,255,255,0.08); color: #fff;">CANCEL</button>
-              <button type="submit" id="saveEditThumbBtn" class="btn-primary" style="background: linear-gradient(135deg, #2563eb, #1d4ed8);">SAVE CHANGES ↗</button>
+              <button type="button" id="cancelEditProjectBtn" class="btn-secondary" style="background: rgba(255,255,255,0.08); color: #fff;">CANCEL</button>
+              <button type="submit" id="saveEditProjectBtn" class="btn-primary" style="background: linear-gradient(135deg, #2563eb, #1d4ed8);">SAVE CHANGES ↗</button>
             </div>
           </form>
         </div>
@@ -2105,13 +2164,9 @@
               <p class="manage-project-desc">${escapeHtml(desc)}</p>
               <div class="manage-project-actions">
                 <a href="${mediaUrl}" target="_blank" rel="noopener noreferrer" class="btn-view-project">VIEW ↗</a>
-                <button type="button" class="btn-edit-thumb-project" 
-                  data-id="${proj.id}" 
-                  data-title="${escapeHtml(title)}" 
-                  data-thumb="${escapeHtml(thumb)}" 
-                  data-tag="${escapeHtml(categoryTag)}">
-                  <span>🖼</span>
-                  <span>EDIT THUMB</span>
+                <button type="button" class="btn-edit-project" data-id="${proj.id}">
+                  <span>✏️</span>
+                  <span>EDIT</span>
                 </button>
                 <button type="button" class="btn-delete-project" data-id="${proj.id}" data-title="${escapeHtml(title)}">
                   <span>🗑</span>
@@ -2122,6 +2177,10 @@
           </div>
         `;
       }).join('');
+
+      // Map for fast lookup by ID
+      const activeProjectsMap = new Map();
+      activeProjects.forEach(p => activeProjectsMap.set(p.id, p));
 
       // Attach video hover preview for manage items
       manageProjectsGrid.querySelectorAll('.manage-project-item').forEach(item => {
@@ -2178,65 +2237,80 @@
         });
       });
 
-      // Attach Edit Thumbnail & Tag Handlers
-      manageProjectsGrid.querySelectorAll('.btn-edit-thumb-project').forEach(btn => {
+      // Attach Edit Project Handlers
+      manageProjectsGrid.querySelectorAll('.btn-edit-project').forEach(btn => {
         btn.addEventListener('click', () => {
           const id = btn.getAttribute('data-id');
-          const title = btn.getAttribute('data-title');
-          const thumb = btn.getAttribute('data-thumb');
-          const tag = btn.getAttribute('data-tag');
-          openEditThumbModal(id, title, thumb, tag);
+          const project = activeProjectsMap.get(id);
+          if (project) {
+            openEditProjectModal(project);
+          }
         });
       });
     }
 
     // ============================================
-    // 7. Edit Thumbnail & Custom Tag Modal Logic
+    // 7. Edit Project Details Modal Logic
     // ============================================
-    const editThumbModal = document.getElementById('editThumbModal');
-    const closeEditThumbModalBtn = document.getElementById('closeEditThumbModalBtn');
-    const cancelEditThumbBtn = document.getElementById('cancelEditThumbBtn');
-    const editThumbForm = document.getElementById('editThumbForm');
+    const editProjectModal = document.getElementById('editProjectModal');
+    const closeEditProjectModalBtn = document.getElementById('closeEditProjectModalBtn');
+    const cancelEditProjectBtn = document.getElementById('cancelEditProjectBtn');
+    const editProjectForm = document.getElementById('editProjectForm');
     const editModalProjTitle = document.getElementById('editModalProjTitle');
+    const editProjectTitle = document.getElementById('editProjectTitle');
+    const editProjectCategory = document.getElementById('editProjectCategory');
+    const editCategoryTagInput = document.getElementById('editCategoryTagInput');
+    const editProjectSubtitle = document.getElementById('editProjectSubtitle');
+    const editProjectUrl = document.getElementById('editProjectUrl');
+    const editProjectTags = document.getElementById('editProjectTags');
+    const editProjectDescription = document.getElementById('editProjectDescription');
     const editModalCurrentThumb = document.getElementById('editModalCurrentThumb');
     const editThumbFileInput = document.getElementById('editThumbFileInput');
     const editThumbUrlInput = document.getElementById('editThumbUrlInput');
-    const editCategoryTagInput = document.getElementById('editCategoryTagInput');
-    const editThumbProgressWrap = document.getElementById('editThumbProgressWrap');
-    const editThumbProgressBar = document.getElementById('editThumbProgressBar');
-    const editThumbProgressPercent = document.getElementById('editThumbProgressPercent');
-    const editThumbProgressText = document.getElementById('editThumbProgressText');
-    const saveEditThumbBtn = document.getElementById('saveEditThumbBtn');
+    const editProjectProgressWrap = document.getElementById('editProjectProgressWrap');
+    const editProjectProgressBar = document.getElementById('editProjectProgressBar');
+    const editProjectProgressPercent = document.getElementById('editProjectProgressPercent');
+    const editProjectProgressText = document.getElementById('editProjectProgressText');
+    const saveEditProjectBtn = document.getElementById('saveEditProjectBtn');
 
     let currentEditingProjectId = null;
 
-    function openEditThumbModal(id, title, currentThumb, currentTag) {
-      currentEditingProjectId = id;
-      editModalProjTitle.textContent = title;
+    function openEditProjectModal(project) {
+      currentEditingProjectId = project.id;
+      editModalProjTitle.textContent = `Editing: ${project.title || 'Untitled Project'}`;
+      editProjectTitle.value = project.title || '';
+      editProjectCategory.value = project.category || '2D Animation & Motion';
+      editCategoryTagInput.value = project.categoryTag || '';
+      editProjectSubtitle.value = project.subtitle || '';
+      editProjectUrl.value = project.url || '';
+      editProjectTags.value = Array.isArray(project.tags) ? project.tags.join(', ') : (project.tags || '');
+      editProjectDescription.value = project.description || '';
+
+      const currentThumb = project.thumbnailUrl || project.mediaUrl || '';
       editModalCurrentThumb.src = currentThumb;
       editThumbFileInput.value = '';
       editThumbUrlInput.value = '';
-      editCategoryTagInput.value = currentTag || '';
-      editThumbProgressWrap.style.display = 'none';
-      editThumbModal.style.display = 'flex';
+      editProjectProgressWrap.style.display = 'none';
+
+      editProjectModal.style.display = 'flex';
       document.body.style.overflow = 'hidden';
     }
 
-    function closeEditThumbModal() {
-      editThumbModal.style.display = 'none';
+    function closeEditProjectModal() {
+      editProjectModal.style.display = 'none';
       document.body.style.overflow = '';
       currentEditingProjectId = null;
     }
 
-    if (closeEditThumbModalBtn) closeEditThumbModalBtn.addEventListener('click', closeEditThumbModal);
-    if (cancelEditThumbBtn) cancelEditThumbBtn.addEventListener('click', closeEditThumbModal);
-    if (editThumbModal) {
-      editThumbModal.addEventListener('click', (e) => {
-        if (e.target === editThumbModal) closeEditThumbModal();
+    if (closeEditProjectModalBtn) closeEditProjectModalBtn.addEventListener('click', closeEditProjectModal);
+    if (cancelEditProjectBtn) cancelEditProjectBtn.addEventListener('click', closeEditProjectModal);
+    if (editProjectModal) {
+      editProjectModal.addEventListener('click', (e) => {
+        if (e.target === editProjectModal) closeEditProjectModal();
       });
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && editThumbModal.style.display === 'flex') {
-          closeEditThumbModal();
+        if (e.key === 'Escape' && editProjectModal.style.display === 'flex') {
+          closeEditProjectModal();
         }
       });
     }
@@ -2255,37 +2329,65 @@
       });
     }
 
-    if (editThumbForm) {
-      editThumbForm.addEventListener('submit', async (e) => {
+    // Live preview when direct URL entered
+    if (editThumbUrlInput) {
+      editThumbUrlInput.addEventListener('input', (e) => {
+        const val = e.target.value.trim();
+        if (val) {
+          editModalCurrentThumb.src = val;
+        }
+      });
+    }
+
+    if (editProjectForm) {
+      editProjectForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!currentEditingProjectId) return;
 
-        const file = editThumbFileInput.files[0];
-        const directUrl = editThumbUrlInput.value.trim();
-        const newTag = editCategoryTagInput.value.trim();
+        const newTitle = editProjectTitle.value.trim();
+        if (!newTitle) {
+          alert('Project title is required.');
+          return;
+        }
 
-        saveEditThumbBtn.disabled = true;
-        saveEditThumbBtn.textContent = 'SAVING...';
+        saveEditProjectBtn.disabled = true;
+        saveEditProjectBtn.textContent = 'SAVING...';
 
         try {
           let updatedThumbUrl = null;
+          const thumbFile = editThumbFileInput.files[0];
+          const directThumbUrl = editThumbUrlInput.value.trim();
 
-          if (file) {
-            editThumbProgressWrap.style.display = 'block';
-            editThumbProgressText.textContent = `Uploading thumbnail (${file.name})...`;
-            const cdnRes = await uploadFileToCloudinary(file, (percent) => {
-              editThumbProgressBar.style.width = `${percent}%`;
-              editThumbProgressPercent.textContent = `${percent}%`;
+          if (thumbFile) {
+            editProjectProgressWrap.style.display = 'block';
+            editProjectProgressText.textContent = `Uploading new cover image (${thumbFile.name})...`;
+            const cdnRes = await uploadFileToCloudinary(thumbFile, (percent) => {
+              editProjectProgressBar.style.width = `${percent}%`;
+              editProjectProgressPercent.textContent = `${percent}%`;
             });
             updatedThumbUrl = cdnRes.secure_url;
-          } else if (directUrl) {
-            updatedThumbUrl = directUrl;
+          } else if (directThumbUrl) {
+            updatedThumbUrl = directThumbUrl;
           }
 
+          const categoryVal = editProjectCategory.value;
+          const categoryTagVal = editCategoryTagInput.value.trim() || categoryVal;
+          const subtitleVal = editProjectSubtitle.value.trim();
+          const urlVal = editProjectUrl.value.trim();
+          const tagsVal = editProjectTags.value.split(',').map(t => t.trim()).filter(Boolean);
+          const descVal = editProjectDescription.value.trim();
+
           const updatePayload = {
-            categoryTag: newTag,
+            title: newTitle,
+            category: categoryVal,
+            categoryTag: categoryTagVal,
+            subtitle: subtitleVal,
+            url: urlVal,
+            tags: tagsVal,
+            description: descVal,
             updatedAt: serverTimestamp()
           };
+
           if (updatedThumbUrl) {
             updatePayload.thumbnailUrl = updatedThumbUrl;
           }
@@ -2293,17 +2395,17 @@
           await updateDoc(doc(db, 'projects', currentEditingProjectId), updatePayload);
           try { localStorage.removeItem('taqi_portfolio_cache'); } catch (e) {}
 
-          showUploadAlert(`✓ Thumbnail & custom tag updated successfully!`, true);
-          closeEditThumbModal();
+          showUploadAlert(`✓ Project "${newTitle}" updated successfully!`, true);
+          closeEditProjectModal();
           loadProjectsManual();
 
         } catch (err) {
-          console.error('Update thumbnail error:', err);
-          showUploadAlert(`Failed to update thumbnail: ${err.message}`);
+          console.error('Update project error:', err);
+          showUploadAlert(`Failed to update project: ${err.message}`);
         } finally {
-          saveEditThumbBtn.disabled = false;
-          saveEditThumbBtn.textContent = 'SAVE CHANGES ↗';
-          editThumbProgressWrap.style.display = 'none';
+          saveEditProjectBtn.disabled = false;
+          saveEditProjectBtn.textContent = 'SAVE CHANGES ↗';
+          editProjectProgressWrap.style.display = 'none';
         }
       });
     }
