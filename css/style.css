@@ -1982,7 +1982,6 @@ video::-webkit-media-controls-enclosure {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.8rem;
-  align-items: start;
   margin-bottom: 5rem;
   width: 100%;
 }
@@ -2006,7 +2005,7 @@ video::-webkit-media-controls-enclosure {
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
 }
 
-/* Card Thumbnail Container */
+/* Square Thumbnail Container */
 .project-card-link-wrapper {
   display: block;
   text-decoration: none;
@@ -2021,24 +2020,6 @@ video::-webkit-media-controls-enclosure {
   overflow: hidden;
   background: #ebe9e1;
   border-bottom: 1.5px solid rgba(0, 0, 0, 0.12);
-}
-
-/* Dynamic Card Display Orientations */
-.project-grid-card.orientation-square .project-card-thumb-wrap {
-  aspect-ratio: 1 / 1;
-}
-
-.project-grid-card.orientation-landscape .project-card-thumb-wrap {
-  aspect-ratio: 16 / 9;
-}
-
-.project-grid-card.orientation-portrait .project-card-thumb-wrap,
-.project-grid-card.orientation-vertical .project-card-thumb-wrap {
-  aspect-ratio: 9 / 16;
-}
-
-.project-grid-card.orientation-poster .project-card-thumb-wrap {
-  aspect-ratio: 4 / 5;
 }
 
 .project-card-img,
@@ -2428,16 +2409,6 @@ video::-webkit-media-controls-enclosure {
   height: 100%;
   display: block;
   object-fit: contain;
-}
-
-/* Vertical Reel Video Modal Modifier */
-.video-modal-container.is-vertical {
-  max-width: 440px;
-}
-
-.video-modal-container.is-vertical .video-modal-video-wrap {
-  aspect-ratio: 9 / 16;
-  max-height: 75vh;
 }
 
 /* Play Badge in Card Overlay */
