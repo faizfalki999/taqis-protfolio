@@ -750,6 +750,117 @@
     .btn-view-project:hover {
       background: rgba(255, 255, 255, 0.15);
     }
+    .btn-edit-thumb-project {
+      padding: 0.55rem 0.8rem;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      color: #93c5fd;
+      font-family: var(--font-adm-heading);
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .btn-edit-thumb-project:hover {
+      background: #2563eb;
+      color: #ffffff;
+    }
+    .manage-project-tag-pill {
+      display: inline-block;
+      font-family: var(--font-adm-mono);
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: #ffffff;
+      background: rgba(229, 9, 20, 0.25);
+      border: 1px solid rgba(229, 9, 20, 0.5);
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      margin-left: 0.4rem;
+      letter-spacing: 0.05em;
+    }
+    /* Edit Thumbnail Modal */
+    .edit-thumb-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.82);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .edit-thumb-modal-card {
+      background: #11070a;
+      border: 1.5px solid rgba(229, 9, 20, 0.35);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 560px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(120, 16, 34, 0.3);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .edit-thumb-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 1.4rem 1.6rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .edit-thumb-title {
+      font-family: var(--font-adm-heading);
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 0.25rem;
+      letter-spacing: 0.04em;
+    }
+    .edit-thumb-sub {
+      font-size: 0.78rem;
+      color: var(--adm-crimson-bright);
+      margin: 0;
+      font-family: var(--font-adm-mono);
+    }
+    .edit-thumb-close-btn {
+      background: transparent;
+      border: none;
+      color: #a1a1aa;
+      font-size: 1.6rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0.2rem;
+      transition: color 0.15s ease;
+    }
+    .edit-thumb-close-btn:hover {
+      color: #ffffff;
+    }
+    .edit-thumb-body {
+      padding: 1.6rem;
+    }
+    .edit-thumb-img-frame {
+      width: 100%;
+      height: 160px;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #000;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .edit-thumb-img-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
     @media (max-width: 768px) {
       .upload-grid-2col {
@@ -870,11 +981,9 @@
           <div class="admin-form-group">
             <label for="projectCategory" class="admin-label">Portfolio Category *</label>
             <select id="projectCategory" name="category" class="upload-select" required>
-              <option value="Branding &amp; Identity">Branding &amp; Identity</option>
               <option value="2D Animation &amp; Motion">2D Animation &amp; Motion</option>
               <option value="Graphic Design">Graphic Design</option>
               <option value="Video Editing &amp; Reel">Video Editing &amp; Reel</option>
-              <option value="Editorial &amp; Art Series">Editorial &amp; Art Series</option>
             </select>
           </div>
         </div>
@@ -907,17 +1016,40 @@
           </div>
         </div>
 
-        <!-- Tags -->
-        <div class="admin-form-group">
-          <label for="projectTags" class="admin-label">Tags (comma-separated)</label>
-          <input
-            type="text"
-            id="projectTags"
-            name="tags"
-            class="admin-input"
-            style="padding-left: 1rem;"
-            placeholder="Branding, Illustrator, Motion Design, After Effects, Typography"
-          >
+        <div class="upload-grid-2col">
+          <!-- Custom Tag / Card Badge -->
+          <div class="admin-form-group">
+            <label for="projectCategoryTag" class="admin-label">
+              Custom Card Badge / Tag (e.g. BRANDING // IDENTITY)
+            </label>
+            <input
+              type="text"
+              id="projectCategoryTag"
+              name="categoryTag"
+              class="admin-input"
+              style="padding-left: 1rem;"
+              placeholder="e.g. BRANDING // IDENTITY, 2D EXPLAINER, SHORT FILM"
+            >
+            <span style="font-size: 0.7rem; color: #a1a1aa; margin-top: 0.25rem; display: block;">
+              Displayed on top of the card badge (&lt;span class="project-card-category"&gt;). Defaults to category if empty.
+            </span>
+          </div>
+
+          <!-- Tags -->
+          <div class="admin-form-group">
+            <label for="projectTags" class="admin-label">Tags (comma-separated)</label>
+            <input
+              type="text"
+              id="projectTags"
+              name="tags"
+              class="admin-input"
+              style="padding-left: 1rem;"
+              placeholder="Branding, Illustrator, Motion Design, After Effects, Typography"
+            >
+            <span style="font-size: 0.7rem; color: #a1a1aa; margin-top: 0.25rem; display: block;">
+              Keyword tags shown at bottom of the card.
+            </span>
+          </div>
         </div>
 
         <!-- Media Upload Dropzone -->
@@ -1066,6 +1198,78 @@
         </div>
       </div>
 
+      <!-- Manage Curriculum Vitae (CV / Resume) Section -->
+      <div class="manage-projects-card" id="manageCvSection" style="margin-bottom: 2rem;">
+        <div class="manage-projects-header">
+          <div class="manage-projects-title">
+            <span style="color: #60a5fa;">📄</span>
+            <span>MANAGE CURRICULUM VITAE (CV / RESUME)</span>
+            <span class="manage-projects-count" id="cvStatusBadge" style="background: rgba(96, 165, 250, 0.15); border-color: rgba(96, 165, 250, 0.4); color: #93c5fd;">DEFAULT CV ACTIVE</span>
+          </div>
+        </div>
+        
+        <div style="padding: 1.5rem 1.8rem;">
+          <p style="font-size: 0.85rem; color: var(--adm-text-muted); margin-bottom: 1.25rem; line-height: 1.5;">
+            Upload an updated PDF of your Curriculum Vitae or provide a direct link. The <strong>"DOWNLOAD CV (PDF)"</strong> button in your live portfolio footer will immediately link to this file.
+          </p>
+
+          <div style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 1.2rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <div style="font-size: 0.7rem; color: #a1a1aa; font-family: var(--font-adm-mono); text-transform: uppercase; margin-bottom: 0.25rem;">CURRENT ACTIVE CV</div>
+              <div id="currentCvDisplay" style="font-family: var(--font-adm-heading); font-size: 0.95rem; color: #ffffff; word-break: break-all;">
+                Default Local File (assets/docs/Taqi.pdf)
+              </div>
+              <div id="cvUpdatedTime" style="font-size: 0.72rem; color: #86efac; margin-top: 0.25rem;">Default PDF bundled in portfolio assets</div>
+            </div>
+            <a href="assets/docs/Taqi.pdf" target="_blank" rel="noopener noreferrer" id="currentCvLink" class="btn-view-project" style="padding: 0.55rem 1.1rem; background: rgba(96, 165, 250, 0.15); border-color: rgba(96, 165, 250, 0.4); color: #93c5fd;">
+              VIEW / TEST CURRENT CV ↗
+            </a>
+          </div>
+
+          <form id="cvUpdateForm" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div class="upload-grid-2col">
+              <!-- Upload PDF file -->
+              <div class="admin-form-group">
+                <label for="cvFileInput" class="admin-label">Upload New PDF File</label>
+                <input type="file" id="cvFileInput" accept=".pdf,.doc,.docx" class="admin-input" style="padding: 0.6rem 1rem;">
+                <span style="font-size: 0.7rem; color: var(--adm-text-muted); margin-top: 0.25rem; display: block;">
+                  Select a new PDF from your computer (auto-uploaded to cloud storage).
+                </span>
+              </div>
+
+              <!-- Or Paste Direct Link -->
+              <div class="admin-form-group">
+                <label for="cvUrlInput" class="admin-label">Or Direct CV URL (Google Drive / CDN)</label>
+                <input type="url" id="cvUrlInput" class="admin-input" style="padding-left: 1rem;" placeholder="https://drive.google.com/... or https://res.cloudinary.com/...">
+                <span style="font-size: 0.7rem; color: var(--adm-text-muted); margin-top: 0.25rem; display: block;">
+                  Paste a direct link to your online resume or Drive share link.
+                </span>
+              </div>
+            </div>
+
+            <!-- Upload progress for CV -->
+            <div id="cvUploadProgress" style="display: none; margin-top: 0.2rem;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.35rem;">
+                <span id="cvProgressText" style="color: #60a5fa;">Uploading CV to cloud...</span>
+                <span id="cvProgressPercent" style="color: #60a5fa; font-family: var(--font-adm-mono);">0%</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" id="cvProgressBar" style="width: 0%; background: #60a5fa;"></div>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 1rem; align-items: center; flex-wrap: wrap;">
+              <button type="button" id="resetCvBtn" class="btn-secondary" style="font-size: 0.75rem; padding: 0.6rem 1rem; color: #a1a1aa; background: transparent; border: 1px solid rgba(255,255,255,0.12);">
+                RESET TO DEFAULT (Taqi.pdf)
+              </button>
+              <button type="submit" id="saveCvBtn" class="btn-primary" style="padding: 0.65rem 1.6rem; font-size: 0.82rem; background: linear-gradient(135deg, #2563eb, #1d4ed8);">
+                <span>UPDATE &amp; PUBLISH CV ↗</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <!-- Manage Uploaded Projects -->
       <div class="manage-projects-card" id="manageProjectsSection">
         <div class="manage-projects-header">
@@ -1086,6 +1290,71 @@
 
     </div>
 
+    <!-- Edit Thumbnail & Badge Modal -->
+    <div class="edit-thumb-modal-backdrop" id="editThumbModal" style="display: none;">
+      <div class="edit-thumb-modal-card">
+        <div class="edit-thumb-header">
+          <div>
+            <h3 class="edit-thumb-title">EDIT THUMBNAIL &amp; CUSTOM TAG</h3>
+            <p class="edit-thumb-sub" id="editModalProjTitle">Project Name</p>
+          </div>
+          <button type="button" class="edit-thumb-close-btn" id="closeEditThumbModalBtn" aria-label="Close modal">×</button>
+        </div>
+
+        <div class="edit-thumb-body">
+          <!-- Current Thumbnail Preview -->
+          <div class="edit-thumb-preview-section">
+            <label class="admin-label">Current Thumbnail</label>
+            <div class="edit-thumb-img-frame">
+              <img id="editModalCurrentThumb" src="" alt="Thumbnail preview" onerror="this.src='https://via.placeholder.com/400x250?text=No+Thumbnail';">
+            </div>
+          </div>
+
+          <form id="editThumbForm">
+            <!-- Option A: Upload New Image -->
+            <div class="admin-form-group" style="margin-bottom: 1.1rem;">
+              <label for="editThumbFileInput" class="admin-label">Upload New Thumbnail Image (JPG, PNG, WebP)</label>
+              <input type="file" id="editThumbFileInput" accept="image/*" class="admin-input" style="padding: 0.6rem 1rem;">
+              <span style="font-size: 0.7rem; color: #a1a1aa; margin-top: 0.25rem; display: block;">
+                Select a new cover picture or video poster. Auto-uploaded to Cloudinary when saved.
+              </span>
+            </div>
+
+            <!-- Option B: Direct Image URL -->
+            <div class="admin-form-group" style="margin-bottom: 1.1rem;">
+              <label for="editThumbUrlInput" class="admin-label">Or Direct Thumbnail URL</label>
+              <input type="url" id="editThumbUrlInput" class="admin-input" style="padding-left: 1rem;" placeholder="https://res.cloudinary.com/... or image link">
+            </div>
+
+            <!-- Custom Card Tag / Badge -->
+            <div class="admin-form-group" style="margin-bottom: 1.3rem;">
+              <label for="editCategoryTagInput" class="admin-label">Custom Card Badge / Tag (e.g. BRANDING // IDENTITY)</label>
+              <input type="text" id="editCategoryTagInput" class="admin-input" style="padding-left: 1rem;" placeholder="e.g. BRANDING // IDENTITY, 2D EXPLAINER, REEL">
+              <span style="font-size: 0.7rem; color: #a1a1aa; margin-top: 0.25rem; display: block;">
+                Updates the &lt;span class="project-card-category"&gt; badge displayed at the top of this project card.
+              </span>
+            </div>
+
+            <!-- Progress / Loading state -->
+            <div id="editThumbProgressWrap" style="display: none; margin-bottom: 1rem;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.35rem; color: #60a5fa;">
+                <span id="editThumbProgressText">Uploading thumbnail...</span>
+                <span id="editThumbProgressPercent" style="font-family: var(--font-adm-mono);">0%</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" id="editThumbProgressBar" style="width: 0%; background: #3b82f6;"></div>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 0.8rem;">
+              <button type="button" id="cancelEditThumbBtn" class="btn-secondary" style="background: rgba(255,255,255,0.08); color: #fff;">CANCEL</button>
+              <button type="submit" id="saveEditThumbBtn" class="btn-primary" style="background: linear-gradient(135deg, #2563eb, #1d4ed8);">SAVE CHANGES ↗</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
   </main>
 
   <!-- Page Footer Bar -->
@@ -1102,7 +1371,7 @@
   <script type="module">
     import { initializeApp } from "firebase/app";
     import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-    import { getFirestore, collection, addDoc, serverTimestamp, deleteDoc, doc, onSnapshot, getDocs } from "firebase/firestore";
+    import { getFirestore, collection, addDoc, serverTimestamp, deleteDoc, doc, onSnapshot, getDocs, updateDoc, setDoc, getDoc } from "firebase/firestore";
     import { getAnalytics } from "firebase/analytics";
 
     // Firebase configuration
@@ -1130,6 +1399,60 @@
     const CLOUDINARY_CLOUD_NAME = "pea1wjtw";
     const CLOUDINARY_UPLOAD_PRESET = "ozgarxqn";
     const CLOUDINARY_AUTO_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`;
+
+    // Reusable Cloudinary Upload Helper
+    function uploadFileToCloudinary(file, onProgress) {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', CLOUDINARY_AUTO_URL, true);
+
+        if (onProgress) {
+          xhr.upload.onprogress = (e) => {
+            if (e.lengthComputable) {
+              const percent = Math.round((e.loaded / e.total) * 100);
+              onProgress(percent);
+            }
+          };
+        }
+
+        xhr.onload = () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            try {
+              const res = JSON.parse(xhr.responseText);
+              resolve(res);
+            } catch (err) {
+              reject(new Error('Invalid response from Cloudinary'));
+            }
+          } else {
+            try {
+              const errData = JSON.parse(xhr.responseText);
+              reject(new Error(errData?.error?.message || `Upload failed with status ${xhr.status}`));
+            } catch (err) {
+              reject(new Error(`Upload failed with status ${xhr.status}`));
+            }
+          }
+        };
+
+        xhr.onerror = () => reject(new Error('Network error uploading file to Cloudinary'));
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+        formData.append('folder', 'taqi_portfolio');
+        xhr.send(formData);
+      });
+    }
+
+    // Helper: Escape HTML
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
 
     // DOM Elements
     const userEmailText = document.getElementById('userEmailText');
@@ -1297,6 +1620,7 @@
         const draft = {
           title: document.getElementById('projectTitle').value,
           category: document.getElementById('projectCategory').value,
+          categoryTag: document.getElementById('projectCategoryTag')?.value || '',
           subtitle: document.getElementById('projectSubtitle').value,
           url: document.getElementById('projectUrl').value,
           tags: document.getElementById('projectTags').value,
@@ -1313,7 +1637,10 @@
           const draft = JSON.parse(savedDraftJson);
           if (draft.title && !document.getElementById('projectTitle').value) {
             document.getElementById('projectTitle').value = draft.title || '';
-            document.getElementById('projectCategory').value = draft.category || 'Branding & Identity';
+            document.getElementById('projectCategory').value = draft.category || '2D Animation & Motion';
+            if (document.getElementById('projectCategoryTag')) {
+              document.getElementById('projectCategoryTag').value = draft.categoryTag || '';
+            }
             document.getElementById('projectSubtitle').value = draft.subtitle || '';
             document.getElementById('projectUrl').value = draft.url || '';
             document.getElementById('projectTags').value = draft.tags || '';
@@ -1330,6 +1657,7 @@
 
         const title = document.getElementById('projectTitle').value.trim();
         const category = document.getElementById('projectCategory').value;
+        const categoryTag = (document.getElementById('projectCategoryTag')?.value || '').trim() || category;
         const subtitle = document.getElementById('projectSubtitle').value.trim();
         const projectUrl = document.getElementById('projectUrl').value.trim();
         const tags = document.getElementById('projectTags').value.trim();
@@ -1420,6 +1748,7 @@
               const projectRecord = {
                 title: title,
                 category: category,
+                categoryTag: categoryTag,
                 subtitle: subtitle,
                 url: projectUrl,
                 tags: tags.split(',').map(t => t.trim()).filter(Boolean),
@@ -1507,7 +1836,8 @@
 
       firestoreDocBadge.textContent = `DOC: #${firestoreDocId}`;
       successTitle.textContent = project.title;
-      successCategoryMeta.textContent = `${project.category} // ${project.tags.join(', ') || 'No tags'}`;
+      const displayBadge = project.categoryTag ? `${project.categoryTag} (${project.category})` : project.category;
+      successCategoryMeta.textContent = `${displayBadge} // ${project.tags.join(', ') || 'No tags'}`;
       successTimestamp.textContent = new Date().toLocaleTimeString();
       
       cloudinaryUrlInput.value = cdnData.secure_url;
@@ -1663,9 +1993,11 @@
         const data = docSnap.data();
         const id = docSnap.id;
         const title = (data.title || '').trim();
-        if (PURGE_TARGET_IDS.includes(id) || PURGE_TARGET_TITLES.includes(title)) {
-          // Permanently delete test record from Firestore
-          deleteDoc(doc(db, 'projects', id)).catch(() => {});
+        // Ignore test projects and CV metadata
+        if (id === 'site_cv_metadata' || id === 'cv' || PURGE_TARGET_IDS.includes(id) || PURGE_TARGET_TITLES.includes(title)) {
+          if (PURGE_TARGET_IDS.includes(id) || PURGE_TARGET_TITLES.includes(title)) {
+            deleteDoc(doc(db, 'projects', id)).catch(() => {});
+          }
           return;
         }
         activeProjects.push({ id, ...data });
@@ -1684,7 +2016,7 @@
         manageProjectsGrid.innerHTML = `
           <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem 1rem; color: var(--adm-text-muted);">
             <p style="font-size: 0.95rem; margin-bottom: 0.5rem; color: #fff;">No active projects in Firestore</p>
-            <p style="font-size: 0.8rem;">Projects you upload will appear here with an option to permanently delete them at any time.</p>
+            <p style="font-size: 0.8rem;">Projects you upload will appear here with an option to permanently delete them or edit their thumbnails at any time.</p>
           </div>
         `;
         return;
@@ -1695,19 +2027,31 @@
         const thumb = proj.thumbnailUrl || proj.mediaUrl || 'https://via.placeholder.com/400x250?text=No+Preview';
         const title = proj.title || 'Untitled Project';
         const category = proj.category || 'General';
+        const categoryTag = proj.categoryTag || '';
         const desc = proj.description || 'No description provided';
         const mediaUrl = proj.mediaUrl || '#';
 
         return `
           <div class="manage-project-item" id="proj-card-${proj.id}">
-            <img src="${thumb}" alt="${title}" class="manage-project-thumb" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250?text=No+Image';">
+            <img src="${thumb}" alt="${escapeHtml(title)}" class="manage-project-thumb" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250?text=No+Image';">
             <div class="manage-project-body">
-              <span class="manage-project-category">${category}</span>
-              <h4 class="manage-project-name">${title}</h4>
-              <p class="manage-project-desc">${desc}</p>
+              <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.35rem;">
+                <span class="manage-project-category" style="margin-bottom:0;">${escapeHtml(category)}</span>
+                ${categoryTag ? `<span class="manage-project-tag-pill">${escapeHtml(categoryTag)}</span>` : ''}
+              </div>
+              <h4 class="manage-project-name">${escapeHtml(title)}</h4>
+              <p class="manage-project-desc">${escapeHtml(desc)}</p>
               <div class="manage-project-actions">
                 <a href="${mediaUrl}" target="_blank" rel="noopener noreferrer" class="btn-view-project">VIEW ↗</a>
-                <button type="button" class="btn-delete-project" data-id="${proj.id}" data-title="${title.replace(/"/g, '&quot;')}">
+                <button type="button" class="btn-edit-thumb-project" 
+                  data-id="${proj.id}" 
+                  data-title="${escapeHtml(title)}" 
+                  data-thumb="${escapeHtml(thumb)}" 
+                  data-tag="${escapeHtml(categoryTag)}">
+                  <span>🖼</span>
+                  <span>EDIT THUMB</span>
+                </button>
+                <button type="button" class="btn-delete-project" data-id="${proj.id}" data-title="${escapeHtml(title)}">
                   <span>🗑</span>
                   <span>DELETE</span>
                 </button>
@@ -1744,7 +2088,277 @@
           }
         });
       });
+
+      // Attach Edit Thumbnail & Tag Handlers
+      manageProjectsGrid.querySelectorAll('.btn-edit-thumb-project').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          const title = btn.getAttribute('data-title');
+          const thumb = btn.getAttribute('data-thumb');
+          const tag = btn.getAttribute('data-tag');
+          openEditThumbModal(id, title, thumb, tag);
+        });
+      });
     }
+
+    // ============================================
+    // 7. Edit Thumbnail & Custom Tag Modal Logic
+    // ============================================
+    const editThumbModal = document.getElementById('editThumbModal');
+    const closeEditThumbModalBtn = document.getElementById('closeEditThumbModalBtn');
+    const cancelEditThumbBtn = document.getElementById('cancelEditThumbBtn');
+    const editThumbForm = document.getElementById('editThumbForm');
+    const editModalProjTitle = document.getElementById('editModalProjTitle');
+    const editModalCurrentThumb = document.getElementById('editModalCurrentThumb');
+    const editThumbFileInput = document.getElementById('editThumbFileInput');
+    const editThumbUrlInput = document.getElementById('editThumbUrlInput');
+    const editCategoryTagInput = document.getElementById('editCategoryTagInput');
+    const editThumbProgressWrap = document.getElementById('editThumbProgressWrap');
+    const editThumbProgressBar = document.getElementById('editThumbProgressBar');
+    const editThumbProgressPercent = document.getElementById('editThumbProgressPercent');
+    const editThumbProgressText = document.getElementById('editThumbProgressText');
+    const saveEditThumbBtn = document.getElementById('saveEditThumbBtn');
+
+    let currentEditingProjectId = null;
+
+    function openEditThumbModal(id, title, currentThumb, currentTag) {
+      currentEditingProjectId = id;
+      editModalProjTitle.textContent = title;
+      editModalCurrentThumb.src = currentThumb;
+      editThumbFileInput.value = '';
+      editThumbUrlInput.value = '';
+      editCategoryTagInput.value = currentTag || '';
+      editThumbProgressWrap.style.display = 'none';
+      editThumbModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeEditThumbModal() {
+      editThumbModal.style.display = 'none';
+      document.body.style.overflow = '';
+      currentEditingProjectId = null;
+    }
+
+    if (closeEditThumbModalBtn) closeEditThumbModalBtn.addEventListener('click', closeEditThumbModal);
+    if (cancelEditThumbBtn) cancelEditThumbBtn.addEventListener('click', closeEditThumbModal);
+    if (editThumbModal) {
+      editThumbModal.addEventListener('click', (e) => {
+        if (e.target === editThumbModal) closeEditThumbModal();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && editThumbModal.style.display === 'flex') {
+          closeEditThumbModal();
+        }
+      });
+    }
+
+    // Live preview when file chosen
+    if (editThumbFileInput) {
+      editThumbFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            editModalCurrentThumb.src = ev.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    if (editThumbForm) {
+      editThumbForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!currentEditingProjectId) return;
+
+        const file = editThumbFileInput.files[0];
+        const directUrl = editThumbUrlInput.value.trim();
+        const newTag = editCategoryTagInput.value.trim();
+
+        saveEditThumbBtn.disabled = true;
+        saveEditThumbBtn.textContent = 'SAVING...';
+
+        try {
+          let updatedThumbUrl = null;
+
+          if (file) {
+            editThumbProgressWrap.style.display = 'block';
+            editThumbProgressText.textContent = `Uploading thumbnail (${file.name})...`;
+            const cdnRes = await uploadFileToCloudinary(file, (percent) => {
+              editThumbProgressBar.style.width = `${percent}%`;
+              editThumbProgressPercent.textContent = `${percent}%`;
+            });
+            updatedThumbUrl = cdnRes.secure_url;
+          } else if (directUrl) {
+            updatedThumbUrl = directUrl;
+          }
+
+          const updatePayload = {
+            categoryTag: newTag,
+            updatedAt: serverTimestamp()
+          };
+          if (updatedThumbUrl) {
+            updatePayload.thumbnailUrl = updatedThumbUrl;
+          }
+
+          await updateDoc(doc(db, 'projects', currentEditingProjectId), updatePayload);
+          try { localStorage.removeItem('taqi_portfolio_cache'); } catch (e) {}
+
+          showUploadAlert(`✓ Thumbnail & custom tag updated successfully!`, true);
+          closeEditThumbModal();
+          loadProjectsManual();
+
+        } catch (err) {
+          console.error('Update thumbnail error:', err);
+          showUploadAlert(`Failed to update thumbnail: ${err.message}`);
+        } finally {
+          saveEditThumbBtn.disabled = false;
+          saveEditThumbBtn.textContent = 'SAVE CHANGES ↗';
+          editThumbProgressWrap.style.display = 'none';
+        }
+      });
+    }
+
+    // ============================================
+    // 8. CV (Curriculum Vitae) Manager Logic
+    // ============================================
+    const cvStatusBadge = document.getElementById('cvStatusBadge');
+    const currentCvDisplay = document.getElementById('currentCvDisplay');
+    const currentCvLink = document.getElementById('currentCvLink');
+    const cvUpdatedTime = document.getElementById('cvUpdatedTime');
+    const cvUpdateForm = document.getElementById('cvUpdateForm');
+    const cvFileInput = document.getElementById('cvFileInput');
+    const cvUrlInput = document.getElementById('cvUrlInput');
+    const resetCvBtn = document.getElementById('resetCvBtn');
+    const cvUploadProgress = document.getElementById('cvUploadProgress');
+    const cvProgressBar = document.getElementById('cvProgressBar');
+    const cvProgressPercent = document.getElementById('cvProgressPercent');
+    const cvProgressText = document.getElementById('cvProgressText');
+    const saveCvBtn = document.getElementById('saveCvBtn');
+
+    async function loadCurrentCv() {
+      try {
+        const cvSnap = await getDoc(doc(db, 'projects', 'site_cv_metadata'));
+        if (cvSnap.exists() && cvSnap.data().cvUrl) {
+          const data = cvSnap.data();
+          if (cvStatusBadge) {
+            cvStatusBadge.textContent = 'CUSTOM CV ACTIVE';
+            cvStatusBadge.style.color = '#86efac';
+            cvStatusBadge.style.borderColor = 'rgba(134, 239, 172, 0.4)';
+            cvStatusBadge.style.background = 'rgba(134, 239, 172, 0.15)';
+          }
+          if (currentCvDisplay) {
+            currentCvDisplay.textContent = data.fileName ? `${data.fileName}` : data.cvUrl;
+          }
+          if (currentCvLink) {
+            currentCvLink.href = data.cvUrl;
+            currentCvLink.textContent = 'VIEW ACTIVE CV ↗';
+          }
+          if (cvUpdatedTime && data.updatedAt) {
+            const dateObj = data.updatedAt.toDate ? data.updatedAt.toDate() : new Date();
+            cvUpdatedTime.textContent = `Last updated: ${dateObj.toLocaleDateString()} at ${dateObj.toLocaleTimeString()}`;
+          }
+          if (cvUrlInput) {
+            cvUrlInput.value = data.cvUrl;
+          }
+        } else {
+          if (cvStatusBadge) {
+            cvStatusBadge.textContent = 'DEFAULT CV ACTIVE';
+            cvStatusBadge.style.color = '#93c5fd';
+            cvStatusBadge.style.borderColor = 'rgba(96, 165, 250, 0.4)';
+            cvStatusBadge.style.background = 'rgba(96, 165, 250, 0.15)';
+          }
+          if (currentCvDisplay) {
+            currentCvDisplay.textContent = 'Default Local File (assets/docs/Taqi.pdf)';
+          }
+          if (currentCvLink) {
+            currentCvLink.href = 'assets/docs/Taqi.pdf';
+            currentCvLink.textContent = 'VIEW DEFAULT CV (PDF) ↗';
+          }
+          if (cvUpdatedTime) {
+            cvUpdatedTime.textContent = 'Default PDF bundled in portfolio assets';
+          }
+        }
+      } catch (err) {
+        console.warn('Could not load CV status:', err);
+      }
+    }
+
+    if (cvUpdateForm) {
+      cvUpdateForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const file = cvFileInput.files[0];
+        const directUrl = cvUrlInput.value.trim();
+
+        if (!file && !directUrl) {
+          showUploadAlert('Please select a PDF file or enter a direct CV link.');
+          return;
+        }
+
+        saveCvBtn.disabled = true;
+        saveCvBtn.textContent = 'UPDATING CV...';
+
+        try {
+          let finalCvUrl = directUrl;
+          let finalFileName = file ? file.name : (directUrl.split('/').pop() || 'Taqi_Haider_CV.pdf');
+
+          if (file) {
+            cvUploadProgress.style.display = 'block';
+            cvProgressText.textContent = `Uploading "${file.name}" to Cloudinary...`;
+
+            const cdnRes = await uploadFileToCloudinary(file, (percent) => {
+              cvProgressBar.style.width = `${percent}%`;
+              cvProgressPercent.textContent = `${percent}%`;
+            });
+
+            finalCvUrl = cdnRes.secure_url;
+          }
+
+          const payload = {
+            cvUrl: finalCvUrl,
+            fileName: finalFileName,
+            updatedAt: serverTimestamp()
+          };
+
+          await setDoc(doc(db, 'projects', 'site_cv_metadata'), payload, { merge: true });
+          try {
+            await setDoc(doc(db, 'settings', 'cv'), payload, { merge: true });
+          } catch (e) {}
+
+          showUploadAlert(`✓ CV updated successfully! Live portfolio button updated.`, true);
+          cvFileInput.value = '';
+          cvUploadProgress.style.display = 'none';
+          await loadCurrentCv();
+
+        } catch (err) {
+          console.error('CV upload error:', err);
+          showUploadAlert(`Failed to update CV: ${err.message}`);
+        } finally {
+          saveCvBtn.disabled = false;
+          saveCvBtn.textContent = 'UPDATE & PUBLISH CV ↗';
+          cvUploadProgress.style.display = 'none';
+        }
+      });
+    }
+
+    if (resetCvBtn) {
+      resetCvBtn.addEventListener('click', async () => {
+        if (!confirm('Reset CV back to the original default file (assets/docs/Taqi.pdf)?')) return;
+        try {
+          await deleteDoc(doc(db, 'projects', 'site_cv_metadata'));
+          try { await deleteDoc(doc(db, 'settings', 'cv')); } catch (e) {}
+          showUploadAlert('CV reset to default local PDF file.', true);
+          cvFileInput.value = '';
+          cvUrlInput.value = '';
+          await loadCurrentCv();
+        } catch (err) {
+          showUploadAlert(`Reset failed: ${err.message}`);
+        }
+      });
+    }
+
+    // Initialize CV state on page load
+    loadCurrentCv();
   </script>
 
 </body>

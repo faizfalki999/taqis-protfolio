@@ -73,7 +73,7 @@ function matchesCategory(projectCategory, sectionCategory) {
 // Build Card HTML for an Image Project
 function buildImageCardHtml(project) {
   const title = escapeHtml(project.title || 'Untitled Project');
-  const category = escapeHtml(project.category || 'Visual Design');
+  const category = escapeHtml(project.categoryTag || project.category || 'Visual Design');
   const description = escapeHtml(project.description || project.subtitle || '');
   const thumbUrl = escapeHtml(project.thumbnailUrl || project.mediaUrl || '');
   const fullUrl = escapeHtml(project.mediaUrl || '');
@@ -127,7 +127,7 @@ function buildImageCardHtml(project) {
 // Build Card HTML for a Video Project
 function buildVideoCardHtml(project) {
   const title = escapeHtml(project.title || 'Untitled Video');
-  const category = escapeHtml(project.category || 'Animation');
+  const category = escapeHtml(project.categoryTag || project.category || 'Animation');
   const description = escapeHtml(project.description || project.subtitle || '');
   const videoUrl = escapeHtml(project.mediaUrl || '');
   const posterUrl = escapeHtml(project.thumbnailUrl || '');
@@ -259,8 +259,9 @@ function initCategoryLoader() {
       return timeB - timeA;
     });
 
-    // Filter strictly for this category, excluding deleted test projects
+    // Filter strictly for this category, excluding deleted test projects and metadata docs
     const matchingDocs = docs.filter(p => {
+      if (p.id === 'site_cv_metadata' || p.id === 'cv' || !p.title) return false;
       if (TEST_PROJECT_IDS.has(p.id)) return false;
       const titleClean = (p.title || '').trim().toLowerCase();
       if (TEST_TITLES.has(titleClean)) return false;

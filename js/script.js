@@ -284,5 +284,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // =========================================================================
+  // 8. DYNAMIC CV LINK SYNCHRONIZATION (Syncs with Admin Panel Upload)
+  // =========================================================================
+  async function initDynamicCv() {
+    const downloadCvBtn = document.getElementById('downloadCvBtn');
+    if (!downloadCvBtn) return;
+
+    try {
+      const res = await fetch('https://firestore.googleapis.com/v1/projects/portfolio-63983/databases/(default)/documents/projects/site_cv_metadata');
+      if (res.ok) {
+        const data = await res.json();
+        const cvUrl = data?.fields?.cvUrl?.stringValue;
+        if (cvUrl) {
+          downloadCvBtn.href = cvUrl;
+          downloadCvBtn.target = '_blank';
+          if (cvUrl.startsWith('http')) {
+            downloadCvBtn.removeAttribute('download');
+          }
+        }
+      }
+    } catch (err) {
+      // Graceful fallback: keeps default assets/docs/Taqi.pdf
+    }
+  }
+
+  initDynamicCv();
+
 });
 
