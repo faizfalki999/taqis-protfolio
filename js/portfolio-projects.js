@@ -233,6 +233,107 @@ function setupImageLightbox() {
   });
 }
 
+// Video Modal Player Setup
+function setupVideoModal() {
+  let videoModal = document.getElementById('portfolioVideoModal');
+
+  if (!videoModal) {
+    videoModal = document.createElement('div');
+    videoModal.id = 'portfolioVideoModal';
+    videoModal.className = 'video-modal-backdrop';
+    videoModal.innerHTML = `
+      <div class="video-modal-container" role="dialog" aria-modal="true">
+        <div class="video-modal-header">
+          <div class="video-modal-title-wrap">
+            <span class="video-modal-category" id="videoModalCategory">PROJECT VIDEO</span>
+            <h3 class="video-modal-title" id="videoModalTitle">Video Title</h3>
+          </div>
+          <button class="video-modal-close-btn" id="videoModalCloseBtn" aria-label="Close Video">×</button>
+        </div>
+        <div class="video-modal-video-wrap">
+          <video id="videoModalPlayer" controls controlslist="nodownload noplaybackrate" disablepictureinpicture playsinline preload="metadata" oncontextmenu="return false;">
+            <source src="" type="video/mp4">
+            Your browser does not support HTML5 video.
+          </video>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(videoModal);
+  }
+
+  const player = document.getElementById('videoModalPlayer');
+  const titleEl = document.getElementById('videoModalTitle');
+  const catEl = document.getElementById('videoModalCategory');
+  const closeBtn = document.getElementById('videoModalCloseBtn');
+
+  function openVideoModal(videoSrc, title, category) {
+    if (!player) return;
+    if (titleEl) titleEl.textContent = title || 'PROJECT PREVIEW';
+    if (catEl) catEl.textContent = category || 'VIDEO';
+
+    player.src = videoSrc;
+    player.load();
+    videoModal.classList.add('is-active');
+    document.body.style.overflow = 'hidden';
+
+    // Attempt unmuted play first; if blocked by browser policy, fall back to muted
+    player.muted = false;
+    const playPromise = player.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        player.muted = true;
+        player.play().catch(() => {});
+      });
+    }
+  }
+
+  function closeVideoModal() {
+    if (!player) return;
+    videoModal.classList.remove('is-active');
+    player.pause();
+    player.currentTime = 0;
+    player.removeAttribute('src');
+    player.load();
+    document.body.style.overflow = '';
+  }
+
+  // Delegated click listener for all video triggers (cards, links, play buttons)
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('.project-video-trigger');
+    if (trigger) {
+      e.preventDefault();
+      e.stopPropagation();
+      const videoSrc = trigger.getAttribute('data-video-src');
+      const title = trigger.getAttribute('data-title');
+      const cat = trigger.getAttribute('data-category');
+      if (videoSrc) {
+        openVideoModal(videoSrc, title, cat);
+      }
+    }
+  });
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeVideoModal);
+  }
+
+  videoModal.addEventListener('click', (e) => {
+    if (e.target === videoModal) {
+      closeVideoModal();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && videoModal.classList.contains('is-active')) {
+      closeVideoModal();
+    }
+  });
+
+  // Prevent right-click save on video modal
+  videoModal.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+  });
+}
+
 // Category Page Dynamic Loader
 function initCategoryLoader() {
   const dynamicContainer = document.getElementById('dynamicProjectsList');
@@ -243,6 +344,7 @@ function initCategoryLoader() {
   if (!targetCategory) return;
 
   setupImageLightbox();
+  setupVideoModal();
 
   const projectsCol = collection(db, "projects");
 
@@ -277,13 +379,20 @@ function initCategoryLoader() {
       return p.mediaType === 'video' ? buildVideoCardHtml(p) : buildImageCardHtml(p);
     }).join('');
 
-    // Attach video hover autoplay
+    // Attach video hover preview
     dynamicContainer.querySelectorAll('.project-grid-card').forEach(card => {
       const video = card.querySelector('video.project-card-video');
       if (video) {
+        video.muted = true;
+        video.defaultMuted = true;
+        video.playsInline = true;
         let playPromise = null;
         card.addEventListener('mouseenter', () => {
+          video.muted = true;
           playPromise = video.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(() => {});
+          }
         });
         card.addEventListener('mouseleave', () => {
           if (playPromise !== null) {

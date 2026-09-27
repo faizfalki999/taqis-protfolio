@@ -90,6 +90,25 @@
     </div>
   </footer>
 
+  <!-- Video Player Modal Lightbox -->
+  <div class="video-modal-backdrop" id="portfolioVideoModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="video-modal-container">
+      <div class="video-modal-header">
+        <div class="video-modal-title-wrap">
+          <span class="video-modal-category" id="videoModalCategory">PROJECT VIDEO</span>
+          <h3 class="video-modal-title" id="videoModalTitle">Video Title</h3>
+        </div>
+        <button class="video-modal-close-btn" id="videoModalCloseBtn" aria-label="Close Video">×</button>
+      </div>
+      <div class="video-modal-video-wrap">
+        <video id="videoModalPlayer" controls controlslist="nodownload noplaybackrate" disablepictureinpicture playsinline preload="metadata" oncontextmenu="return false;">
+          <source src="" type="video/mp4">
+          Your browser does not support HTML5 video.
+        </video>
+      </div>
+    </div>
+  </div>
+
   <!-- Image Lightbox Modal -->
   <div class="image-lightbox-modal" id="portfolioImageModal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="image-lightbox-wrap">
@@ -99,6 +118,8 @@
     </div>
   </div>
 
+  <!-- Scripts -->
+  <script src="js/script.js"></script>
   <!-- Dynamic Firestore Projects Loader -->
   <script type="module" src="js/portfolio-projects.js"></script>
 </body>

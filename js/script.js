@@ -168,96 +168,117 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================================================================
   // 6. PORTFOLIO VIDEO MODAL LIGHTBOX CONTROLLER
   // =========================================================================
-  let videoModal = document.getElementById('portfolioVideoModal');
-  
-  // Create modal element if not present in DOM
-  if (!videoModal && document.querySelector('.project-video-trigger')) {
-    videoModal = document.createElement('div');
-    videoModal.id = 'portfolioVideoModal';
-    videoModal.className = 'video-modal-backdrop';
-    videoModal.innerHTML = `
-      <div class="video-modal-container" role="dialog" aria-modal="true">
-        <div class="video-modal-header">
-          <div class="video-modal-title-wrap">
-            <span class="video-modal-category" id="videoModalCategory">PROJECT VIDEO</span>
-            <h3 class="video-modal-title" id="videoModalTitle">Video Title</h3>
+  function getOrCreateVideoModal() {
+    let modal = document.getElementById('portfolioVideoModal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'portfolioVideoModal';
+      modal.className = 'video-modal-backdrop';
+      modal.innerHTML = `
+        <div class="video-modal-container" role="dialog" aria-modal="true">
+          <div class="video-modal-header">
+            <div class="video-modal-title-wrap">
+              <span class="video-modal-category" id="videoModalCategory">PROJECT VIDEO</span>
+              <h3 class="video-modal-title" id="videoModalTitle">Video Title</h3>
+            </div>
+            <button class="video-modal-close-btn" id="videoModalCloseBtn" aria-label="Close Video">×</button>
           </div>
-          <button class="video-modal-close-btn" id="videoModalCloseBtn" aria-label="Close Video">×</button>
+          <div class="video-modal-video-wrap">
+            <video id="videoModalPlayer" controls controlslist="nodownload noplaybackrate" disablepictureinpicture playsinline preload="metadata" oncontextmenu="return false;">
+              <source src="" type="video/mp4">
+              Your browser does not support HTML5 video.
+            </video>
+          </div>
         </div>
-        <div class="video-modal-video-wrap">
-          <video id="videoModalPlayer" controls controlslist="nodownload noplaybackrate" disablepictureinpicture playsinline preload="metadata" oncontextmenu="return false;">
-            <source src="" type="video/mp4">
-            Your browser does not support HTML5 video.
-          </video>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(videoModal);
-  }
+      `;
+      document.body.appendChild(modal);
 
-  if (videoModal) {
-    const player = document.getElementById('videoModalPlayer');
-    const titleEl = document.getElementById('videoModalTitle');
-    const catEl = document.getElementById('videoModalCategory');
-    const closeBtn = document.getElementById('videoModalCloseBtn');
+      const player = modal.querySelector('#videoModalPlayer');
+      const closeBtn = modal.querySelector('#videoModalCloseBtn');
 
-    function openVideoModal(videoSrc, title, category) {
-      if (!player) return;
-      if (titleEl) titleEl.textContent = title || 'PROJECT PREVIEW';
-      if (catEl) catEl.textContent = category || 'VIDEO';
-
-      player.src = videoSrc;
-      videoModal.classList.add('is-active');
-      document.body.style.overflow = 'hidden';
-
-      player.play().catch(() => {});
-    }
-
-    function closeVideoModal() {
-      if (!player) return;
-      videoModal.classList.remove('is-active');
-      player.pause();
-      player.currentTime = 0;
-      player.src = '';
-      document.body.style.overflow = '';
-    }
-
-    document.addEventListener('click', (e) => {
-      const trigger = e.target.closest('.project-video-trigger');
-      if (trigger) {
-        e.preventDefault();
-        const videoSrc = trigger.getAttribute('data-video-src');
-        const title = trigger.getAttribute('data-title');
-        const cat = trigger.getAttribute('data-category');
-        if (videoSrc) {
-          openVideoModal(videoSrc, title, cat);
+      function closeVideoModal() {
+        modal.classList.remove('is-active');
+        if (player) {
+          player.pause();
+          player.currentTime = 0;
+          player.removeAttribute('src');
+          player.load();
         }
+        document.body.style.overflow = '';
       }
-    });
 
-    if (closeBtn) {
-      closeBtn.addEventListener('click', closeVideoModal);
-    }
-
-    videoModal.addEventListener('click', (e) => {
-      if (e.target === videoModal) {
-        closeVideoModal();
+      if (closeBtn) {
+        closeBtn.addEventListener('click', closeVideoModal);
       }
-    });
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && videoModal.classList.contains('is-active')) {
-        closeVideoModal();
-      }
-    });
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeVideoModal();
+        }
+      });
 
-    // Disable right-click context menu on all video elements to prevent "Save video as..."
-    document.addEventListener('contextmenu', (e) => {
-      if (e.target && (e.target.tagName === 'VIDEO' || e.target.closest('video') || e.target.closest('.video-modal-video-wrap'))) {
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('is-active')) {
+          closeVideoModal();
+        }
+      });
+
+      modal.addEventListener('contextmenu', (e) => {
         e.preventDefault();
-      }
-    });
+      });
+    }
+    return modal;
   }
+
+  // Pre-create modal
+  getOrCreateVideoModal();
+
+  function openVideoModal(videoSrc, title, category) {
+    const modal = getOrCreateVideoModal();
+    const player = modal.querySelector('#videoModalPlayer');
+    const titleEl = modal.querySelector('#videoModalTitle');
+    const catEl = modal.querySelector('#videoModalCategory');
+
+    if (!player) return;
+    if (titleEl) titleEl.textContent = title || 'PROJECT PREVIEW';
+    if (catEl) catEl.textContent = category || 'VIDEO';
+
+    player.src = videoSrc;
+    player.load();
+    modal.classList.add('is-active');
+    document.body.style.overflow = 'hidden';
+
+    player.muted = false;
+    const playPromise = player.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        player.muted = true;
+        player.play().catch(() => {});
+      });
+    }
+  }
+
+  // Delegated click handler on document to capture dynamically added project cards
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('.project-video-trigger');
+    if (trigger) {
+      e.preventDefault();
+      e.stopPropagation();
+      const videoSrc = trigger.getAttribute('data-video-src');
+      const title = trigger.getAttribute('data-title');
+      const cat = trigger.getAttribute('data-category');
+      if (videoSrc) {
+        openVideoModal(videoSrc, title, cat);
+      }
+    }
+  });
+
+  // Disable right-click context menu on all video elements
+  document.addEventListener('contextmenu', (e) => {
+    if (e.target && (e.target.tagName === 'VIDEO' || e.target.closest('video') || e.target.closest('.video-modal-video-wrap'))) {
+      e.preventDefault();
+    }
+  });
 
   // =========================================================================
   // 7. VIDEO CARD HOVER PREVIEWS
