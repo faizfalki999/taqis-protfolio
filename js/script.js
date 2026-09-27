@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Pre-create modal
   getOrCreateVideoModal();
 
-  function openVideoModal(videoSrc, title, category) {
+  function openVideoModal(videoSrc, title, category, orientation) {
     const modal = getOrCreateVideoModal();
     const player = modal.querySelector('#videoModalPlayer');
     const titleEl = modal.querySelector('#videoModalTitle');
@@ -242,6 +242,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!player) return;
     if (titleEl) titleEl.textContent = title || 'PROJECT PREVIEW';
     if (catEl) catEl.textContent = category || 'VIDEO';
+
+    const isVertical = orientation === 'portrait' || orientation === 'vertical' || orientation === '9:16';
+    const container = modal.querySelector('.video-modal-container');
+    if (container) {
+      container.classList.toggle('is-vertical', Boolean(isVertical));
+    }
 
     player.src = videoSrc;
     player.load();
@@ -267,8 +273,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const videoSrc = trigger.getAttribute('data-video-src');
       const title = trigger.getAttribute('data-title');
       const cat = trigger.getAttribute('data-category');
+      const orientation = trigger.getAttribute('data-orientation') || '';
       if (videoSrc) {
-        openVideoModal(videoSrc, title, cat);
+        openVideoModal(videoSrc, title, cat, orientation);
       }
     }
   });

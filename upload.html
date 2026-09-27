@@ -1054,21 +1054,37 @@
             </span>
           </div>
 
-          <!-- Tags -->
+          <!-- Display Orientation / Aspect Ratio -->
           <div class="admin-form-group">
-            <label for="projectTags" class="admin-label">Tags (comma-separated)</label>
-            <input
-              type="text"
-              id="projectTags"
-              name="tags"
-              class="admin-input"
-              style="padding-left: 1rem;"
-              placeholder="Branding, Illustrator, Motion Design, After Effects, Typography"
-            >
+            <label for="projectOrientation" class="admin-label">
+              Card Display Orientation / Aspect Ratio
+            </label>
+            <select id="projectOrientation" name="orientation" class="upload-select">
+              <option value="square">Square 1:1 (Classic Portfolio Tile)</option>
+              <option value="landscape">Landscape 16:9 (Widescreen Video / Cut)</option>
+              <option value="portrait">Portrait 9:16 (Vertical Reel / TikTok / Shorts)</option>
+              <option value="poster">Poster 4:5 (Standard Art / Social Post)</option>
+            </select>
             <span style="font-size: 0.7rem; color: #a1a1aa; margin-top: 0.25rem; display: block;">
-              Keyword tags shown at bottom of the card.
+              Select how your card media is proportioned on portfolio grids and lightbox player.
             </span>
           </div>
+        </div>
+
+        <!-- Tags -->
+        <div class="admin-form-group">
+          <label for="projectTags" class="admin-label">Tags (comma-separated)</label>
+          <input
+            type="text"
+            id="projectTags"
+            name="tags"
+            class="admin-input"
+            style="padding-left: 1rem;"
+            placeholder="Branding, Illustrator, Motion Design, After Effects, Typography"
+          >
+          <span style="font-size: 0.7rem; color: #a1a1aa; margin-top: 0.25rem; display: block;">
+            Keyword tags shown at bottom of the card.
+          </span>
         </div>
 
         <!-- Media Upload Dropzone -->
@@ -1398,11 +1414,22 @@
                 <input type="url" id="editProjectUrl" class="admin-input" style="padding-left: 1rem;" placeholder="https://www.behance.net/gallery/...">
               </div>
 
-              <!-- Tags -->
+              <!-- Display Orientation -->
               <div class="admin-form-group">
-                <label for="editProjectTags" class="admin-label">Tags (comma-separated)</label>
-                <input type="text" id="editProjectTags" class="admin-input" style="padding-left: 1rem;" placeholder="INTRO IDENT, BRAND SYSTEM, KINETIC">
+                <label for="editProjectOrientation" class="admin-label">Display Orientation / Aspect Ratio</label>
+                <select id="editProjectOrientation" class="upload-select">
+                  <option value="square">Square 1:1 (Classic Portfolio Tile)</option>
+                  <option value="landscape">Landscape 16:9 (Widescreen Video / Cut)</option>
+                  <option value="portrait">Portrait 9:16 (Vertical Reel / TikTok / Shorts)</option>
+                  <option value="poster">Poster 4:5 (Standard Art / Social Post)</option>
+                </select>
               </div>
+            </div>
+
+            <!-- Tags -->
+            <div class="admin-form-group" style="margin-bottom: 1rem;">
+              <label for="editProjectTags" class="admin-label">Tags (comma-separated)</label>
+              <input type="text" id="editProjectTags" class="admin-input" style="padding-left: 1rem;" placeholder="INTRO IDENT, BRAND SYSTEM, KINETIC">
             </div>
 
             <!-- Description -->
@@ -1731,6 +1758,7 @@
           title: document.getElementById('projectTitle').value,
           category: document.getElementById('projectCategory').value,
           categoryTag: document.getElementById('projectCategoryTag')?.value || '',
+          orientation: document.getElementById('projectOrientation')?.value || 'square',
           subtitle: document.getElementById('projectSubtitle').value,
           url: document.getElementById('projectUrl').value,
           tags: document.getElementById('projectTags').value,
@@ -1751,6 +1779,9 @@
             if (document.getElementById('projectCategoryTag')) {
               document.getElementById('projectCategoryTag').value = draft.categoryTag || '';
             }
+            if (draft.orientation && document.getElementById('projectOrientation')) {
+              document.getElementById('projectOrientation').value = draft.orientation;
+            }
             document.getElementById('projectSubtitle').value = draft.subtitle || '';
             document.getElementById('projectUrl').value = draft.url || '';
             document.getElementById('projectTags').value = draft.tags || '';
@@ -1768,6 +1799,7 @@
         const title = document.getElementById('projectTitle').value.trim();
         const category = document.getElementById('projectCategory').value;
         const categoryTag = (document.getElementById('projectCategoryTag')?.value || '').trim() || category;
+        const orientation = document.getElementById('projectOrientation')?.value || 'square';
         const subtitle = document.getElementById('projectSubtitle').value.trim();
         const projectUrl = document.getElementById('projectUrl').value.trim();
         const tags = document.getElementById('projectTags').value.trim();
@@ -1859,6 +1891,7 @@
                 title: title,
                 category: category,
                 categoryTag: categoryTag,
+                orientation: orientation,
                 subtitle: subtitle,
                 url: projectUrl,
                 tags: tags.split(',').map(t => t.trim()).filter(Boolean),
@@ -2144,6 +2177,19 @@
         const mediaUrl = proj.mediaUrl || '#';
 
         const isVideo = proj.mediaType === 'video';
+        let orient = proj.orientation;
+        if (!orient) {
+          if (proj.width && proj.height) {
+            const ratio = proj.width / proj.height;
+            if (ratio > 1.35) orient = 'landscape';
+            else if (ratio < 0.68) orient = 'portrait';
+            else if (ratio < 0.88) orient = 'poster';
+            else orient = 'square';
+          } else {
+            orient = 'square';
+          }
+        }
+        const orientLabel = orient === 'portrait' ? '9:16' : orient === 'landscape' ? '16:9' : orient === 'poster' ? '4:5' : '1:1';
 
         return `
           <div class="manage-project-item" id="proj-card-${proj.id}">
@@ -2159,6 +2205,7 @@
               <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.35rem;">
                 <span class="manage-project-category" style="margin-bottom:0;">${escapeHtml(category)}</span>
                 ${categoryTag ? `<span class="manage-project-tag-pill">${escapeHtml(categoryTag)}</span>` : ''}
+                <span class="manage-project-tag-pill" style="border-color: rgba(59, 130, 246, 0.45); color: #93c5fd; background: rgba(59, 130, 246, 0.1);">📐 ${orientLabel}</span>
               </div>
               <h4 class="manage-project-name">${escapeHtml(title)}</h4>
               <p class="manage-project-desc">${escapeHtml(desc)}</p>
@@ -2260,6 +2307,7 @@
     const editProjectTitle = document.getElementById('editProjectTitle');
     const editProjectCategory = document.getElementById('editProjectCategory');
     const editCategoryTagInput = document.getElementById('editCategoryTagInput');
+    const editProjectOrientation = document.getElementById('editProjectOrientation');
     const editProjectSubtitle = document.getElementById('editProjectSubtitle');
     const editProjectUrl = document.getElementById('editProjectUrl');
     const editProjectTags = document.getElementById('editProjectTags');
@@ -2281,6 +2329,9 @@
       editProjectTitle.value = project.title || '';
       editProjectCategory.value = project.category || '2D Animation & Motion';
       editCategoryTagInput.value = project.categoryTag || '';
+      if (editProjectOrientation) {
+        editProjectOrientation.value = project.orientation || 'square';
+      }
       editProjectSubtitle.value = project.subtitle || '';
       editProjectUrl.value = project.url || '';
       editProjectTags.value = Array.isArray(project.tags) ? project.tags.join(', ') : (project.tags || '');
@@ -2372,6 +2423,7 @@
 
           const categoryVal = editProjectCategory.value;
           const categoryTagVal = editCategoryTagInput.value.trim() || categoryVal;
+          const orientationVal = editProjectOrientation?.value || 'square';
           const subtitleVal = editProjectSubtitle.value.trim();
           const urlVal = editProjectUrl.value.trim();
           const tagsVal = editProjectTags.value.split(',').map(t => t.trim()).filter(Boolean);
@@ -2381,6 +2433,7 @@
             title: newTitle,
             category: categoryVal,
             categoryTag: categoryTagVal,
+            orientation: orientationVal,
             subtitle: subtitleVal,
             url: urlVal,
             tags: tagsVal,

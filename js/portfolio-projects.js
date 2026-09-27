@@ -70,6 +70,25 @@ function matchesCategory(projectCategory, sectionCategory) {
   return p.includes(s) || s.includes(p);
 }
 
+// Resolve card display orientation
+function getOrientationClass(orientation, width, height) {
+  if (orientation) {
+    const o = orientation.toLowerCase().trim();
+    if (o.includes('land') || o === '16:9' || o === 'horizontal') return 'orientation-landscape';
+    if (o.includes('port') || o.includes('reel') || o === '9:16' || o === 'vertical') return 'orientation-portrait';
+    if (o.includes('post') || o === '4:5' || o === '3:4') return 'orientation-poster';
+    if (o.includes('square') || o === '1:1') return 'orientation-square';
+  }
+  // Smart auto-detection based on width and height
+  if (width && height && typeof width === 'number' && typeof height === 'number') {
+    const ratio = width / height;
+    if (ratio > 1.35) return 'orientation-landscape';
+    if (ratio < 0.68) return 'orientation-portrait';
+    if (ratio < 0.88) return 'orientation-poster';
+  }
+  return 'orientation-square';
+}
+
 // Build Card HTML for an Image Project
 function buildImageCardHtml(project) {
   const title = escapeHtml(project.title || 'Untitled Project');
@@ -79,6 +98,7 @@ function buildImageCardHtml(project) {
   const fullUrl = escapeHtml(project.mediaUrl || '');
   const behanceUrl = project.url ? escapeHtml(project.url) : '';
   const tagsHtml = (project.tags || []).map(t => `<span class="card-tag">${escapeHtml(t)}</span>`).join('');
+  const orientationClass = getOrientationClass(project.orientation, project.width, project.height);
 
   const linkHref = behanceUrl || fullUrl || '#';
   const isExternal = Boolean(behanceUrl);
@@ -88,7 +108,7 @@ function buildImageCardHtml(project) {
   const overlayText = isExternal ? 'VIEW ON BEHANCE ↗' : 'VIEW IMAGE ↗';
 
   return `
-    <article class="project-grid-card">
+    <article class="project-grid-card ${orientationClass}">
       <a href="${linkHref}" ${linkAttrs} class="project-card-link-wrapper" aria-label="${title}">
         <div class="project-card-thumb-wrap">
           <img src="${thumbUrl}" alt="${title}" class="project-card-img" loading="lazy">
@@ -133,13 +153,16 @@ function buildVideoCardHtml(project) {
   const posterUrl = escapeHtml(project.thumbnailUrl || '');
   const behanceUrl = project.url ? escapeHtml(project.url) : '';
   const tagsHtml = (project.tags || []).map(t => `<span class="card-tag">${escapeHtml(t)}</span>`).join('');
+  const orientationClass = getOrientationClass(project.orientation, project.width, project.height);
+  const isVertical = orientationClass === 'orientation-portrait';
 
   return `
-    <article class="project-grid-card">
+    <article class="project-grid-card ${orientationClass}">
       <a href="#" class="project-card-link-wrapper project-video-trigger" 
          data-video-src="${videoUrl}" 
          data-title="${title}" 
          data-category="${category}"
+         data-orientation="${isVertical ? 'portrait' : 'landscape'}"
          aria-label="Play ${title} Video">
         <div class="project-card-thumb-wrap">
           <video class="project-card-video" src="${videoUrl}" poster="${posterUrl}" muted loop playsinline preload="metadata" controlslist="nodownload" disablepictureinpicture oncontextmenu="return false;"></video>
@@ -155,12 +178,12 @@ function buildVideoCardHtml(project) {
           <span class="dynamic-drop-badge">NEW</span>
         </div>
         <h2 class="project-card-title">
-          <a href="#" class="project-video-trigger" data-video-src="${videoUrl}" data-title="${title}" data-category="${category}">${title}</a>
+          <a href="#" class="project-video-trigger" data-video-src="${videoUrl}" data-title="${title}" data-category="${category}" data-orientation="${isVertical ? 'portrait' : 'landscape'}">${title}</a>
         </h2>
         ${description ? `<p class="project-card-subtitle">${description}</p>` : ''}
         ${tagsHtml ? `<div class="project-card-tags">${tagsHtml}</div>` : ''}
         <div class="project-card-footer">
-          <button type="button" class="card-play-btn project-video-trigger" data-video-src="${videoUrl}" data-title="${title}" data-category="${category}">
+          <button type="button" class="card-play-btn project-video-trigger" data-video-src="${videoUrl}" data-title="${title}" data-category="${category}" data-orientation="${isVertical ? 'portrait' : 'landscape'}">
             <span>Play Video</span>
             <span>▶</span>
           </button>
@@ -266,10 +289,16 @@ function setupVideoModal() {
   const catEl = document.getElementById('videoModalCategory');
   const closeBtn = document.getElementById('videoModalCloseBtn');
 
-  function openVideoModal(videoSrc, title, category) {
+  function openVideoModal(videoSrc, title, category, orientation) {
     if (!player) return;
     if (titleEl) titleEl.textContent = title || 'PROJECT PREVIEW';
     if (catEl) catEl.textContent = category || 'VIDEO';
+
+    const isVertical = orientation === 'portrait' || orientation === 'vertical' || orientation === '9:16';
+    const container = videoModal.querySelector('.video-modal-container');
+    if (container) {
+      container.classList.toggle('is-vertical', Boolean(isVertical));
+    }
 
     player.src = videoSrc;
     player.load();
@@ -290,6 +319,10 @@ function setupVideoModal() {
   function closeVideoModal() {
     if (!player) return;
     videoModal.classList.remove('is-active');
+    const container = videoModal.querySelector('.video-modal-container');
+    if (container) {
+      container.classList.remove('is-vertical');
+    }
     player.pause();
     player.currentTime = 0;
     player.removeAttribute('src');
@@ -306,8 +339,9 @@ function setupVideoModal() {
       const videoSrc = trigger.getAttribute('data-video-src');
       const title = trigger.getAttribute('data-title');
       const cat = trigger.getAttribute('data-category');
+      const orientation = trigger.getAttribute('data-orientation') || '';
       if (videoSrc) {
-        openVideoModal(videoSrc, title, cat);
+        openVideoModal(videoSrc, title, cat, orientation);
       }
     }
   });
