@@ -786,6 +786,67 @@
       margin-left: 0.4rem;
       letter-spacing: 0.05em;
     }
+    .manage-project-order-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      font-family: var(--font-adm-mono);
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.14);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      margin-left: 0.4rem;
+      letter-spacing: 0.04em;
+    }
+    .btn-move-order {
+      padding: 0.5rem 0.65rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+    .btn-move-order:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: #ffffff;
+    }
+    .btn-move-order:disabled {
+      opacity: 0.25;
+      cursor: not-allowed;
+    }
+    .manage-filter-tab {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+      padding: 0.4rem 0.85rem;
+      border-radius: 4px;
+      font-family: var(--font-adm-heading);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .manage-filter-tab:hover {
+      background: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+    }
+    .manage-filter-tab.active {
+      background: #e50914;
+      border-color: #e50914;
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(229, 9, 20, 0.35);
+    }
     /* Edit Project & Thumbnail Modal */
     .edit-thumb-modal-backdrop,
     .edit-project-modal-backdrop {
@@ -1050,25 +1111,44 @@
               placeholder="e.g. BRANDING // IDENTITY, 2D EXPLAINER, SHORT FILM"
             >
             <span style="font-size: 0.7rem; color: #a1a1aa; margin-top: 0.25rem; display: block;">
-              Displayed on top of the card badge (&lt;span class="project-card-category"&gt;). Defaults to category if empty.
+              Displayed on card badge (<span class="project-card-category">&lt;span&gt;</span>). Defaults to category if empty.
             </span>
           </div>
 
-          <!-- Tags -->
+          <!-- Placement Order -->
           <div class="admin-form-group">
-            <label for="projectTags" class="admin-label">Tags (comma-separated)</label>
+            <label for="projectOrder" class="admin-label">
+              Placement Position / Order #
+            </label>
             <input
-              type="text"
-              id="projectTags"
-              name="tags"
+              type="number"
+              id="projectOrder"
+              name="order"
               class="admin-input"
               style="padding-left: 1rem;"
-              placeholder="Branding, Illustrator, Motion Design, After Effects, Typography"
+              placeholder="e.g. 1 for top spot (auto-assigned if left empty)"
+              min="1"
             >
             <span style="font-size: 0.7rem; color: #a1a1aa; margin-top: 0.25rem; display: block;">
-              Keyword tags shown at bottom of the card.
+              Determines order on the page (1 = 1st card, 2 = 2nd card). Can be reordered anytime.
             </span>
           </div>
+        </div>
+
+        <!-- Tags -->
+        <div class="admin-form-group">
+          <label for="projectTags" class="admin-label">Tags (comma-separated)</label>
+          <input
+            type="text"
+            id="projectTags"
+            name="tags"
+            class="admin-input"
+            style="padding-left: 1rem;"
+            placeholder="Branding, Illustrator, Motion Design, After Effects, Typography"
+          >
+          <span style="font-size: 0.7rem; color: #a1a1aa; margin-top: 0.25rem; display: block;">
+            Keyword tags shown at bottom of the card.
+          </span>
         </div>
 
         <!-- Media Upload Dropzone -->
@@ -1338,6 +1418,18 @@
             ↻ REFRESH LIST
           </button>
         </div>
+
+        <!-- Page / Category Filter Tabs for Managing Placement -->
+        <div class="manage-category-tabs" id="manageCategoryTabs" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 1rem 0 0.8rem 0;">
+          <button type="button" class="manage-filter-tab active" data-category="all">ALL PAGES (ALL)</button>
+          <button type="button" class="manage-filter-tab" data-category="2D Animation & Motion">2D ANIMATION</button>
+          <button type="button" class="manage-filter-tab" data-category="Graphic Design">GRAPHIC DESIGN</button>
+          <button type="button" class="manage-filter-tab" data-category="Video Editing & Reel">VIDEO EDITING</button>
+        </div>
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 0.65rem 0.85rem; margin-bottom: 1.25rem; font-size: 0.76rem; color: #a1a1aa; line-height: 1.45;">
+          💡 <strong>Placement Sequence:</strong> Projects appear on each page in the exact sequence shown below (<span style="color:#34d399; font-weight:700;">POS #1</span> displays first). Use <strong style="color: #fff;">▲</strong> and <strong style="color: #fff;">▼</strong> to swap placement instantly, or click <strong style="color: #fff;">EDIT</strong> to set a specific position.
+        </div>
+
         <div id="manageProjectsLoading" style="color: var(--adm-text-muted); font-size: 0.85rem; padding: 1.5rem; text-align: center;">
           Loading projects from Firestore...
         </div>
@@ -1398,11 +1490,17 @@
                 <input type="url" id="editProjectUrl" class="admin-input" style="padding-left: 1rem;" placeholder="https://www.behance.net/gallery/...">
               </div>
 
-              <!-- Tags -->
+              <!-- Placement Position / Order -->
               <div class="admin-form-group">
-                <label for="editProjectTags" class="admin-label">Tags (comma-separated)</label>
-                <input type="text" id="editProjectTags" class="admin-input" style="padding-left: 1rem;" placeholder="INTRO IDENT, BRAND SYSTEM, KINETIC">
+                <label for="editProjectOrder" class="admin-label">Placement Position / Order #</label>
+                <input type="number" id="editProjectOrder" class="admin-input" style="padding-left: 1rem;" placeholder="e.g. 1 for top spot" min="1">
               </div>
+            </div>
+
+            <!-- Tags -->
+            <div class="admin-form-group" style="margin-bottom: 1rem;">
+              <label for="editProjectTags" class="admin-label">Tags (comma-separated)</label>
+              <input type="text" id="editProjectTags" class="admin-input" style="padding-left: 1rem;" placeholder="INTRO IDENT, BRAND SYSTEM, KINETIC">
             </div>
 
             <!-- Description -->
@@ -1731,6 +1829,7 @@
           title: document.getElementById('projectTitle').value,
           category: document.getElementById('projectCategory').value,
           categoryTag: document.getElementById('projectCategoryTag')?.value || '',
+          order: document.getElementById('projectOrder')?.value || '',
           subtitle: document.getElementById('projectSubtitle').value,
           url: document.getElementById('projectUrl').value,
           tags: document.getElementById('projectTags').value,
@@ -1751,6 +1850,9 @@
             if (document.getElementById('projectCategoryTag')) {
               document.getElementById('projectCategoryTag').value = draft.categoryTag || '';
             }
+            if (draft.order && document.getElementById('projectOrder')) {
+              document.getElementById('projectOrder').value = draft.order;
+            }
             document.getElementById('projectSubtitle').value = draft.subtitle || '';
             document.getElementById('projectUrl').value = draft.url || '';
             document.getElementById('projectTags').value = draft.tags || '';
@@ -1768,6 +1870,8 @@
         const title = document.getElementById('projectTitle').value.trim();
         const category = document.getElementById('projectCategory').value;
         const categoryTag = (document.getElementById('projectCategoryTag')?.value || '').trim() || category;
+        const orderVal = document.getElementById('projectOrder')?.value.trim();
+        const parsedOrder = orderVal ? parseInt(orderVal, 10) : null;
         const subtitle = document.getElementById('projectSubtitle').value.trim();
         const projectUrl = document.getElementById('projectUrl').value.trim();
         const tags = document.getElementById('projectTags').value.trim();
@@ -1859,6 +1963,7 @@
                 title: title,
                 category: category,
                 categoryTag: categoryTag,
+                order: Number.isInteger(parsedOrder) ? parsedOrder : 9999,
                 subtitle: subtitle,
                 url: projectUrl,
                 tags: tags.split(',').map(t => t.trim()).filter(Boolean),
@@ -2097,10 +2202,19 @@
       }
     }
 
+    let manageAllProjects = [];
+    let currentManageCategoryFilter = 'all';
+
+    function getProjectSortOrder(p) {
+      if (typeof p.order === 'number' && !isNaN(p.order)) return p.order;
+      const parsed = parseInt(p.order, 10);
+      return !isNaN(parsed) ? parsed : 9999;
+    }
+
     function renderProjectList(docs) {
       if (!manageProjectsGrid) return;
 
-      const activeProjects = [];
+      manageAllProjects = [];
       docs.forEach(docSnap => {
         const data = docSnap.data();
         const id = docSnap.id;
@@ -2112,38 +2226,91 @@
           }
           return;
         }
-        activeProjects.push({ id, ...data });
+        manageAllProjects.push({ id, ...data });
       });
 
       if (projectCountBadge) {
-        projectCountBadge.textContent = `${activeProjects.length} PROJECT${activeProjects.length === 1 ? '' : 'S'}`;
+        projectCountBadge.textContent = `${manageAllProjects.length} PROJECT${manageAllProjects.length === 1 ? '' : 'S'}`;
       }
 
       if (manageProjectsLoading) {
         manageProjectsLoading.style.display = 'none';
       }
 
-      if (activeProjects.length === 0) {
+      renderManageFilteredProjects();
+    }
+
+    // Category filter tabs setup (only attach once)
+    const manageCategoryTabs = document.getElementById('manageCategoryTabs');
+    if (manageCategoryTabs && !manageCategoryTabs.dataset.initialized) {
+      manageCategoryTabs.dataset.initialized = 'true';
+      manageCategoryTabs.querySelectorAll('.manage-filter-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          manageCategoryTabs.querySelectorAll('.manage-filter-tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          currentManageCategoryFilter = tab.getAttribute('data-category') || 'all';
+          renderManageFilteredProjects();
+        });
+      });
+    }
+
+    function renderManageFilteredProjects() {
+      if (!manageProjectsGrid) return;
+
+      if (manageAllProjects.length === 0) {
         manageProjectsGrid.style.display = 'block';
         manageProjectsGrid.innerHTML = `
           <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem 1rem; color: var(--adm-text-muted);">
             <p style="font-size: 0.95rem; margin-bottom: 0.5rem; color: #fff;">No active projects in Firestore</p>
-            <p style="font-size: 0.8rem;">Projects you upload will appear here with an option to permanently delete them or edit their thumbnails at any time.</p>
+            <p style="font-size: 0.8rem;">Projects you upload will appear here with options to reorder, edit, or delete them.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Filter projects based on selected tab
+      const filtered = currentManageCategoryFilter === 'all'
+        ? [...manageAllProjects]
+        : manageAllProjects.filter(p => {
+            const pCat = (p.category || '').toLowerCase();
+            const fCat = currentManageCategoryFilter.toLowerCase();
+            if (fCat.includes('animat')) return pCat.includes('animat') || pCat.includes('motion');
+            if (fCat.includes('graphic')) return pCat.includes('graphic') || pCat.includes('brand') || pCat.includes('design');
+            if (fCat.includes('video')) return pCat.includes('video') || pCat.includes('edit');
+            return pCat.includes(fCat);
+          });
+
+      // Sort by explicit placement order first (ascending), then newest creation date
+      filtered.sort((a, b) => {
+        const ordA = getProjectSortOrder(a);
+        const ordB = getProjectSortOrder(b);
+        if (ordA !== ordB) return ordA - ordB;
+        const timeA = a.createdAt?.toMillis?.() || (a.publishedAt ? Date.parse(a.publishedAt) : 0) || 0;
+        const timeB = b.createdAt?.toMillis?.() || (b.publishedAt ? Date.parse(b.publishedAt) : 0) || 0;
+        return timeB - timeA;
+      });
+
+      if (filtered.length === 0) {
+        manageProjectsGrid.style.display = 'block';
+        manageProjectsGrid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem 1rem; color: var(--adm-text-muted);">
+            <p style="font-size: 0.95rem; margin-bottom: 0.5rem; color: #fff;">No projects in category "${escapeHtml(currentManageCategoryFilter)}"</p>
+            <p style="font-size: 0.8rem;">Switch to "ALL PAGES" or upload a project under this category.</p>
           </div>
         `;
         return;
       }
 
       manageProjectsGrid.style.display = 'grid';
-      manageProjectsGrid.innerHTML = activeProjects.map(proj => {
+      manageProjectsGrid.innerHTML = filtered.map((proj, idx) => {
         const thumb = proj.thumbnailUrl || proj.mediaUrl || 'https://via.placeholder.com/400x250?text=No+Preview';
         const title = proj.title || 'Untitled Project';
         const category = proj.category || 'General';
         const categoryTag = proj.categoryTag || '';
         const desc = proj.description || 'No description provided';
         const mediaUrl = proj.mediaUrl || '#';
-
         const isVideo = proj.mediaType === 'video';
+        const displayOrder = idx + 1;
 
         return `
           <div class="manage-project-item" id="proj-card-${proj.id}">
@@ -2159,10 +2326,15 @@
               <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.35rem;">
                 <span class="manage-project-category" style="margin-bottom:0;">${escapeHtml(category)}</span>
                 ${categoryTag ? `<span class="manage-project-tag-pill">${escapeHtml(categoryTag)}</span>` : ''}
+                <span class="manage-project-order-badge" title="Card sequence position on portfolio page">POS #${displayOrder}</span>
               </div>
               <h4 class="manage-project-name">${escapeHtml(title)}</h4>
               <p class="manage-project-desc">${escapeHtml(desc)}</p>
               <div class="manage-project-actions">
+                <div style="display: flex; gap: 0.25rem;">
+                  <button type="button" class="btn-move-order btn-move-up" data-id="${proj.id}" data-idx="${idx}" title="Move Up in placement" ${idx === 0 ? 'disabled' : ''}>▲</button>
+                  <button type="button" class="btn-move-order btn-move-down" data-id="${proj.id}" data-idx="${idx}" title="Move Down in placement" ${idx === filtered.length - 1 ? 'disabled' : ''}>▼</button>
+                </div>
                 <a href="${mediaUrl}" target="_blank" rel="noopener noreferrer" class="btn-view-project">VIEW ↗</a>
                 <button type="button" class="btn-edit-project" data-id="${proj.id}">
                   <span>✏️</span>
@@ -2180,7 +2352,7 @@
 
       // Map for fast lookup by ID
       const activeProjectsMap = new Map();
-      activeProjects.forEach(p => activeProjectsMap.set(p.id, p));
+      filtered.forEach(p => activeProjectsMap.set(p.id, p));
 
       // Attach video hover preview for manage items
       manageProjectsGrid.querySelectorAll('.manage-project-item').forEach(item => {
@@ -2207,6 +2379,72 @@
             }
           });
         }
+      });
+
+      // Attach Reorder Handlers (Move Up ▲)
+      manageProjectsGrid.querySelectorAll('.btn-move-up').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const idx = parseInt(btn.getAttribute('data-idx'), 10);
+          if (idx <= 0) return;
+
+          btn.disabled = true;
+          const currentItem = filtered[idx];
+          const prevItem = filtered[idx - 1];
+
+          // Swap in array
+          filtered[idx] = prevItem;
+          filtered[idx - 1] = currentItem;
+
+          // Assign sequential orders 1, 2, 3...
+          const updates = filtered.map((item, i) => {
+            item.order = i + 1;
+            return updateDoc(doc(db, 'projects', item.id), { order: i + 1 });
+          });
+
+          try {
+            await Promise.all(updates);
+            try { localStorage.removeItem('taqi_portfolio_cache'); } catch (e) {}
+            showUploadAlert(`✓ Moved "${currentItem.title}" up to Position #${idx}.`, true);
+            renderManageFilteredProjects();
+          } catch (err) {
+            console.error('Reorder error:', err);
+            showUploadAlert('Failed to update placement: ' + err.message);
+            renderManageFilteredProjects();
+          }
+        });
+      });
+
+      // Attach Reorder Handlers (Move Down ▼)
+      manageProjectsGrid.querySelectorAll('.btn-move-down').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const idx = parseInt(btn.getAttribute('data-idx'), 10);
+          if (idx >= filtered.length - 1) return;
+
+          btn.disabled = true;
+          const currentItem = filtered[idx];
+          const nextItem = filtered[idx + 1];
+
+          // Swap in array
+          filtered[idx] = nextItem;
+          filtered[idx + 1] = currentItem;
+
+          // Assign sequential orders 1, 2, 3...
+          const updates = filtered.map((item, i) => {
+            item.order = i + 1;
+            return updateDoc(doc(db, 'projects', item.id), { order: i + 1 });
+          });
+
+          try {
+            await Promise.all(updates);
+            try { localStorage.removeItem('taqi_portfolio_cache'); } catch (e) {}
+            showUploadAlert(`✓ Moved "${currentItem.title}" down to Position #${idx + 2}.`, true);
+            renderManageFilteredProjects();
+          } catch (err) {
+            console.error('Reorder error:', err);
+            showUploadAlert('Failed to update placement: ' + err.message);
+            renderManageFilteredProjects();
+          }
+        });
       });
 
       // Attach Delete Handlers
@@ -2260,6 +2498,7 @@
     const editProjectTitle = document.getElementById('editProjectTitle');
     const editProjectCategory = document.getElementById('editProjectCategory');
     const editCategoryTagInput = document.getElementById('editCategoryTagInput');
+    const editProjectOrder = document.getElementById('editProjectOrder');
     const editProjectSubtitle = document.getElementById('editProjectSubtitle');
     const editProjectUrl = document.getElementById('editProjectUrl');
     const editProjectTags = document.getElementById('editProjectTags');
@@ -2281,6 +2520,9 @@
       editProjectTitle.value = project.title || '';
       editProjectCategory.value = project.category || '2D Animation & Motion';
       editCategoryTagInput.value = project.categoryTag || '';
+      if (editProjectOrder) {
+        editProjectOrder.value = (typeof project.order === 'number' && !isNaN(project.order)) ? project.order : '';
+      }
       editProjectSubtitle.value = project.subtitle || '';
       editProjectUrl.value = project.url || '';
       editProjectTags.value = Array.isArray(project.tags) ? project.tags.join(', ') : (project.tags || '');
@@ -2372,6 +2614,8 @@
 
           const categoryVal = editProjectCategory.value;
           const categoryTagVal = editCategoryTagInput.value.trim() || categoryVal;
+          const orderValStr = editProjectOrder?.value.trim();
+          const parsedOrder = orderValStr ? parseInt(orderValStr, 10) : null;
           const subtitleVal = editProjectSubtitle.value.trim();
           const urlVal = editProjectUrl.value.trim();
           const tagsVal = editProjectTags.value.split(',').map(t => t.trim()).filter(Boolean);
@@ -2387,6 +2631,10 @@
             description: descVal,
             updatedAt: serverTimestamp()
           };
+
+          if (Number.isInteger(parsedOrder)) {
+            updatePayload.order = parsedOrder;
+          }
 
           if (updatedThumbUrl) {
             updatePayload.thumbnailUrl = updatedThumbUrl;

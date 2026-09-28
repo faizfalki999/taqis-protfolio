@@ -354,8 +354,18 @@ function initCategoryLoader() {
       docs.push({ id: doc.id, ...doc.data() });
     });
 
-    // Sort newest first
+    // Sort by placement order (ascending 1, 2, 3...) first, then newest first for ties
     docs.sort((a, b) => {
+      const getOrder = (item) => {
+        if (typeof item.order === 'number' && !isNaN(item.order)) return item.order;
+        const parsed = parseInt(item.order, 10);
+        return !isNaN(parsed) ? parsed : 9999;
+      };
+      const orderA = getOrder(a);
+      const orderB = getOrder(b);
+      if (orderA !== orderB) {
+        return orderA - orderB;
+      }
       const timeA = a.createdAt?.toMillis?.() || (a.publishedAt ? Date.parse(a.publishedAt) : 0) || 0;
       const timeB = b.createdAt?.toMillis?.() || (b.publishedAt ? Date.parse(b.publishedAt) : 0) || 0;
       return timeB - timeA;
