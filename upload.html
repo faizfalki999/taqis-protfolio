@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="color-scheme" content="dark">
-  <meta name="theme-color" content="#060305">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f4f3ee">
   <title>Project Upload Portal | Taqi Haider Admin</title>
   <meta name="description" content="Administrative project and asset upload console for Taqi Haider's portfolio.">
 
@@ -25,28 +25,23 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/admin.css">
 
-  <!-- Additional Upload Form Styles (Dark Maroon / Black Streetwear Aesthetic) -->
+  <!-- Additional Upload Form Styles (Streetwear Kraft Paper & Heavy Ink Aesthetic) -->
   <style>
     .upload-main-wrap {
       width: 100%;
-      max-width: 920px;
+      max-width: 960px;
       margin: 0 auto;
-      padding: 2rem 1.5rem 4rem;
+      padding: 2.2rem 1.5rem 5rem;
       position: relative;
       z-index: 20;
     }
 
     .upload-card {
-      background: var(--adm-card-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--adm-card-border);
+      background: #ffffff;
+      border: 2px solid #191b1b;
       border-radius: 12px;
       padding: 2.5rem;
-      box-shadow: 
-        0 20px 50px rgba(0, 0, 0, 0.8),
-        0 0 40px rgba(120, 16, 34, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      box-shadow: 5px 5px 0px #191b1b;
       position: relative;
       overflow: hidden;
     }
@@ -57,8 +52,8 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, var(--adm-maroon-mid), var(--adm-crimson-bright), var(--adm-maroon-mid), transparent);
+      height: 4px;
+      background: linear-gradient(90deg, #191b1b 0%, #e50914 50%, #191b1b 100%);
     }
 
     .upload-grid-2col {
@@ -70,70 +65,73 @@
     .upload-select {
       width: 100%;
       padding: 0.85rem 1rem;
-      background-color: var(--adm-input-bg);
-      border: 1.5px solid var(--adm-input-border);
+      background-color: #ffffff;
+      border: 1.5px solid #191b1b;
       border-radius: 6px;
-      color: var(--adm-text-primary);
+      color: #191b1b;
       font-family: var(--font-adm-body);
       font-size: 0.92rem;
       outline: none;
-      transition: border-color 0.2s ease;
+      box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.05);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
       cursor: pointer;
     }
 
     .upload-select option {
-      background: #120a0d;
-      color: #ffffff;
+      background: #ffffff;
+      color: #191b1b;
     }
 
     .upload-select:focus {
-      border-color: var(--adm-crimson-bright);
-      box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.18);
+      border-color: #e50914;
+      box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.15), 2px 2px 0px #191b1b;
     }
 
     .upload-textarea {
       width: 100%;
       min-height: 120px;
       padding: 0.85rem 1rem;
-      background-color: var(--adm-input-bg);
-      border: 1.5px solid var(--adm-input-border);
+      background-color: #ffffff;
+      border: 1.5px solid #191b1b;
       border-radius: 6px;
-      color: var(--adm-text-primary);
+      color: #191b1b;
       font-family: var(--font-adm-body);
       font-size: 0.92rem;
       outline: none;
       resize: vertical;
-      transition: border-color 0.2s ease;
+      box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.05);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     .upload-textarea:focus {
-      border-color: var(--adm-crimson-bright);
-      box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.18);
+      border-color: #e50914;
+      box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.15), 2px 2px 0px #191b1b;
     }
 
     /* Media Dropzone */
     .upload-dropzone {
-      border: 2px dashed rgba(229, 9, 20, 0.35);
+      border: 2px dashed #191b1b;
       border-radius: 8px;
       padding: 2.2rem 1.5rem;
       text-align: center;
-      background: rgba(44, 7, 16, 0.25);
+      background: #faf8f5;
       cursor: pointer;
       transition: all 0.25s ease;
       position: relative;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.03);
     }
 
     .upload-dropzone:hover,
     .upload-dropzone.dragover {
-      border-color: var(--adm-crimson-bright);
-      background: rgba(72, 11, 24, 0.4);
-      box-shadow: 0 0 24px rgba(229, 9, 20, 0.25);
+      border-color: #e50914;
+      background: rgba(229, 9, 20, 0.04);
+      box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.12);
     }
 
     .dropzone-icon {
       width: 44px;
       height: 44px;
-      color: var(--adm-crimson-bright);
+      color: #e50914;
       margin-bottom: 0.8rem;
       transition: transform 0.2s ease;
     }
@@ -145,14 +143,14 @@
     .dropzone-title {
       font-family: var(--font-adm-heading);
       font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--adm-text-primary);
+      font-weight: 800;
+      color: #191b1b;
       margin-bottom: 0.25rem;
     }
 
     .dropzone-sub {
       font-size: 0.78rem;
-      color: var(--adm-text-muted);
+      color: #666666;
     }
 
     .dropzone-file-input {
@@ -181,7 +179,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1.5px solid #191b1b;
+      box-shadow: 2px 2px 0px #191b1b;
     }
 
     .preview-media-box img,
@@ -197,29 +196,33 @@
       align-items: center;
       justify-content: space-between;
       padding: 0.6rem 0.95rem;
-      background: rgba(44, 7, 16, 0.8);
-      border: 1px solid rgba(229, 9, 20, 0.35);
-      border-radius: 4px;
+      background: #ffffff;
+      border: 1.5px solid #191b1b;
+      border-radius: 6px;
+      box-shadow: 2px 2px 0px #191b1b;
       font-family: var(--font-adm-mono);
-      font-size: 0.76rem;
-      color: #ff99a2;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #191b1b;
     }
 
     .clear-file-btn {
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #ffffff;
+      background: #ffffff;
+      border: 1.5px solid #191b1b;
+      color: #e50914;
       padding: 0.25rem 0.6rem;
-      border-radius: 3px;
+      border-radius: 4px;
       font-family: var(--font-adm-mono);
-      font-size: 0.68rem;
+      font-size: 0.7rem;
+      font-weight: 800;
       cursor: pointer;
       transition: all 0.15s ease;
     }
 
     .clear-file-btn:hover {
-      background: var(--adm-crimson-bright);
-      border-color: var(--adm-crimson-bright);
+      background: #e50914;
+      color: #ffffff;
+      border-color: #e50914;
     }
 
     /* Upload Progress Bar */
@@ -227,10 +230,10 @@
       display: none;
       margin-top: 1.25rem;
       padding: 1.1rem 1.2rem;
-      background: rgba(12, 6, 8, 0.95);
-      border: 1.5px solid rgba(229, 9, 20, 0.35);
+      background: #ffffff;
+      border: 1.5px solid #191b1b;
       border-radius: 6px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      box-shadow: 3px 3px 0px #191b1b;
     }
 
     .progress-header {
@@ -238,21 +241,21 @@
       justify-content: space-between;
       align-items: center;
       font-family: var(--font-adm-mono);
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--adm-text-secondary);
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: #191b1b;
       margin-bottom: 0.55rem;
     }
 
     .progress-percent {
-      color: #ff4a58;
+      color: #e50914;
       font-weight: 800;
     }
 
     .progress-track {
       width: 100%;
       height: 8px;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.08);
       border-radius: 4px;
       overflow: hidden;
       position: relative;
@@ -261,9 +264,8 @@
     .progress-fill {
       width: 0%;
       height: 100%;
-      background: linear-gradient(90deg, var(--adm-maroon-mid), var(--adm-maroon-accent), var(--adm-crimson-bright));
+      background: #191b1b;
       border-radius: 4px;
-      box-shadow: 0 0 12px rgba(229, 9, 20, 0.6);
       transition: width 0.15s ease-out;
     }
 
@@ -275,13 +277,10 @@
       justify-content: center;
       padding: 2.8rem 1.8rem;
       margin: 1.5rem 0;
-      background: rgba(13, 6, 9, 0.96);
-      border: 1.5px solid rgba(229, 9, 20, 0.45);
+      background: #ffffff;
+      border: 2px solid #191b1b;
       border-radius: 10px;
-      box-shadow: 
-        0 15px 40px rgba(0, 0, 0, 0.8),
-        0 0 35px rgba(229, 9, 20, 0.25),
-        inset 0 0 30px rgba(0, 0, 0, 0.6);
+      box-shadow: 5px 5px 0px #191b1b;
       text-align: center;
       gap: 1.2rem;
       position: relative;
@@ -295,8 +294,8 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--adm-crimson-bright), transparent);
+      height: 3px;
+      background: linear-gradient(90deg, #191b1b 0%, #e50914 50%, #191b1b 100%);
     }
 
     .spinner-core {
@@ -312,10 +311,9 @@
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      border: 3.5px solid rgba(229, 9, 20, 0.18);
-      border-top-color: var(--adm-crimson-bright);
-      border-right-color: #ff3344;
-      box-shadow: 0 0 20px rgba(229, 9, 20, 0.55);
+      border: 4px solid rgba(25, 27, 27, 0.12);
+      border-top-color: #e50914;
+      border-right-color: #191b1b;
       animation: adminSpin 0.8s linear infinite;
     }
 
@@ -324,8 +322,7 @@
       width: 14px;
       height: 14px;
       border-radius: 50%;
-      background: #ffffff;
-      box-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
+      background: #191b1b;
       animation: adminPulse 1.4s ease-in-out infinite;
     }
 
@@ -334,7 +331,7 @@
       font-size: 1rem;
       font-weight: 800;
       letter-spacing: 0.12em;
-      color: #ffffff;
+      color: #191b1b;
       text-transform: uppercase;
       margin: 0;
     }
@@ -342,7 +339,8 @@
     .spinner-sub {
       font-family: var(--font-adm-mono);
       font-size: 0.78rem;
-      color: #ff858f;
+      color: #e50914;
+      font-weight: 700;
       margin: 0.35rem 0 0 0;
     }
 
@@ -353,10 +351,10 @@
       gap: 1.25rem;
       padding: 1.4rem 1.6rem;
       margin-bottom: 2rem;
-      background: linear-gradient(135deg, rgba(8, 30, 16, 0.96) 0%, rgba(14, 48, 25, 0.96) 100%);
-      border: 1.5px solid rgba(34, 197, 94, 0.55);
+      background: #ffffff;
+      border: 2px solid #16a34a;
       border-radius: 10px;
-      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7), 0 0 30px rgba(34, 197, 94, 0.25);
+      box-shadow: 5px 5px 0px #16a34a;
       animation: adminSlideDown 0.35s ease-out;
     }
 
@@ -364,24 +362,23 @@
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: rgba(34, 197, 94, 0.2);
-      border: 2px solid #22c55e;
-      color: #22c55e;
+      background: #f0fdf4;
+      border: 2px solid #16a34a;
+      color: #16a34a;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1.5rem;
       font-weight: 900;
-      box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
       flex-shrink: 0;
     }
 
     .toast-tag {
       font-family: var(--font-adm-mono);
-      font-size: 0.66rem;
+      font-size: 0.68rem;
       font-weight: 800;
       letter-spacing: 0.15em;
-      color: #86efac;
+      color: #16a34a;
       text-transform: uppercase;
       display: block;
       margin-bottom: 0.15rem;
@@ -391,32 +388,32 @@
       font-family: var(--font-adm-display);
       font-size: 1.45rem;
       font-weight: 900;
-      color: #ffffff;
+      color: #191b1b;
       letter-spacing: 0.02em;
       text-transform: uppercase;
       margin: 0.1rem 0 0.25rem 0;
     }
 
     .toast-title .highlight-name {
-      color: #4ade80;
-      text-shadow: 0 0 14px rgba(74, 222, 128, 0.45);
+      color: #16a34a;
     }
 
     .toast-desc {
-      font-size: 0.82rem;
-      color: #d1fae5;
+      font-size: 0.84rem;
+      color: #333333;
       margin: 0;
       font-family: var(--font-adm-body);
     }
 
     .code-pill {
-      background: rgba(0, 0, 0, 0.5);
+      background: #f0fdf4;
       padding: 0.15rem 0.45rem;
       border-radius: 3px;
-      border: 1px solid rgba(34, 197, 94, 0.35);
+      border: 1px solid #16a34a;
       font-family: var(--font-adm-mono);
       font-size: 0.74rem;
-      color: #86efac;
+      color: #166534;
+      font-weight: 700;
     }
 
     /* Actions Row */
@@ -431,50 +428,56 @@
     .btn-secondary {
       padding: 0.85rem 1.4rem;
       border-radius: 6px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--adm-text-secondary);
+      border: 1.5px solid #191b1b;
+      background: #ffffff;
+      color: #191b1b;
       font-family: var(--font-adm-heading);
       font-size: 0.82rem;
       font-weight: 700;
       letter-spacing: 0.08em;
+      box-shadow: 2px 2px 0px #191b1b;
       cursor: pointer;
       transition: all 0.2s ease;
     }
 
     .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
+      background: #191b1b;
       color: #ffffff;
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px #191b1b;
     }
 
     .admin-signout-btn {
-      background: transparent;
-      border: 1px solid rgba(229, 9, 20, 0.35);
-      color: #ff858f;
-      padding: 0.42rem 0.9rem;
+      background: #ffffff;
+      border: 1.5px solid #191b1b;
+      box-shadow: 2px 2px 0px #191b1b;
+      color: #e50914;
+      padding: 0.48rem 0.95rem;
       border-radius: 4px;
       font-family: var(--font-adm-heading);
       font-size: 0.74rem;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
       transition: all 0.2s ease;
     }
 
     .admin-signout-btn:hover {
-      background: var(--adm-crimson-bright);
+      background: #e50914;
       color: #ffffff;
-      border-color: var(--adm-crimson-bright);
+      border-color: #191b1b;
+      box-shadow: 3px 3px 0px #191b1b;
+      transform: translate(-1px, -1px);
     }
 
     /* Success Card Showcase (Revealed after upload) */
     .upload-success-card {
       display: none;
       margin-top: 2rem;
-      padding: 1.8rem;
-      background: rgba(14, 22, 16, 0.95);
-      border: 1.5px solid rgba(34, 197, 94, 0.4);
-      border-radius: 8px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(34, 197, 94, 0.15);
+      padding: 2rem;
+      background: #ffffff;
+      border: 2px solid #191b1b;
+      border-radius: 12px;
+      box-shadow: 5px 5px 0px #191b1b;
       animation: adminSlideDown 0.3s ease-out;
     }
 
@@ -492,9 +495,9 @@
       font-size: 0.68rem;
       font-weight: 800;
       letter-spacing: 0.12em;
-      color: #4ade80;
-      background: rgba(34, 197, 94, 0.15);
-      border: 1px solid rgba(34, 197, 94, 0.35);
+      color: #166534;
+      background: #f0fdf4;
+      border: 1px solid #16a34a;
       padding: 0.3rem 0.75rem;
       border-radius: 4px;
     }
@@ -511,7 +514,8 @@
       height: 160px;
       border-radius: 6px;
       background: #000000;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1.5px solid #191b1b;
+      box-shadow: 2px 2px 0px #191b1b;
       overflow: hidden;
       display: flex;
       align-items: center;
@@ -533,9 +537,9 @@
 
     .success-proj-title {
       font-family: var(--font-adm-display);
-      font-size: 1.4rem;
+      font-size: 1.45rem;
       font-weight: 900;
-      color: #ffffff;
+      color: #191b1b;
       text-transform: uppercase;
       letter-spacing: 0.02em;
       margin: 0;
@@ -543,8 +547,9 @@
 
     .success-proj-category {
       font-family: var(--font-adm-mono);
-      font-size: 0.72rem;
-      color: #a7f3d0;
+      font-size: 0.74rem;
+      color: #e50914;
+      font-weight: 800;
       text-transform: uppercase;
     }
 
@@ -564,141 +569,164 @@
     .cdn-input {
       flex: 1;
       padding: 0.55rem 0.8rem;
-      background: #080d09;
-      border: 1px solid rgba(34, 197, 94, 0.3);
+      background: #faf8f5;
+      border: 1.5px solid #191b1b;
       border-radius: 4px;
-      color: #d1fae5;
+      color: #191b1b;
       font-family: var(--font-adm-mono);
       font-size: 0.75rem;
+      font-weight: 600;
     }
 
     .btn-copy {
       padding: 0.55rem 0.9rem;
-      background: rgba(34, 197, 94, 0.2);
-      border: 1px solid rgba(34, 197, 94, 0.4);
-      color: #86efac;
+      background: #191b1b;
+      border: 1.5px solid #191b1b;
+      color: #ffffff;
       font-family: var(--font-adm-heading);
       font-size: 0.72rem;
-      font-weight: 700;
+      font-weight: 800;
       border-radius: 4px;
+      box-shadow: 2px 2px 0px #191b1b;
       cursor: pointer;
       transition: all 0.15s ease;
       white-space: nowrap;
     }
 
     .btn-copy:hover {
-      background: #22c55e;
-      color: #000000;
+      background: #e50914;
+      border-color: #e50914;
+      color: #ffffff;
+      transform: translate(-1px, -1px);
     }
 
     .btn-open-cdn {
       padding: 0.55rem 0.9rem;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #ffffff;
+      background: #ffffff;
+      border: 1.5px solid #191b1b;
+      color: #191b1b;
       font-family: var(--font-adm-heading);
       font-size: 0.72rem;
-      font-weight: 700;
+      font-weight: 800;
       border-radius: 4px;
+      box-shadow: 2px 2px 0px #191b1b;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       white-space: nowrap;
+      transition: all 0.15s ease;
     }
 
     .btn-open-cdn:hover {
-      background: rgba(255, 255, 255, 0.15);
+      background: #191b1b;
+      color: #ffffff;
+      transform: translate(-1px, -1px);
     }
 
     /* Project Management Section */
     .manage-projects-card {
       margin-top: 2.5rem;
-      background: var(--adm-card-bg);
-      border: 1px solid var(--adm-border);
-      border-radius: 8px;
-      padding: 1.75rem;
-      box-shadow: var(--adm-shadow);
+      background: #ffffff;
+      border: 2px solid #191b1b;
+      border-radius: 12px;
+      padding: 1.85rem;
+      box-shadow: 5px 5px 0px #191b1b;
     }
+
     .manage-projects-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1.5rem;
       padding-bottom: 1rem;
-      border-bottom: 1px solid var(--adm-border);
+      border-bottom: 2px solid #191b1b;
       flex-wrap: wrap;
       gap: 0.75rem;
     }
+
     .manage-projects-title {
       font-family: var(--font-adm-heading);
       font-size: 1.15rem;
       font-weight: 900;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: #ffffff;
+      color: #191b1b;
       display: flex;
       align-items: center;
       gap: 0.6rem;
     }
+
     .manage-projects-count {
       font-size: 0.75rem;
-      color: var(--adm-crimson-bright);
-      background: rgba(220, 38, 38, 0.15);
-      padding: 0.2rem 0.6rem;
+      color: #ffffff;
+      background: #191b1b;
+      padding: 0.25rem 0.65rem;
       border-radius: 4px;
-      font-weight: 700;
+      font-family: var(--font-adm-mono);
+      font-weight: 800;
     }
+
     .manage-projects-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 1.25rem;
     }
+
     .manage-project-item {
-      background: rgba(13, 13, 13, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 6px;
+      background: #ffffff;
+      border: 1.5px solid #191b1b;
+      border-radius: 8px;
+      box-shadow: 3px 3px 0px #191b1b;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       transition: all 0.2s ease;
     }
+
     .manage-project-item:hover {
-      border-color: rgba(220, 38, 38, 0.4);
-      transform: translateY(-2px);
+      border-color: #191b1b;
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0px #191b1b;
     }
+
     .manage-project-thumb {
       width: 100%;
       height: 150px;
       object-fit: cover;
-      background: #000;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: #000000;
+      border-bottom: 1.5px solid #191b1b;
     }
+
     .manage-project-body {
       padding: 1rem;
       display: flex;
       flex-direction: column;
       flex: 1;
     }
+
     .manage-project-category {
       font-size: 0.68rem;
-      color: var(--adm-crimson-bright);
+      color: #e50914;
       text-transform: uppercase;
-      font-weight: 700;
+      font-weight: 800;
+      font-family: var(--font-adm-mono);
       letter-spacing: 0.08em;
       margin-bottom: 0.35rem;
     }
+
     .manage-project-name {
       font-family: var(--font-adm-heading);
       font-size: 1rem;
       font-weight: 800;
-      color: #ffffff;
+      color: #191b1b;
       margin-bottom: 0.5rem;
       line-height: 1.3;
     }
+
     .manage-project-desc {
-      font-size: 0.78rem;
-      color: var(--adm-text-muted);
-      line-height: 1.4;
+      font-size: 0.8rem;
+      color: #666666;
+      line-height: 1.45;
       margin-bottom: 0.75rem;
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -706,23 +734,26 @@
       overflow: hidden;
       flex: 1;
     }
+
     .manage-project-actions {
       display: flex;
       gap: 0.6rem;
       margin-top: auto;
       padding-top: 0.75rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 1.5px solid rgba(0, 0, 0, 0.08);
     }
+
     .btn-delete-project {
       flex: 1;
       padding: 0.55rem 0.8rem;
-      background: rgba(220, 38, 38, 0.15);
-      border: 1px solid rgba(220, 38, 38, 0.4);
-      color: #f87171;
+      background: #ffffff;
+      border: 1.5px solid #ef4444;
+      color: #dc2626;
       font-family: var(--font-adm-heading);
       font-size: 0.72rem;
-      font-weight: 700;
+      font-weight: 800;
       border-radius: 4px;
+      box-shadow: 1px 1px 0px #ef4444;
       cursor: pointer;
       transition: all 0.2s ease;
       display: flex;
@@ -730,62 +761,74 @@
       justify-content: center;
       gap: 0.4rem;
     }
+
     .btn-delete-project:hover {
       background: #dc2626;
       color: #ffffff;
+      transform: translate(-1px, -1px);
     }
+
     .btn-view-project {
       padding: 0.55rem 0.8rem;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #ffffff;
+      background: #ffffff;
+      border: 1.5px solid #191b1b;
+      color: #191b1b;
       font-family: var(--font-adm-heading);
       font-size: 0.72rem;
-      font-weight: 700;
+      font-weight: 800;
       border-radius: 4px;
+      box-shadow: 1px 1px 0px #191b1b;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
+      transition: all 0.15s ease;
     }
+
     .btn-view-project:hover {
-      background: rgba(255, 255, 255, 0.15);
+      background: #191b1b;
+      color: #ffffff;
+      transform: translate(-1px, -1px);
     }
+
     .btn-edit-project,
     .btn-edit-thumb-project {
       padding: 0.55rem 0.85rem;
-      background: rgba(59, 130, 246, 0.15);
-      border: 1px solid rgba(59, 130, 246, 0.45);
-      color: #93c5fd;
+      background: #ffffff;
+      border: 1.5px solid #2563eb;
+      color: #2563eb;
       font-family: var(--font-adm-heading);
       font-size: 0.72rem;
-      font-weight: 700;
+      font-weight: 800;
       border-radius: 4px;
+      box-shadow: 1px 1px 0px #2563eb;
       cursor: pointer;
       transition: all 0.2s ease;
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
     }
+
     .btn-edit-project:hover,
     .btn-edit-thumb-project:hover {
       background: #2563eb;
       color: #ffffff;
-      border-color: #2563eb;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+      transform: translate(-1px, -1px);
     }
+
     .manage-project-tag-pill {
       display: inline-block;
       font-family: var(--font-adm-mono);
       font-size: 0.65rem;
       font-weight: 800;
-      color: #ffffff;
-      background: rgba(229, 9, 20, 0.25);
-      border: 1px solid rgba(229, 9, 20, 0.5);
+      color: #191b1b;
+      background: #faf8f5;
+      border: 1px solid #191b1b;
       padding: 0.15rem 0.45rem;
       border-radius: 3px;
       margin-left: 0.4rem;
       letter-spacing: 0.05em;
     }
+
     .manage-project-order-badge {
       display: inline-flex;
       align-items: center;
@@ -793,22 +836,24 @@
       font-family: var(--font-adm-mono);
       font-size: 0.65rem;
       font-weight: 800;
-      color: #34d399;
-      background: rgba(16, 185, 129, 0.14);
-      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #166534;
+      background: #f0fdf4;
+      border: 1px solid #16a34a;
       padding: 0.15rem 0.45rem;
       border-radius: 3px;
       margin-left: 0.4rem;
       letter-spacing: 0.04em;
     }
+
     .btn-move-order {
       padding: 0.5rem 0.65rem;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #ffffff;
-      font-size: 0.72rem;
-      font-weight: 700;
+      background: #ffffff;
+      border: 1.5px solid #191b1b;
+      color: #191b1b;
+      font-size: 0.74rem;
+      font-weight: 800;
       border-radius: 4px;
+      box-shadow: 1px 1px 0px #191b1b;
       cursor: pointer;
       transition: all 0.2s ease;
       display: inline-flex;
@@ -816,45 +861,54 @@
       justify-content: center;
       line-height: 1;
     }
+
     .btn-move-order:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.25);
-      border-color: #ffffff;
+      background: #191b1b;
+      color: #ffffff;
+      transform: translate(-1px, -1px);
     }
+
     .btn-move-order:disabled {
       opacity: 0.25;
       cursor: not-allowed;
+      box-shadow: none;
     }
+
     .manage-filter-tab {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #cbd5e1;
-      padding: 0.4rem 0.85rem;
+      background: #ffffff;
+      border: 1.5px solid #191b1b;
+      box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.08);
+      color: #191b1b;
+      padding: 0.45rem 0.95rem;
       border-radius: 4px;
       font-family: var(--font-adm-heading);
-      font-size: 0.72rem;
-      font-weight: 700;
+      font-size: 0.74rem;
+      font-weight: 800;
       letter-spacing: 0.05em;
       cursor: pointer;
       transition: all 0.2s ease;
     }
+
     .manage-filter-tab:hover {
-      background: rgba(255, 255, 255, 0.14);
-      color: #ffffff;
+      background: rgba(229, 9, 20, 0.06);
+      transform: translate(-1px, -1px);
     }
+
     .manage-filter-tab.active {
-      background: #e50914;
-      border-color: #e50914;
+      background: #191b1b;
+      border-color: #191b1b;
       color: #ffffff;
-      box-shadow: 0 2px 10px rgba(229, 9, 20, 0.35);
+      box-shadow: 3px 3px 0px #e50914;
     }
+
     /* Edit Project & Thumbnail Modal */
     .edit-thumb-modal-backdrop,
     .edit-project-modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(25, 27, 27, 0.78);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       z-index: 10000;
       display: flex;
       align-items: center;
@@ -862,80 +916,125 @@
       padding: 1.5rem;
       overflow-y: auto;
     }
+
     .edit-thumb-modal-card,
     .edit-project-modal-card {
-      background: #11070a;
-      border: 1.5px solid rgba(229, 9, 20, 0.4);
+      background: #ffffff;
+      border: 2px solid #191b1b;
       border-radius: 12px;
       width: 100%;
       max-width: 680px;
       max-height: 90vh;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(120, 16, 34, 0.35);
+      box-shadow: 8px 8px 0px #191b1b;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
     }
+
     .edit-project-grid-2col {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
     }
+
     @media (max-width: 640px) {
       .edit-project-grid-2col {
         grid-template-columns: 1fr;
         gap: 0.5rem;
       }
     }
+
     .edit-thumb-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       padding: 1.4rem 1.6rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 2px solid #191b1b;
+      background: #ffffff;
     }
+
     .edit-thumb-title {
-      font-family: var(--font-adm-heading);
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: #ffffff;
+      font-family: var(--font-adm-display);
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #191b1b;
       margin: 0 0 0.25rem;
-      letter-spacing: 0.04em;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
     }
+
     .edit-thumb-sub {
       font-size: 0.78rem;
-      color: var(--adm-crimson-bright);
+      color: #e50914;
       margin: 0;
       font-family: var(--font-adm-mono);
+      font-weight: 700;
     }
+
     .edit-thumb-close-btn {
-      background: transparent;
-      border: none;
-      color: #a1a1aa;
-      font-size: 1.6rem;
-      line-height: 1;
+      background: #ffffff;
+      border: 1.5px solid #191b1b;
+      box-shadow: 2px 2px 0px #191b1b;
+      color: #191b1b;
+      font-size: 1.3rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      padding: 0.2rem;
-      transition: color 0.15s ease;
+      transition: all 0.15s ease;
     }
+
     .edit-thumb-close-btn:hover {
+      background: #e50914;
+      border-color: #191b1b;
       color: #ffffff;
+      transform: translate(-1px, -1px);
     }
+
+    .btn-close-edit-modal {
+      background: #ffffff;
+      border: 1.5px solid #191b1b;
+      box-shadow: 2px 2px 0px #191b1b;
+      color: #191b1b;
+      font-size: 1rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-close-edit-modal:hover {
+      background: #e50914;
+      border-color: #191b1b;
+      color: #ffffff;
+      transform: translate(-1px, -1px);
+    }
+
     .edit-thumb-body {
       padding: 1.6rem;
     }
+
     .edit-thumb-img-frame {
       width: 100%;
       height: 160px;
       border-radius: 6px;
       overflow: hidden;
-      background: #000;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: #000000;
+      border: 1.5px solid #191b1b;
+      box-shadow: 2px 2px 0px #191b1b;
       margin-bottom: 1.25rem;
       display: flex;
       align-items: center;
       justify-content: center;
     }
+
     .edit-thumb-img-frame img {
       width: 100%;
       height: 100%;
@@ -1209,7 +1308,7 @@
 
           <!-- Local Thumbnail Preview Box -->
           <div class="dropzone-preview-wrap" id="thumbPreviewWrapLocal" style="display: none; margin-top: 0.8rem;">
-            <div id="thumbPreviewBoxLocal" style="max-height: 140px; overflow: hidden; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); background: #000; display: flex; align-items: center; justify-content: center;">
+            <div id="thumbPreviewBoxLocal" style="max-height: 140px; overflow: hidden; border-radius: 6px; border: 2px solid #191b1b; background: #000; display: flex; align-items: center; justify-content: center;">
               <img id="thumbPreviewImgLocal" src="" alt="Custom Thumbnail Preview" style="width: 100%; height: 140px; object-fit: cover;">
             </div>
             <div class="file-preview-pill" style="margin-top: 0.5rem;">
@@ -1275,7 +1374,7 @@
           <span class="toast-tag">FIRESTORE RECORD SAVED // LIVE</span>
           <h4 class="toast-title">"<span class="highlight-name" id="toastProjectTitle"></span>" SAVED SUCCESSFULLY!</h4>
           <p class="toast-desc">
-            Project published to collection <code class="code-pill">projects</code> with document ID <span id="toastDocId" style="font-family: var(--font-adm-mono); color: #86efac; font-weight: 700;">#...</span>
+            Project published to collection <code class="code-pill">projects</code> with document ID <span id="toastDocId" style="font-family: var(--font-adm-mono); color: #15803d; font-weight: 700;">#...</span>
           </p>
         </div>
       </div>
@@ -1284,18 +1383,18 @@
       <div class="upload-success-card" id="uploadSuccessCard">
         <div class="success-badge-row">
           <span class="success-pill">✓ SAVED TO FIRESTORE // ASSET LIVE</span>
-          <span class="success-pill" id="firestoreDocBadge" style="background: rgba(229, 9, 20, 0.15); border-color: rgba(229, 9, 20, 0.4); color: #ff858f;">
+          <span class="success-pill" id="firestoreDocBadge" style="background: #fff1f2; border-color: #e50914; color: #b91c1c; font-weight: 700;">
             DOC: #PENDING
           </span>
-          <span class="success-timestamp" id="successTimestamp" style="font-family: var(--font-adm-mono); font-size: 0.72rem; color: #a7f3d0;"></span>
+          <span class="success-timestamp" id="successTimestamp" style="font-family: var(--font-adm-mono); font-size: 0.72rem; color: #15803d; font-weight: 700;"></span>
         </div>
 
         <div class="success-content-grid">
           <div>
             <div class="success-media-frame" id="successMediaFrame"></div>
             <div id="thumbPreviewWrap" style="margin-top: 0.6rem; display: none;">
-              <span class="admin-label" style="font-size: 0.65rem; color: #86efac; display: block; margin-bottom: 0.25rem;">AUTO-THUMBNAIL</span>
-              <div style="width: 100%; height: 90px; border-radius: 4px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.12); background: #000;">
+              <span class="admin-label" style="font-size: 0.65rem; color: #15803d; font-weight: 700; display: block; margin-bottom: 0.25rem;">AUTO-THUMBNAIL</span>
+              <div style="width: 100%; height: 90px; border-radius: 4px; overflow: hidden; border: 2px solid #191b1b; background: #000;">
                 <img id="autoThumbImg" src="" alt="Thumbnail" style="width: 100%; height: 100%; object-fit: cover;">
               </div>
             </div>
@@ -1307,7 +1406,7 @@
 
             <!-- Media URL -->
             <div class="cdn-link-box">
-              <label class="admin-label" style="font-size: 0.68rem; color: #86efac;">CLOUDINARY MEDIA URL</label>
+              <label class="admin-label" style="font-size: 0.68rem; color: #15803d; font-weight: 700;">CLOUDINARY MEDIA URL</label>
               <div class="cdn-url-row">
                 <input type="text" readonly id="cloudinaryUrlInput" class="cdn-input">
                 <button type="button" id="copyUrlBtn" class="btn-copy">COPY URL</button>
@@ -1317,10 +1416,10 @@
 
             <!-- Auto-Thumbnail URL -->
             <div class="cdn-link-box" style="margin-top: 0.5rem;">
-              <label class="admin-label" style="font-size: 0.68rem; color: #ff99a2;">AUTO-THUMBNAIL URL</label>
+              <label class="admin-label" style="font-size: 0.68rem; color: #b91c1c; font-weight: 700;">AUTO-THUMBNAIL URL</label>
               <div class="cdn-url-row">
-                <input type="text" readonly id="thumbnailUrlInput" class="cdn-input" style="border-color: rgba(229, 9, 20, 0.3); color: #ffd1d6;">
-                <button type="button" id="copyThumbBtn" class="btn-copy" style="background: rgba(229, 9, 20, 0.2); border-color: rgba(229, 9, 20, 0.4); color: #ff858f;">COPY THUMB</button>
+                <input type="text" readonly id="thumbnailUrlInput" class="cdn-input" style="border-color: #191b1b; color: #191b1b;">
+                <button type="button" id="copyThumbBtn" class="btn-copy" style="background: #fff1f2; border-color: #e50914; color: #b91c1c; font-weight: 700;">COPY THUMB</button>
                 <a href="#" target="_blank" rel="noopener noreferrer" id="openThumbLink" class="btn-open-cdn">OPEN ↗</a>
               </div>
             </div>
@@ -1328,7 +1427,7 @@
         </div>
 
         <div style="margin-top: 1.4rem; display: flex; justify-content: flex-end;">
-          <button type="button" id="uploadAnotherBtn" class="btn-secondary" style="background: rgba(255, 255, 255, 0.1); color: #ffffff;">
+          <button type="button" id="uploadAnotherBtn" class="btn-secondary" style="background: #ffffff; border: 2px solid #191b1b; box-shadow: 2px 2px 0px #191b1b; color: #191b1b; font-weight: 700;">
             + UPLOAD ANOTHER PROJECT
           </button>
         </div>
@@ -1338,9 +1437,9 @@
       <div class="manage-projects-card" id="manageCvSection" style="margin-bottom: 2rem;">
         <div class="manage-projects-header">
           <div class="manage-projects-title">
-            <span style="color: #60a5fa;">📄</span>
+            <span style="color: #2563eb;">📄</span>
             <span>MANAGE CURRICULUM VITAE (CV / RESUME)</span>
-            <span class="manage-projects-count" id="cvStatusBadge" style="background: rgba(96, 165, 250, 0.15); border-color: rgba(96, 165, 250, 0.4); color: #93c5fd;">DEFAULT CV ACTIVE</span>
+            <span class="manage-projects-count" id="cvStatusBadge" style="background: #eff6ff; border-color: #3b82f6; color: #1d4ed8; font-weight: 700;">DEFAULT CV ACTIVE</span>
           </div>
         </div>
         
@@ -1349,15 +1448,15 @@
             Upload an updated PDF of your Curriculum Vitae or provide a direct link. The <strong>"DOWNLOAD CV (PDF)"</strong> button in your live portfolio footer will immediately link to this file.
           </p>
 
-          <div style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 1.2rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+          <div style="background: #faf8f5; border: 2px solid #191b1b; box-shadow: 3px 3px 0px #191b1b; border-radius: 6px; padding: 1.2rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
             <div>
-              <div style="font-size: 0.7rem; color: #a1a1aa; font-family: var(--font-adm-mono); text-transform: uppercase; margin-bottom: 0.25rem;">CURRENT ACTIVE CV</div>
-              <div id="currentCvDisplay" style="font-family: var(--font-adm-heading); font-size: 0.95rem; color: #ffffff; word-break: break-all;">
+              <div style="font-size: 0.7rem; color: #666666; font-family: var(--font-adm-mono); text-transform: uppercase; font-weight: 700; margin-bottom: 0.25rem;">CURRENT ACTIVE CV</div>
+              <div id="currentCvDisplay" style="font-family: var(--font-adm-heading); font-size: 0.95rem; color: #191b1b; font-weight: 800; word-break: break-all;">
                 Default Local File (assets/docs/Taqi.pdf)
               </div>
-              <div id="cvUpdatedTime" style="font-size: 0.72rem; color: #86efac; margin-top: 0.25rem;">Default PDF bundled in portfolio assets</div>
+              <div id="cvUpdatedTime" style="font-size: 0.72rem; color: #15803d; font-weight: 600; margin-top: 0.25rem;">Default PDF bundled in portfolio assets</div>
             </div>
-            <a href="assets/docs/Taqi.pdf" target="_blank" rel="noopener noreferrer" id="currentCvLink" class="btn-view-project" style="padding: 0.55rem 1.1rem; background: rgba(96, 165, 250, 0.15); border-color: rgba(96, 165, 250, 0.4); color: #93c5fd;">
+            <a href="assets/docs/Taqi.pdf" target="_blank" rel="noopener noreferrer" id="currentCvLink" class="btn-view-project" style="padding: 0.55rem 1.1rem; background: #eff6ff; border: 1.5px solid #1d4ed8; color: #1d4ed8; font-weight: 700; box-shadow: 2px 2px 0px #1d4ed8;">
               VIEW / TEST CURRENT CV ↗
             </a>
           </div>
@@ -1372,9 +1471,9 @@
                   Select a new PDF from your computer (auto-uploaded to cloud storage).
                 </span>
                 <!-- Selected file pill -->
-                <div id="cvFilePill" style="display: none; margin-top: 0.6rem; background: rgba(96, 165, 250, 0.12); border: 1px solid rgba(96, 165, 250, 0.35); padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.78rem; color: #93c5fd; align-items: center; justify-content: space-between;">
+                <div id="cvFilePill" style="display: none; margin-top: 0.6rem; background: #eff6ff; border: 1.5px solid #3b82f6; padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.78rem; color: #1d4ed8; font-weight: 600; align-items: center; justify-content: space-between;">
                   <span id="cvFileNameLabel">📄 Selected file</span>
-                  <button type="button" id="cvFileClearBtn" title="Remove selected file" style="background: none; border: none; color: #f87171; cursor: pointer; font-size: 0.85rem; font-weight: bold; margin-left: 0.6rem;">✕</button>
+                  <button type="button" id="cvFileClearBtn" title="Remove selected file" style="background: none; border: none; color: #dc2626; cursor: pointer; font-size: 0.85rem; font-weight: bold; margin-left: 0.6rem;">✕</button>
                 </div>
               </div>
 
@@ -1391,11 +1490,11 @@
             <!-- Upload progress for CV -->
             <div id="cvUploadProgress" style="display: none; margin-top: 0.2rem;">
               <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.35rem;">
-                <span id="cvProgressText" style="color: #60a5fa;">Uploading CV to cloud...</span>
-                <span id="cvProgressPercent" style="color: #60a5fa; font-family: var(--font-adm-mono);">0%</span>
+                <span id="cvProgressText" style="color: #2563eb; font-weight: 600;">Uploading CV to cloud...</span>
+                <span id="cvProgressPercent" style="color: #2563eb; font-family: var(--font-adm-mono); font-weight: 700;">0%</span>
               </div>
               <div class="progress-track">
-                <div class="progress-fill" id="cvProgressBar" style="width: 0%; background: #60a5fa;"></div>
+                <div class="progress-fill" id="cvProgressBar" style="width: 0%; background: #2563eb;"></div>
               </div>
             </div>
 
@@ -1403,10 +1502,10 @@
             <div id="cvInlineAlert" style="display: none; border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.82rem; line-height: 1.45; font-family: var(--font-adm-body);"></div>
 
             <div style="display: flex; justify-content: flex-end; gap: 1rem; align-items: center; flex-wrap: wrap;">
-              <button type="button" id="resetCvBtn" class="btn-secondary" style="font-size: 0.75rem; padding: 0.6rem 1rem; color: #a1a1aa; background: transparent; border: 1px solid rgba(255,255,255,0.12);">
+              <button type="button" id="resetCvBtn" class="btn-secondary" style="font-size: 0.75rem; padding: 0.6rem 1rem; color: #191b1b; background: #ffffff; border: 2px solid #191b1b; box-shadow: 2px 2px 0px #191b1b; font-weight: 700; cursor: pointer;">
                 RESET TO DEFAULT (Taqi.pdf)
               </button>
-              <button type="submit" id="saveCvBtn" class="btn-primary" style="padding: 0.65rem 1.6rem; font-size: 0.82rem; background: linear-gradient(135deg, #2563eb, #1d4ed8);">
+              <button type="submit" id="saveCvBtn" class="btn-primary" style="padding: 0.65rem 1.6rem; font-size: 0.82rem; background: #191b1b; color: #ffffff; border: 2px solid #191b1b; box-shadow: 3px 3px 0px #e50914; font-weight: 800;">
                 <span>UPDATE &amp; PUBLISH CV ↗</span>
               </button>
             </div>
@@ -1422,7 +1521,7 @@
             <span>MANAGE UPLOADED PROJECTS</span>
             <span class="manage-projects-count" id="projectCountBadge">0 PROJECTS</span>
           </div>
-          <button type="button" id="refreshProjectsBtn" class="btn-secondary" style="font-size: 0.72rem; padding: 0.45rem 0.85rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #fff; cursor: pointer; border-radius: 4px;">
+          <button type="button" id="refreshProjectsBtn" class="btn-secondary" style="font-size: 0.72rem; padding: 0.45rem 0.85rem; background: #ffffff; border: 2px solid #191b1b; box-shadow: 2px 2px 0px #191b1b; color: #191b1b; font-weight: 800; cursor: pointer; border-radius: 4px;">
             ↻ REFRESH LIST
           </button>
         </div>
@@ -1434,8 +1533,8 @@
           <button type="button" class="manage-filter-tab" data-category="Graphic Design">GRAPHIC DESIGN</button>
           <button type="button" class="manage-filter-tab" data-category="Video Editing & Reel">VIDEO EDITING</button>
         </div>
-        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 0.65rem 0.85rem; margin-bottom: 1.25rem; font-size: 0.76rem; color: #a1a1aa; line-height: 1.45;">
-          💡 <strong>Placement Sequence:</strong> Projects appear on each page in the exact sequence shown below (<span style="color:#34d399; font-weight:700;">POS #1</span> displays first). Use <strong style="color: #fff;">▲</strong> and <strong style="color: #fff;">▼</strong> to swap placement instantly, or click <strong style="color: #fff;">EDIT</strong> to set a specific position.
+        <div style="background: #faf8f5; border: 1.5px solid #191b1b; box-shadow: 2px 2px 0px #191b1b; border-radius: 6px; padding: 0.65rem 0.85rem; margin-bottom: 1.25rem; font-size: 0.76rem; color: #444444; line-height: 1.45;">
+          💡 <strong>Placement Sequence:</strong> Projects appear on each page in the exact sequence shown below (<span style="color:#15803d; font-weight:700;">POS #1</span> displays first). Use <strong style="color: #191b1b;">▲</strong> and <strong style="color: #191b1b;">▼</strong> to swap placement instantly, or click <strong style="color: #191b1b;">EDIT</strong> to set a specific position.
         </div>
 
         <div id="manageProjectsLoading" style="color: var(--adm-text-muted); font-size: 0.85rem; padding: 1.5rem; text-align: center;">
@@ -1518,7 +1617,7 @@
             </div>
 
             <!-- Thumbnail / Cover Section -->
-            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px; padding: 1rem; margin-bottom: 1.2rem;">
+            <div style="background: #faf8f5; border: 1.5px solid #191b1b; box-shadow: 2px 2px 0px #191b1b; border-radius: 6px; padding: 1rem; margin-bottom: 1.2rem;">
               <label class="admin-label" style="margin-bottom: 0.5rem; display: block;">Cover / Thumbnail Poster</label>
               <div style="display: flex; gap: 1rem; align-items: flex-start; flex-wrap: wrap;">
                 <div class="edit-thumb-img-frame" style="width: 130px; height: 85px; margin-bottom: 0; flex-shrink: 0;">
@@ -1539,18 +1638,18 @@
 
             <!-- Progress / Loading state -->
             <div id="editProjectProgressWrap" style="display: none; margin-bottom: 1rem;">
-              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.35rem; color: #60a5fa;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.35rem; color: #2563eb; font-weight: 600;">
                 <span id="editProjectProgressText">Updating project...</span>
-                <span id="editProjectProgressPercent" style="font-family: var(--font-adm-mono);">0%</span>
+                <span id="editProjectProgressPercent" style="font-family: var(--font-adm-mono); font-weight: 700;">0%</span>
               </div>
               <div class="progress-track">
-                <div class="progress-fill" id="editProjectProgressBar" style="width: 0%; background: #3b82f6;"></div>
+                <div class="progress-fill" id="editProjectProgressBar" style="width: 0%; background: #2563eb;"></div>
               </div>
             </div>
 
             <div style="display: flex; justify-content: flex-end; gap: 0.8rem;">
-              <button type="button" id="cancelEditProjectBtn" class="btn-secondary" style="background: rgba(255,255,255,0.08); color: #fff;">CANCEL</button>
-              <button type="submit" id="saveEditProjectBtn" class="btn-primary" style="background: linear-gradient(135deg, #2563eb, #1d4ed8);">SAVE CHANGES ↗</button>
+              <button type="button" id="cancelEditProjectBtn" class="btn-secondary" style="background: #ffffff; border: 2px solid #191b1b; box-shadow: 2px 2px 0px #191b1b; color: #191b1b; font-weight: 700;">CANCEL</button>
+              <button type="submit" id="saveEditProjectBtn" class="btn-primary" style="background: #191b1b; border: 2px solid #191b1b; box-shadow: 3px 3px 0px #e50914; color: #ffffff; font-weight: 800;">SAVE CHANGES ↗</button>
             </div>
           </form>
         </div>
@@ -1563,7 +1662,7 @@
         <div class="edit-thumb-header" style="flex-shrink: 0; padding: 0.8rem 1.2rem;">
           <div>
             <div style="font-family: var(--font-adm-mono); font-size: 0.68rem; color: #e50914; letter-spacing: 0.12em; text-transform: uppercase;" id="adminVideoModalCategory">VIDEO PREVIEW</div>
-            <h3 style="font-size: 1.15rem; font-weight: 700; color: #fff; margin: 0.15rem 0 0;" id="adminVideoModalTitle">Project Video</h3>
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #191b1b; margin: 0.15rem 0 0;" id="adminVideoModalTitle">Project Video</h3>
           </div>
           <button type="button" class="btn-close-edit-modal" id="closeAdminVideoModalBtn" aria-label="Close Video">✕</button>
         </div>
@@ -2358,7 +2457,7 @@
         manageProjectsGrid.style.display = 'block';
         manageProjectsGrid.innerHTML = `
           <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem 1rem; color: var(--adm-text-muted);">
-            <p style="font-size: 0.95rem; margin-bottom: 0.5rem; color: #fff;">No active projects in Firestore</p>
+            <p style="font-size: 0.95rem; margin-bottom: 0.5rem; color: #191b1b; font-weight: 700;">No active projects in Firestore</p>
             <p style="font-size: 0.8rem;">Projects you upload will appear here with options to reorder, edit, or delete them.</p>
           </div>
         `;
@@ -2391,7 +2490,7 @@
         manageProjectsGrid.style.display = 'block';
         manageProjectsGrid.innerHTML = `
           <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem 1rem; color: var(--adm-text-muted);">
-            <p style="font-size: 0.95rem; margin-bottom: 0.5rem; color: #fff;">No projects in category "${escapeHtml(currentManageCategoryFilter)}"</p>
+            <p style="font-size: 0.95rem; margin-bottom: 0.5rem; color: #191b1b; font-weight: 700;">No projects in category "${escapeHtml(currentManageCategoryFilter)}"</p>
             <p style="font-size: 0.8rem;">Switch to "ALL PAGES" or upload a project under this category.</p>
           </div>
         `;
@@ -2899,17 +2998,17 @@
       if (!cvInlineAlert) return;
       cvInlineAlert.style.display = 'block';
       if (type === 'success') {
-        cvInlineAlert.style.background = 'rgba(16, 185, 129, 0.15)';
-        cvInlineAlert.style.border = '1px solid rgba(16, 185, 129, 0.4)';
-        cvInlineAlert.style.color = '#a7f3d0';
+        cvInlineAlert.style.background = '#f0fdf4';
+        cvInlineAlert.style.border = '1.5px solid #16a34a';
+        cvInlineAlert.style.color = '#166534';
       } else if (type === 'error') {
-        cvInlineAlert.style.background = 'rgba(239, 68, 68, 0.15)';
-        cvInlineAlert.style.border = '1px solid rgba(239, 68, 68, 0.4)';
-        cvInlineAlert.style.color = '#fca5a5';
+        cvInlineAlert.style.background = '#fef2f2';
+        cvInlineAlert.style.border = '1.5px solid #dc2626';
+        cvInlineAlert.style.color = '#991b1b';
       } else {
-        cvInlineAlert.style.background = 'rgba(59, 130, 246, 0.15)';
-        cvInlineAlert.style.border = '1px solid rgba(59, 130, 246, 0.4)';
-        cvInlineAlert.style.color = '#93c5fd';
+        cvInlineAlert.style.background = '#eff6ff';
+        cvInlineAlert.style.border = '1.5px solid #2563eb';
+        cvInlineAlert.style.color = '#1e40af';
       }
       cvInlineAlert.innerHTML = msg;
     }
@@ -2946,9 +3045,9 @@
           const data = cvSnap.data();
           if (cvStatusBadge) {
             cvStatusBadge.textContent = 'CUSTOM CV ACTIVE';
-            cvStatusBadge.style.color = '#86efac';
-            cvStatusBadge.style.borderColor = 'rgba(134, 239, 172, 0.4)';
-            cvStatusBadge.style.background = 'rgba(134, 239, 172, 0.15)';
+            cvStatusBadge.style.color = '#15803d';
+            cvStatusBadge.style.borderColor = '#15803d';
+            cvStatusBadge.style.background = '#f0fdf4';
           }
           if (currentCvDisplay) {
             currentCvDisplay.textContent = data.fileName ? `${data.fileName}` : data.cvUrl;
@@ -2967,9 +3066,9 @@
         } else {
           if (cvStatusBadge) {
             cvStatusBadge.textContent = 'DEFAULT CV ACTIVE';
-            cvStatusBadge.style.color = '#93c5fd';
-            cvStatusBadge.style.borderColor = 'rgba(96, 165, 250, 0.4)';
-            cvStatusBadge.style.background = 'rgba(96, 165, 250, 0.15)';
+            cvStatusBadge.style.color = '#1d4ed8';
+            cvStatusBadge.style.borderColor = '#3b82f6';
+            cvStatusBadge.style.background = '#eff6ff';
           }
           if (currentCvDisplay) {
             currentCvDisplay.textContent = 'Default Local File (assets/docs/Taqi.pdf)';
@@ -3045,7 +3144,7 @@
             localStorage.setItem('taqi_portfolio_cv_name', finalFileName);
           } catch (e) {}
 
-          showCvInlineAlert(`✓ <strong>CV updated and published!</strong> Live portfolio footer button now links to <a href="${finalCvUrl}" target="_blank" style="color:#fff; text-decoration:underline;">${finalFileName}</a>.`, 'success');
+          showCvInlineAlert(`✓ <strong>CV updated and published!</strong> Live portfolio footer button now links to <a href="${finalCvUrl}" target="_blank" style="color:#166534; font-weight:700; text-decoration:underline;">${finalFileName}</a>.`, 'success');
           showUploadAlert(`✓ CV updated successfully! Live portfolio button updated.`, true);
 
           cvFileInput.value = '';
