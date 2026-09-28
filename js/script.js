@@ -378,6 +378,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const downloadCvBtn = document.getElementById('downloadCvBtn');
     if (!downloadCvBtn) return;
 
+    // Instant 0ms render from local cache
+    try {
+      const cachedCv = localStorage.getItem('taqi_portfolio_cv_url');
+      if (cachedCv) {
+        downloadCvBtn.href = cachedCv;
+        downloadCvBtn.target = '_blank';
+        if (cachedCv.startsWith('http')) {
+          downloadCvBtn.removeAttribute('download');
+        }
+      }
+    } catch (e) {}
+
     try {
       const res = await fetch('https://firestore.googleapis.com/v1/projects/portfolio-63983/databases/(default)/documents/projects/site_cv_metadata');
       if (res.ok) {
@@ -389,6 +401,9 @@ document.addEventListener('DOMContentLoaded', () => {
           if (cvUrl.startsWith('http')) {
             downloadCvBtn.removeAttribute('download');
           }
+          try {
+            localStorage.setItem('taqi_portfolio_cv_url', cvUrl);
+          } catch (e) {}
         }
       }
     } catch (err) {

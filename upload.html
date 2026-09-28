@@ -1371,6 +1371,11 @@
                 <span style="font-size: 0.7rem; color: var(--adm-text-muted); margin-top: 0.25rem; display: block;">
                   Select a new PDF from your computer (auto-uploaded to cloud storage).
                 </span>
+                <!-- Selected file pill -->
+                <div id="cvFilePill" style="display: none; margin-top: 0.6rem; background: rgba(96, 165, 250, 0.12); border: 1px solid rgba(96, 165, 250, 0.35); padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.78rem; color: #93c5fd; align-items: center; justify-content: space-between;">
+                  <span id="cvFileNameLabel">📄 Selected file</span>
+                  <button type="button" id="cvFileClearBtn" title="Remove selected file" style="background: none; border: none; color: #f87171; cursor: pointer; font-size: 0.85rem; font-weight: bold; margin-left: 0.6rem;">✕</button>
+                </div>
               </div>
 
               <!-- Or Paste Direct Link -->
@@ -1393,6 +1398,9 @@
                 <div class="progress-fill" id="cvProgressBar" style="width: 0%; background: #60a5fa;"></div>
               </div>
             </div>
+
+            <!-- Prominent INLINE Alert directly inside CV card -->
+            <div id="cvInlineAlert" style="display: none; border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.82rem; line-height: 1.45; font-family: var(--font-adm-body);"></div>
 
             <div style="display: flex; justify-content: flex-end; gap: 1rem; align-items: center; flex-wrap: wrap;">
               <button type="button" id="resetCvBtn" class="btn-secondary" style="font-size: 0.75rem; padding: 0.6rem 1rem; color: #a1a1aa; background: transparent; border: 1px solid rgba(255,255,255,0.12);">
@@ -1551,16 +1559,16 @@
 
     <!-- Admin Video Player Modal -->
     <div class="edit-thumb-modal-backdrop" id="adminVideoModal" style="display: none;" role="dialog" aria-modal="true" aria-hidden="true">
-      <div class="edit-thumb-modal-container" style="max-width: 800px; width: 95%;">
-        <div class="edit-thumb-header">
+      <div class="edit-thumb-modal-container" style="max-width: min(92vw, calc((84vh - 65px) * (16 / 9))); width: 95%; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden;">
+        <div class="edit-thumb-header" style="flex-shrink: 0; padding: 0.8rem 1.2rem;">
           <div>
             <div style="font-family: var(--font-adm-mono); font-size: 0.68rem; color: #e50914; letter-spacing: 0.12em; text-transform: uppercase;" id="adminVideoModalCategory">VIDEO PREVIEW</div>
-            <h3 style="font-size: 1.15rem; font-weight: 700; color: #fff; margin: 0.2rem 0 0;" id="adminVideoModalTitle">Project Video</h3>
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #fff; margin: 0.15rem 0 0;" id="adminVideoModalTitle">Project Video</h3>
           </div>
           <button type="button" class="btn-close-edit-modal" id="closeAdminVideoModalBtn" aria-label="Close Video">✕</button>
         </div>
-        <div style="padding: 1.25rem; background: #000; display: flex; justify-content: center; align-items: center; border-radius: 0 0 10px 10px;">
-          <video id="adminVideoModalPlayer" controls controlslist="nodownload noplaybackrate" playsinline preload="metadata" style="max-width: 100%; max-height: 70vh; border-radius: 6px; outline: none; background: #000; width: 100%;">
+        <div style="padding: 0; background: #000; display: flex; justify-content: center; align-items: center; border-radius: 0 0 10px 10px; max-height: calc(88vh - 65px); overflow: hidden;">
+          <video id="adminVideoModalPlayer" controls controlslist="nodownload noplaybackrate" playsinline preload="metadata" style="width: 100%; height: 100%; max-height: calc(88vh - 65px); aspect-ratio: 16 / 9; object-fit: contain; border-radius: 0 0 8px 8px; outline: none; background: #000;">
             Your browser does not support HTML5 video.
           </video>
         </div>
@@ -1612,11 +1620,12 @@
     const CLOUDINARY_UPLOAD_PRESET = "ozgarxqn";
     const CLOUDINARY_AUTO_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`;
 
-    // Reusable Cloudinary Upload Helper
-    function uploadFileToCloudinary(file, onProgress) {
+    // Reusable Cloudinary Upload Helper with automatic fallback for documents/PDFs
+    function uploadFileToCloudinary(file, onProgress, resourceType = 'auto') {
       return new Promise((resolve, reject) => {
+        const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`;
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', CLOUDINARY_AUTO_URL, true);
+        xhr.open('POST', url, true);
 
         if (onProgress) {
           xhr.upload.onprogress = (e) => {
@@ -1636,20 +1645,40 @@
               reject(new Error('Invalid response from Cloudinary'));
             }
           } else {
+            let errMsg = `Upload failed with status ${xhr.status}`;
             try {
               const errData = JSON.parse(xhr.responseText);
-              reject(new Error(errData?.error?.message || `Upload failed with status ${xhr.status}`));
-            } catch (err) {
-              reject(new Error(`Upload failed with status ${xhr.status}`));
+              if (errData?.error?.message) errMsg = errData.error.message;
+            } catch (e) {}
+
+            // If auto failed on a document or file, retry once with raw
+            if (resourceType === 'auto') {
+              console.warn(`[Cloudinary] auto upload failed (${errMsg}), retrying with raw resource type...`);
+              uploadFileToCloudinary(file, onProgress, 'raw')
+                .then(resolve)
+                .catch(reject);
+              return;
             }
+
+            reject(new Error(errMsg));
           }
         };
 
-        xhr.onerror = () => reject(new Error('Network error uploading file to Cloudinary'));
+        xhr.onerror = () => {
+          if (resourceType === 'auto') {
+            console.warn('[Cloudinary] auto upload network error, retrying with raw resource type...');
+            uploadFileToCloudinary(file, onProgress, 'raw')
+              .then(resolve)
+              .catch(reject);
+            return;
+          }
+          reject(new Error('Network error uploading file to Cloudinary. Please check connection.'));
+        };
 
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+        formData.append('cloud_name', CLOUDINARY_CLOUD_NAME);
         formData.append('folder', 'taqi_portfolio');
         xhr.send(formData);
       });
@@ -2854,13 +2883,61 @@
     const cvUpdatedTime = document.getElementById('cvUpdatedTime');
     const cvUpdateForm = document.getElementById('cvUpdateForm');
     const cvFileInput = document.getElementById('cvFileInput');
+    const cvFilePill = document.getElementById('cvFilePill');
+    const cvFileNameLabel = document.getElementById('cvFileNameLabel');
+    const cvFileClearBtn = document.getElementById('cvFileClearBtn');
     const cvUrlInput = document.getElementById('cvUrlInput');
     const resetCvBtn = document.getElementById('resetCvBtn');
     const cvUploadProgress = document.getElementById('cvUploadProgress');
     const cvProgressBar = document.getElementById('cvProgressBar');
     const cvProgressPercent = document.getElementById('cvProgressPercent');
     const cvProgressText = document.getElementById('cvProgressText');
+    const cvInlineAlert = document.getElementById('cvInlineAlert');
     const saveCvBtn = document.getElementById('saveCvBtn');
+
+    function showCvInlineAlert(msg, type = 'info') {
+      if (!cvInlineAlert) return;
+      cvInlineAlert.style.display = 'block';
+      if (type === 'success') {
+        cvInlineAlert.style.background = 'rgba(16, 185, 129, 0.15)';
+        cvInlineAlert.style.border = '1px solid rgba(16, 185, 129, 0.4)';
+        cvInlineAlert.style.color = '#a7f3d0';
+      } else if (type === 'error') {
+        cvInlineAlert.style.background = 'rgba(239, 68, 68, 0.15)';
+        cvInlineAlert.style.border = '1px solid rgba(239, 68, 68, 0.4)';
+        cvInlineAlert.style.color = '#fca5a5';
+      } else {
+        cvInlineAlert.style.background = 'rgba(59, 130, 246, 0.15)';
+        cvInlineAlert.style.border = '1px solid rgba(59, 130, 246, 0.4)';
+        cvInlineAlert.style.color = '#93c5fd';
+      }
+      cvInlineAlert.innerHTML = msg;
+    }
+
+    function hideCvInlineAlert() {
+      if (cvInlineAlert) cvInlineAlert.style.display = 'none';
+    }
+
+    if (cvFileInput) {
+      cvFileInput.addEventListener('change', () => {
+        const file = cvFileInput.files[0];
+        if (file) {
+          const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+          if (cvFileNameLabel) cvFileNameLabel.textContent = `📄 Selected: ${file.name} (${sizeMB} MB)`;
+          if (cvFilePill) cvFilePill.style.display = 'flex';
+          hideCvInlineAlert();
+        } else {
+          if (cvFilePill) cvFilePill.style.display = 'none';
+        }
+      });
+    }
+
+    if (cvFileClearBtn) {
+      cvFileClearBtn.addEventListener('click', () => {
+        if (cvFileInput) cvFileInput.value = '';
+        if (cvFilePill) cvFilePill.style.display = 'none';
+      });
+    }
 
     async function loadCurrentCv() {
       try {
@@ -2884,8 +2961,8 @@
             const dateObj = data.updatedAt.toDate ? data.updatedAt.toDate() : new Date();
             cvUpdatedTime.textContent = `Last updated: ${dateObj.toLocaleDateString()} at ${dateObj.toLocaleTimeString()}`;
           }
-          if (cvUrlInput) {
-            cvUrlInput.value = data.cvUrl;
+          if (cvUrlInput && !cvUrlInput.value) {
+            cvUrlInput.placeholder = `Active URL: ${data.cvUrl}`;
           }
         } else {
           if (cvStatusBadge) {
@@ -2913,16 +2990,19 @@
     if (cvUpdateForm) {
       cvUpdateForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        hideCvInlineAlert();
+
         const file = cvFileInput.files[0];
         const directUrl = cvUrlInput.value.trim();
 
         if (!file && !directUrl) {
+          showCvInlineAlert('⚠️ Please select a PDF/document file or enter a new direct CV link.', 'error');
           showUploadAlert('Please select a PDF file or enter a direct CV link.');
           return;
         }
 
         saveCvBtn.disabled = true;
-        saveCvBtn.textContent = 'UPDATING CV...';
+        saveCvBtn.innerHTML = '<span>UPLOADING CV (0%)...</span>';
 
         try {
           let finalCvUrl = directUrl;
@@ -2930,15 +3010,23 @@
 
           if (file) {
             cvUploadProgress.style.display = 'block';
+            cvProgressBar.style.width = '0%';
+            cvProgressPercent.textContent = '0%';
             cvProgressText.textContent = `Uploading "${file.name}" to Cloudinary...`;
+            showCvInlineAlert(`⏳ Uploading "${file.name}" to Cloudinary... please wait.`, 'info');
 
             const cdnRes = await uploadFileToCloudinary(file, (percent) => {
               cvProgressBar.style.width = `${percent}%`;
               cvProgressPercent.textContent = `${percent}%`;
+              saveCvBtn.innerHTML = `<span>UPLOADING CV (${percent}%)...</span>`;
             });
 
             finalCvUrl = cdnRes.secure_url;
+            finalFileName = file.name;
           }
+
+          showCvInlineAlert('💾 Saving CV metadata to Firestore...', 'info');
+          saveCvBtn.innerHTML = '<span>SAVING TO FIRESTORE...</span>';
 
           const payload = {
             cvUrl: finalCvUrl,
@@ -2951,17 +3039,28 @@
             await setDoc(doc(db, 'settings', 'cv'), payload, { merge: true });
           } catch (e) {}
 
+          // Cache locally for instant 0ms access on portfolio pages
+          try {
+            localStorage.setItem('taqi_portfolio_cv_url', finalCvUrl);
+            localStorage.setItem('taqi_portfolio_cv_name', finalFileName);
+          } catch (e) {}
+
+          showCvInlineAlert(`✓ <strong>CV updated and published!</strong> Live portfolio footer button now links to <a href="${finalCvUrl}" target="_blank" style="color:#fff; text-decoration:underline;">${finalFileName}</a>.`, 'success');
           showUploadAlert(`✓ CV updated successfully! Live portfolio button updated.`, true);
+
           cvFileInput.value = '';
+          cvUrlInput.value = '';
+          if (cvFilePill) cvFilePill.style.display = 'none';
           cvUploadProgress.style.display = 'none';
           await loadCurrentCv();
 
         } catch (err) {
           console.error('CV upload error:', err);
+          showCvInlineAlert(`❌ <strong>Failed to update CV:</strong> ${err.message}`, 'error');
           showUploadAlert(`Failed to update CV: ${err.message}`);
         } finally {
           saveCvBtn.disabled = false;
-          saveCvBtn.textContent = 'UPDATE & PUBLISH CV ↗';
+          saveCvBtn.innerHTML = '<span>UPDATE &amp; PUBLISH CV ↗</span>';
           cvUploadProgress.style.display = 'none';
         }
       });
@@ -2970,14 +3069,22 @@
     if (resetCvBtn) {
       resetCvBtn.addEventListener('click', async () => {
         if (!confirm('Reset CV back to the original default file (assets/docs/Taqi.pdf)?')) return;
+        hideCvInlineAlert();
         try {
           await deleteDoc(doc(db, 'projects', 'site_cv_metadata'));
           try { await deleteDoc(doc(db, 'settings', 'cv')); } catch (e) {}
+          try {
+            localStorage.removeItem('taqi_portfolio_cv_url');
+            localStorage.removeItem('taqi_portfolio_cv_name');
+          } catch (e) {}
+          showCvInlineAlert('✓ CV reset to default local PDF file (assets/docs/Taqi.pdf).', 'success');
           showUploadAlert('CV reset to default local PDF file.', true);
           cvFileInput.value = '';
           cvUrlInput.value = '';
+          if (cvFilePill) cvFilePill.style.display = 'none';
           await loadCurrentCv();
         } catch (err) {
+          showCvInlineAlert(`❌ Reset failed: ${err.message}`, 'error');
           showUploadAlert(`Reset failed: ${err.message}`);
         }
       });
