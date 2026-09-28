@@ -2197,7 +2197,45 @@
       } catch (e) {}
     }
 
+    const CACHE_KEYS = ['taqi_portfolio_cache_v2', 'taqi_portfolio_cache', 'taqi_portfolio_projects'];
+
+    function getAdminCachedProjects() {
+      for (const key of CACHE_KEYS) {
+        try {
+          const raw = localStorage.getItem(key);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          }
+        } catch (e) {}
+      }
+      return null;
+    }
+
+    function saveAdminCachedProjects(projects) {
+      try {
+        const json = JSON.stringify(projects);
+        CACHE_KEYS.forEach(key => {
+          try { localStorage.setItem(key, json); } catch (e) {}
+        });
+      } catch (e) {}
+    }
+
     function initProjectsManager() {
+      // 1. Instant zero-latency render from local cache
+      const cached = getAdminCachedProjects();
+      if (cached && cached.length > 0) {
+        manageAllProjects = cached.filter(p => p.id !== 'site_cv_metadata' && p.id !== 'cv');
+        if (projectCountBadge) {
+          projectCountBadge.textContent = `${manageAllProjects.length} PROJECT${manageAllProjects.length === 1 ? '' : 'S'}`;
+        }
+        if (manageProjectsLoading) {
+          manageProjectsLoading.style.display = 'none';
+        }
+        renderManageFilteredProjects();
+      }
+
+      // 2. Background live sync from Firestore
       const projectsCol = collection(db, 'projects');
       
       onSnapshot(projectsCol, (snapshot) => {
@@ -2256,6 +2294,8 @@
         }
         manageAllProjects.push({ id, ...data });
       });
+
+      saveAdminCachedProjects(manageAllProjects);
 
       if (projectCountBadge) {
         projectCountBadge.textContent = `${manageAllProjects.length} PROJECT${manageAllProjects.length === 1 ? '' : 'S'}`;

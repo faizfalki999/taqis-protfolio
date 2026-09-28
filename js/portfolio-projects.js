@@ -394,6 +394,117 @@ function setupVideoModal() {
   });
 }
 
+// Cache Key Definitions for Instant Zero-Latency Page Loads
+const CACHE_KEYS = ['taqi_portfolio_cache_v2', 'taqi_portfolio_cache', 'taqi_portfolio_projects'];
+
+function getCachedProjects() {
+  for (const key of CACHE_KEYS) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {}
+  }
+  return null;
+}
+
+function saveCachedProjects(projects) {
+  try {
+    const json = JSON.stringify(projects);
+    CACHE_KEYS.forEach(key => {
+      try { localStorage.setItem(key, json); } catch (e) {}
+    });
+  } catch (e) {}
+}
+
+function buildSkeletonCardsHtml(count = 3) {
+  let html = '';
+  for (let i = 0; i < count; i++) {
+    html += `
+      <article class="project-grid-card project-card-skeleton" aria-hidden="true">
+        <div class="skeleton-thumb"></div>
+        <div class="skeleton-body">
+          <div class="skeleton-line short"></div>
+          <div class="skeleton-line title"></div>
+          <div class="skeleton-line desc"></div>
+          <div class="skeleton-line desc-short"></div>
+        </div>
+      </article>
+    `;
+  }
+  return html;
+}
+
+function renderCategoryProjects(docs, targetCategory, dynamicContainer) {
+  if (!dynamicContainer) return;
+
+  // Sort by placement order (ascending 1, 2, 3...) first, then newest first for ties
+  const sorted = [...docs].sort((a, b) => {
+    const getOrder = (item) => {
+      if (typeof item.order === 'number' && !isNaN(item.order)) return item.order;
+      const parsed = parseInt(item.order, 10);
+      return !isNaN(parsed) ? parsed : 9999;
+    };
+    const orderA = getOrder(a);
+    const orderB = getOrder(b);
+    if (orderA !== orderB) {
+      return orderA - orderB;
+    }
+    const timeA = a.createdAt?.toMillis?.() || (a.publishedAt ? Date.parse(a.publishedAt) : 0) || (typeof a.createdAt === 'number' ? a.createdAt : 0) || 0;
+    const timeB = b.createdAt?.toMillis?.() || (b.publishedAt ? Date.parse(b.publishedAt) : 0) || (typeof b.createdAt === 'number' ? b.createdAt : 0) || 0;
+    return timeB - timeA;
+  });
+
+  // Filter strictly for this category, excluding deleted test projects and metadata docs
+  const matchingDocs = sorted.filter(p => {
+    if (p.id === 'site_cv_metadata' || p.id === 'cv' || !p.title) return false;
+    if (TEST_PROJECT_IDS.has(p.id)) return false;
+    const titleClean = (p.title || '').trim().toLowerCase();
+    if (TEST_TITLES.has(titleClean)) return false;
+    return matchesCategory(p.category, targetCategory);
+  });
+
+  if (matchingDocs.length === 0) {
+    dynamicContainer.innerHTML = '';
+    return;
+  }
+
+  dynamicContainer.innerHTML = matchingDocs.map(p => {
+    return p.mediaType === 'video' ? buildVideoCardHtml(p) : buildImageCardHtml(p);
+  }).join('');
+
+  // Attach video hover preview
+  dynamicContainer.querySelectorAll('.project-grid-card').forEach(card => {
+    const video = card.querySelector('video.project-card-video');
+    if (video) {
+      video.muted = true;
+      video.defaultMuted = true;
+      video.playsInline = true;
+      let playPromise = null;
+      card.addEventListener('mouseenter', () => {
+        video.muted = true;
+        playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {});
+        }
+      });
+      card.addEventListener('mouseleave', () => {
+        if (playPromise !== null) {
+          playPromise.then(() => {
+            video.pause();
+            video.currentTime = 0;
+          }).catch(() => {});
+        } else {
+          video.pause();
+          video.currentTime = 0;
+        }
+      });
+    }
+  });
+}
+
 // Category Page Dynamic Loader
 function initCategoryLoader() {
   const dynamicContainer = document.getElementById('dynamicProjectsList');
@@ -406,6 +517,16 @@ function initCategoryLoader() {
   setupImageLightbox();
   setupVideoModal();
 
+  // 1. INSTANT ZERO-LATENCY RENDER FROM CACHE (0ms delay)
+  const cachedProjects = getCachedProjects();
+  if (cachedProjects && cachedProjects.length > 0) {
+    renderCategoryProjects(cachedProjects, targetCategory, dynamicContainer);
+  } else if (!dynamicContainer.hasChildNodes() || dynamicContainer.innerHTML.trim() === '') {
+    // Show instant skeleton cards if first time visitor so page is never blank
+    dynamicContainer.innerHTML = buildSkeletonCardsHtml(3);
+  }
+
+  // 2. LIVE BACKGROUND FIRESTORE SYNC
   const projectsCol = collection(db, "projects");
 
   onSnapshot(projectsCol, (snapshot) => {
@@ -414,75 +535,14 @@ function initCategoryLoader() {
       docs.push({ id: doc.id, ...doc.data() });
     });
 
-    // Sort by placement order (ascending 1, 2, 3...) first, then newest first for ties
-    docs.sort((a, b) => {
-      const getOrder = (item) => {
-        if (typeof item.order === 'number' && !isNaN(item.order)) return item.order;
-        const parsed = parseInt(item.order, 10);
-        return !isNaN(parsed) ? parsed : 9999;
-      };
-      const orderA = getOrder(a);
-      const orderB = getOrder(b);
-      if (orderA !== orderB) {
-        return orderA - orderB;
-      }
-      const timeA = a.createdAt?.toMillis?.() || (a.publishedAt ? Date.parse(a.publishedAt) : 0) || 0;
-      const timeB = b.createdAt?.toMillis?.() || (b.publishedAt ? Date.parse(b.publishedAt) : 0) || 0;
-      return timeB - timeA;
-    });
-
-    // Filter strictly for this category, excluding deleted test projects and metadata docs
-    const matchingDocs = docs.filter(p => {
-      if (p.id === 'site_cv_metadata' || p.id === 'cv' || !p.title) return false;
-      if (TEST_PROJECT_IDS.has(p.id)) return false;
-      const titleClean = (p.title || '').trim().toLowerCase();
-      if (TEST_TITLES.has(titleClean)) return false;
-      return matchesCategory(p.category, targetCategory);
-    });
-
-    if (matchingDocs.length === 0) {
-      dynamicContainer.innerHTML = '';
-      return;
-    }
-
-    dynamicContainer.innerHTML = matchingDocs.map(p => {
-      return p.mediaType === 'video' ? buildVideoCardHtml(p) : buildImageCardHtml(p);
-    }).join('');
-
-    // Attach video hover preview
-    dynamicContainer.querySelectorAll('.project-grid-card').forEach(card => {
-      const video = card.querySelector('video.project-card-video');
-      if (video) {
-        video.muted = true;
-        video.defaultMuted = true;
-        video.playsInline = true;
-        let playPromise = null;
-        card.addEventListener('mouseenter', () => {
-          video.muted = true;
-          playPromise = video.play();
-          if (playPromise !== undefined) {
-            playPromise.catch(() => {});
-          }
-        });
-        card.addEventListener('mouseleave', () => {
-          if (playPromise !== null) {
-            playPromise.then(() => {
-              video.pause();
-              video.currentTime = 0;
-            }).catch(() => {});
-          } else {
-            video.pause();
-            video.currentTime = 0;
-          }
-        });
-      }
-    });
+    saveCachedProjects(docs);
+    renderCategoryProjects(docs, targetCategory, dynamicContainer);
   }, (err) => {
     console.warn("Firestore category live sync notice:", err);
   });
 }
 
-// Auto-run on DOM ready
+// Auto-run immediately
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initCategoryLoader);
 } else {

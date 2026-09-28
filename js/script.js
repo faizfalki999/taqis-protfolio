@@ -153,14 +153,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }, {
-      threshold: 0.1,
-      rootMargin: '0px 0px -40px 0px'
+      threshold: 0.05,
+      rootMargin: '50px 0px 0px 0px'
     });
 
     animatedElements.forEach(el => {
-      el.style.opacity = '0';
-      el.style.transition = 'opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
-      observer.observe(el);
+      const rect = el.getBoundingClientRect();
+      const inView = rect.top < (window.innerHeight || document.documentElement.clientHeight);
+      if (inView) {
+        // Element is already on screen on page load - keep visible immediately
+        el.style.opacity = '1';
+      } else {
+        el.style.opacity = '0';
+        el.style.transition = 'opacity 0.4s ease-out, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+        observer.observe(el);
+      }
     });
   }
 

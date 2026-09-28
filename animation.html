@@ -60,6 +60,66 @@
     <section class="project-showcase-grid" id="gridAnimation" data-category="ANIMATION">
       <!-- Dynamic Live Projects (Prepended here from Firestore) -->
       <div id="dynamicProjectsList" style="display:contents"></div>
+      <script>
+        (function() {
+          try {
+            var raw = localStorage.getItem('taqi_portfolio_cache_v2') || localStorage.getItem('taqi_portfolio_cache') || localStorage.getItem('taqi_portfolio_projects');
+            if (!raw) return;
+            var docs = JSON.parse(raw);
+            if (!Array.isArray(docs) || docs.length === 0) return;
+            function match(c) {
+              var p = (c || '').toLowerCase();
+              return p.includes('animat') || p.includes('motion') || p.includes('explainer') || p.includes('rig') || p.includes('2d');
+            }
+            var matching = docs.filter(function(p) {
+              return p && p.title && p.id !== 'site_cv_metadata' && p.id !== 'cv' && match(p.category);
+            });
+            matching.sort(function(a, b) {
+              var ordA = (typeof a.order === 'number' && !isNaN(a.order)) ? a.order : (parseInt(a.order, 10) || 9999);
+              var ordB = (typeof b.order === 'number' && !isNaN(b.order)) ? b.order : (parseInt(b.order, 10) || 9999);
+              if (ordA !== ordB) return ordA - ordB;
+              var tA = a.createdAt?.toMillis?.() || (a.publishedAt ? Date.parse(a.publishedAt) : 0) || 0;
+              var tB = b.createdAt?.toMillis?.() || (b.publishedAt ? Date.parse(b.publishedAt) : 0) || 0;
+              return tB - tA;
+            });
+            if (matching.length === 0) return;
+            var el = document.getElementById('dynamicProjectsList');
+            if (!el) return;
+            function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+            el.innerHTML = matching.map(function(p) {
+              var title = esc(p.title || 'Untitled');
+              var cat = esc(p.categoryTag || p.category || 'Animation');
+              var desc = esc(p.description || p.subtitle || '');
+              var media = esc(p.mediaUrl || '');
+              var thumb = esc(p.thumbnailUrl || p.mediaUrl || '');
+              var isVid = p.mediaType === 'video';
+              var tags = (p.tags || []).map(function(t) { return '<span class="card-tag">' + esc(t) + '</span>'; }).join('');
+              return '<article class="project-grid-card">' +
+                (isVid ? 
+                  '<a href="#" class="project-card-link-wrapper project-video-trigger" data-video-src="' + media + '" data-title="' + title + '" data-category="' + cat + '" aria-label="Play ' + title + ' Video">' +
+                  '<div class="project-card-thumb-wrap">' +
+                  '<video class="project-card-video" src="' + media + '" poster="' + thumb + '" muted loop playsinline preload="metadata"></video>' +
+                  '<div class="project-card-overlay"><span class="play-btn-circle">▶</span><span class="overlay-action-btn">WATCH VIDEO ▶</span></div>' +
+                  '</div></a>' :
+                  '<a href="' + (p.url || media) + '" class="project-card-link-wrapper ' + (p.url ? '' : 'image-preview-trigger') + '" data-img-src="' + media + '" data-title="' + title + '" ' + (p.url ? 'target="_blank" rel="noopener noreferrer"' : '') + '>' +
+                  '<div class="project-card-thumb-wrap"><img src="' + thumb + '" alt="' + title + '" class="project-card-img">' +
+                  '<div class="project-card-overlay"><span class="overlay-action-btn">VIEW ' + (p.url ? 'ON BEHANCE ↗' : 'IMAGE ↗') + '</span></div>' +
+                  '</div></a>'
+                ) +
+                '<div class="project-card-body">' +
+                '<div class="project-card-meta-top"><span class="project-card-category">' + cat + '</span><span class="dynamic-drop-badge">NEW</span></div>' +
+                '<h2 class="project-card-title"><a href="#" class="project-video-trigger" data-video-src="' + media + '" data-title="' + title + '" data-category="' + cat + '">' + title + '</a></h2>' +
+                (desc ? '<p class="project-card-subtitle">' + desc + '</p>' : '') +
+                (tags ? '<div class="project-card-tags">' + tags + '</div>' : '') +
+                '<div class="project-card-footer">' +
+                (isVid ? '<button type="button" class="card-play-btn project-video-trigger" data-video-src="' + media + '" data-title="' + title + '" data-category="' + cat + '"><span>Play Video</span><span>▶</span></button>' : '<button type="button" class="card-behance-btn"><span>View</span><span class="arrow-up-right">↗</span></button>') +
+                '</div>' +
+                '</div>' +
+                '</article>';
+            }).join('');
+          } catch(e) {}
+        })();
+      </script>
     </section>
 
     <!-- Project Pagination Footer Bar -->
