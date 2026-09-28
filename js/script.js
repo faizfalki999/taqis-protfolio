@@ -209,9 +209,29 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
       }
 
-      if (player) {
+      if (player && !player.__taqiEventsAttached) {
+        player.__taqiEventsAttached = true;
+        const dummySource = player.querySelector('source');
+        if (dummySource) dummySource.remove();
+
         player.addEventListener('loadedmetadata', () => {
+          player.removeAttribute('muted');
+          player.muted = false;
           player.volume = 1.0;
+        });
+
+        player.addEventListener('loadeddata', () => {
+          player.removeAttribute('muted');
+          player.muted = false;
+          player.volume = 1.0;
+        });
+
+        player.addEventListener('play', () => {
+          player.removeAttribute('muted');
+          player.muted = false;
+          if (player.volume === 0) {
+            player.volume = 1.0;
+          }
         });
       }
 
@@ -251,40 +271,66 @@ document.addEventListener('DOMContentLoaded', () => {
     if (titleEl) titleEl.textContent = title || 'PROJECT PREVIEW';
     if (catEl) catEl.textContent = category || 'VIDEO';
 
-    player.src = videoSrc;
-    player.volume = 1.0;
+    // Remove dummy source tags that conflict with direct src
+    const dummySource = player.querySelector('source');
+    if (dummySource) dummySource.remove();
+
+    player.removeAttribute('muted');
     player.muted = false;
-    player.load();
+    player.defaultMuted = false;
+    player.volume = 1.0;
+
+    if (player.src !== videoSrc) {
+      player.src = videoSrc;
+    }
+
     modal.classList.add('is-active');
     document.body.style.overflow = 'hidden';
 
-    // Ensure volume is always initialized at 100% full volume
-    player.volume = 1.0;
+    // Ensure volume is always initialized at 100% full volume and unmuted
+    player.removeAttribute('muted');
     player.muted = false;
+    player.defaultMuted = false;
+    player.volume = 1.0;
+
     const playPromise = player.play();
     if (playPromise !== undefined) {
-      playPromise.catch(() => {
-        player.muted = true;
+      playPromise.then(() => {
+        player.removeAttribute('muted');
+        player.muted = false;
         player.volume = 1.0;
-        player.play().catch(() => {});
+      }).catch((err) => {
+        console.warn('Video playback notice:', err);
+        player.removeAttribute('muted');
+        player.muted = false;
+        player.volume = 1.0;
       });
     }
   }
 
+  window.openPortfolioVideoModal = openVideoModal;
+
   // Delegated click handler on document to capture dynamically added project cards
-  document.addEventListener('click', (e) => {
-    const trigger = e.target.closest('.project-video-trigger');
-    if (trigger) {
-      e.preventDefault();
-      e.stopPropagation();
-      const videoSrc = trigger.getAttribute('data-video-src');
-      const title = trigger.getAttribute('data-title');
-      const cat = trigger.getAttribute('data-category');
-      if (videoSrc) {
-        openVideoModal(videoSrc, title, cat);
+  if (!window.__taqiVideoClickAttached) {
+    window.__taqiVideoClickAttached = true;
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('.project-video-trigger');
+      if (trigger) {
+        e.preventDefault();
+        e.stopPropagation();
+        const videoSrc = trigger.getAttribute('data-video-src');
+        const title = trigger.getAttribute('data-title');
+        const cat = trigger.getAttribute('data-category');
+        if (videoSrc) {
+          if (window.openPortfolioVideoModal) {
+            window.openPortfolioVideoModal(videoSrc, title, cat);
+          } else {
+            openVideoModal(videoSrc, title, cat);
+          }
+        }
       }
-    }
-  });
+    });
+  }
 
   // Disable right-click context menu on all video elements
   document.addEventListener('contextmenu', (e) => {

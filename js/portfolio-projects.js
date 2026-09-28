@@ -235,6 +235,9 @@ function setupImageLightbox() {
 
 // Video Modal Player Setup
 function setupVideoModal() {
+  if (window.__taqiVideoModalReady) return;
+  window.__taqiVideoModalReady = true;
+
   let videoModal = document.getElementById('portfolioVideoModal');
 
   if (!videoModal) {
@@ -252,7 +255,6 @@ function setupVideoModal() {
         </div>
         <div class="video-modal-video-wrap">
           <video id="videoModalPlayer" controls controlslist="nodownload noplaybackrate" disablepictureinpicture playsinline preload="metadata" oncontextmenu="return false;">
-            <source src="" type="video/mp4">
             Your browser does not support HTML5 video.
           </video>
         </div>
@@ -266,30 +268,75 @@ function setupVideoModal() {
   const catEl = document.getElementById('videoModalCategory');
   const closeBtn = document.getElementById('videoModalCloseBtn');
 
+  if (player) {
+    // Remove dummy source tags that conflict with direct src
+    const dummySource = player.querySelector('source');
+    if (dummySource) dummySource.remove();
+
+    player.addEventListener('loadedmetadata', () => {
+      player.removeAttribute('muted');
+      player.muted = false;
+      player.volume = 1.0;
+    });
+
+    player.addEventListener('loadeddata', () => {
+      player.removeAttribute('muted');
+      player.muted = false;
+      player.volume = 1.0;
+    });
+
+    player.addEventListener('play', () => {
+      player.removeAttribute('muted');
+      player.muted = false;
+      if (player.volume === 0) {
+        player.volume = 1.0;
+      }
+    });
+  }
+
   function openVideoModal(videoSrc, title, category) {
     if (!player) return;
     if (titleEl) titleEl.textContent = title || 'PROJECT PREVIEW';
     if (catEl) catEl.textContent = category || 'VIDEO';
 
-    player.src = videoSrc;
-    player.volume = 1.0;
+    // Remove dummy source tags that conflict with direct src
+    const dummySource = player.querySelector('source');
+    if (dummySource) dummySource.remove();
+
+    player.removeAttribute('muted');
     player.muted = false;
-    player.load();
+    player.defaultMuted = false;
+    player.volume = 1.0;
+
+    if (player.src !== videoSrc) {
+      player.src = videoSrc;
+    }
+
     videoModal.classList.add('is-active');
     document.body.style.overflow = 'hidden';
 
-    // Ensure volume is always initialized at 100% full volume
-    player.volume = 1.0;
+    // Ensure volume is always initialized at 100% full volume and unmuted
+    player.removeAttribute('muted');
     player.muted = false;
+    player.defaultMuted = false;
+    player.volume = 1.0;
+
     const playPromise = player.play();
     if (playPromise !== undefined) {
-      playPromise.catch(() => {
-        player.muted = true;
+      playPromise.then(() => {
+        player.removeAttribute('muted');
+        player.muted = false;
         player.volume = 1.0;
-        player.play().catch(() => {});
+      }).catch((err) => {
+        console.warn('Video playback notice:', err);
+        player.removeAttribute('muted');
+        player.muted = false;
+        player.volume = 1.0;
       });
     }
   }
+
+  window.openPortfolioVideoModal = openVideoModal;
 
   function closeVideoModal() {
     if (!player) return;
@@ -303,24 +350,27 @@ function setupVideoModal() {
     document.body.style.overflow = '';
   }
 
-  player.addEventListener('loadedmetadata', () => {
-    player.volume = 1.0;
-  });
-
   // Delegated click listener for all video triggers (cards, links, play buttons)
-  document.addEventListener('click', (e) => {
-    const trigger = e.target.closest('.project-video-trigger');
-    if (trigger) {
-      e.preventDefault();
-      e.stopPropagation();
-      const videoSrc = trigger.getAttribute('data-video-src');
-      const title = trigger.getAttribute('data-title');
-      const cat = trigger.getAttribute('data-category');
-      if (videoSrc) {
-        openVideoModal(videoSrc, title, cat);
+  if (!window.__taqiVideoClickAttached) {
+    window.__taqiVideoClickAttached = true;
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('.project-video-trigger');
+      if (trigger) {
+        e.preventDefault();
+        e.stopPropagation();
+        const videoSrc = trigger.getAttribute('data-video-src');
+        const title = trigger.getAttribute('data-title');
+        const cat = trigger.getAttribute('data-category');
+        if (videoSrc) {
+          if (window.openPortfolioVideoModal) {
+            window.openPortfolioVideoModal(videoSrc, title, cat);
+          } else {
+            openVideoModal(videoSrc, title, cat);
+          }
+        }
       }
-    }
-  });
+    });
+  }
 
   if (closeBtn) {
     closeBtn.addEventListener('click', closeVideoModal);

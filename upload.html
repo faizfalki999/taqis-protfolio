@@ -1549,6 +1549,24 @@
       </div>
     </div>
 
+    <!-- Admin Video Player Modal -->
+    <div class="edit-thumb-modal-backdrop" id="adminVideoModal" style="display: none;" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="edit-thumb-modal-container" style="max-width: 800px; width: 95%;">
+        <div class="edit-thumb-header">
+          <div>
+            <div style="font-family: var(--font-adm-mono); font-size: 0.68rem; color: #e50914; letter-spacing: 0.12em; text-transform: uppercase;" id="adminVideoModalCategory">VIDEO PREVIEW</div>
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #fff; margin: 0.2rem 0 0;" id="adminVideoModalTitle">Project Video</h3>
+          </div>
+          <button type="button" class="btn-close-edit-modal" id="closeAdminVideoModalBtn" aria-label="Close Video">✕</button>
+        </div>
+        <div style="padding: 1.25rem; background: #000; display: flex; justify-content: center; align-items: center; border-radius: 0 0 10px 10px;">
+          <video id="adminVideoModalPlayer" controls controlslist="nodownload noplaybackrate" playsinline preload="metadata" style="max-width: 100%; max-height: 70vh; border-radius: 6px; outline: none; background: #000; width: 100%;">
+            Your browser does not support HTML5 video.
+          </video>
+        </div>
+      </div>
+    </div>
+
   </main>
 
   <!-- Page Footer Bar -->
@@ -1795,13 +1813,18 @@
         const videoEl = document.createElement('video');
         videoEl.src = fileUrl;
         videoEl.controls = true;
-        videoEl.muted = true;
-        videoEl.defaultMuted = true;
-        videoEl.autoplay = true;
+        videoEl.muted = false;
+        videoEl.defaultMuted = false;
+        videoEl.volume = 1.0;
+        videoEl.autoplay = false;
         videoEl.loop = true;
         videoEl.playsInline = true;
+        videoEl.addEventListener('play', () => {
+          videoEl.removeAttribute('muted');
+          videoEl.muted = false;
+          if (videoEl.volume === 0) videoEl.volume = 1.0;
+        });
         previewMediaBox.appendChild(videoEl);
-        videoEl.play().catch(() => {});
       } else {
         const imgEl = document.createElement('img');
         imgEl.src = fileUrl;
@@ -2067,13 +2090,18 @@
         const videoEl = document.createElement('video');
         videoEl.src = cdnData.secure_url;
         videoEl.controls = true;
-        videoEl.muted = true;
-        videoEl.defaultMuted = true;
-        videoEl.autoplay = true;
+        videoEl.muted = false;
+        videoEl.defaultMuted = false;
+        videoEl.volume = 1.0;
+        videoEl.autoplay = false;
         videoEl.loop = true;
         videoEl.playsInline = true;
+        videoEl.addEventListener('play', () => {
+          videoEl.removeAttribute('muted');
+          videoEl.muted = false;
+          if (videoEl.volume === 0) videoEl.volume = 1.0;
+        });
         successMediaFrame.appendChild(videoEl);
-        videoEl.play().catch(() => {});
 
         // Show auto-generated video poster thumbnail
         autoThumbImg.src = thumbnailUrl;
@@ -2315,9 +2343,12 @@
         return `
           <div class="manage-project-item" id="proj-card-${proj.id}">
             ${isVideo ? `
-              <div style="position:relative; width:100%; height:150px; background:#000; overflow:hidden;">
+              <div class="manage-video-thumb-box" data-video-src="${mediaUrl}" data-title="${escapeHtml(title)}" data-category="${escapeHtml(category)}" style="position:relative; width:100%; height:150px; background:#000; overflow:hidden; cursor:pointer;" title="Click to play video with full sound">
                 <video class="manage-project-video" src="${mediaUrl}" poster="${thumb}" muted loop playsinline preload="metadata" style="width:100%; height:150px; object-fit:cover; display:block;"></video>
                 <span style="position:absolute; top:8px; right:8px; background:rgba(229,9,20,0.9); color:#fff; font-size:10px; font-weight:700; padding:2px 6px; border-radius:3px; letter-spacing:1px; z-index:2;">VIDEO ▶</span>
+                <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.3); z-index:1; transition: background 0.2s;">
+                  <span style="background:rgba(229,9,20,0.9); color:#fff; width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; box-shadow:0 4px 12px rgba(0,0,0,0.6);">▶</span>
+                </div>
               </div>
             ` : `
               <img src="${thumb}" alt="${escapeHtml(title)}" class="manage-project-thumb" loading="lazy" onerror="this.src='https://via.placeholder.com/400x250?text=No+Image';">
@@ -2335,6 +2366,7 @@
                   <button type="button" class="btn-move-order btn-move-up" data-id="${proj.id}" data-idx="${idx}" title="Move Up in placement" ${idx === 0 ? 'disabled' : ''}>▲</button>
                   <button type="button" class="btn-move-order btn-move-down" data-id="${proj.id}" data-idx="${idx}" title="Move Down in placement" ${idx === filtered.length - 1 ? 'disabled' : ''}>▼</button>
                 </div>
+                ${isVideo ? `<button type="button" class="btn-play-admin-video" data-video-src="${mediaUrl}" data-title="${escapeHtml(title)}" data-category="${escapeHtml(category)}" style="background:#e50914; color:#fff; border:none; padding:0.35rem 0.65rem; border-radius:4px; font-size:0.75rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:0.25rem;" title="Play video with full sound">▶ PLAY</button>` : ''}
                 <a href="${mediaUrl}" target="_blank" rel="noopener noreferrer" class="btn-view-project">VIEW ↗</a>
                 <button type="button" class="btn-edit-project" data-id="${proj.id}">
                   <span>✏️</span>
@@ -2485,7 +2517,122 @@
           }
         });
       });
+
+      // Attach Play Handlers for admin video modal
+      manageProjectsGrid.querySelectorAll('.btn-play-admin-video, .manage-video-thumb-box').forEach(el => {
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const videoSrc = el.getAttribute('data-video-src');
+          const title = el.getAttribute('data-title');
+          const cat = el.getAttribute('data-category');
+          if (videoSrc) {
+            openAdminVideoModal(videoSrc, title, cat);
+          }
+        });
+      });
     }
+
+    // ============================================
+    // Admin Video Player Modal Logic (Unmuted & 100% Full Volume)
+    // ============================================
+    const adminVideoModal = document.getElementById('adminVideoModal');
+    const adminVideoModalPlayer = document.getElementById('adminVideoModalPlayer');
+    const adminVideoModalTitle = document.getElementById('adminVideoModalTitle');
+    const adminVideoModalCategory = document.getElementById('adminVideoModalCategory');
+    const closeAdminVideoModalBtn = document.getElementById('closeAdminVideoModalBtn');
+
+    if (adminVideoModalPlayer) {
+      adminVideoModalPlayer.addEventListener('loadedmetadata', () => {
+        adminVideoModalPlayer.removeAttribute('muted');
+        adminVideoModalPlayer.muted = false;
+        adminVideoModalPlayer.volume = 1.0;
+      });
+
+      adminVideoModalPlayer.addEventListener('loadeddata', () => {
+        adminVideoModalPlayer.removeAttribute('muted');
+        adminVideoModalPlayer.muted = false;
+        adminVideoModalPlayer.volume = 1.0;
+      });
+
+      adminVideoModalPlayer.addEventListener('play', () => {
+        adminVideoModalPlayer.removeAttribute('muted');
+        adminVideoModalPlayer.muted = false;
+        if (adminVideoModalPlayer.volume === 0) {
+          adminVideoModalPlayer.volume = 1.0;
+        }
+      });
+    }
+
+    function openAdminVideoModal(videoSrc, title, category) {
+      if (!adminVideoModalPlayer) return;
+      if (adminVideoModalTitle) adminVideoModalTitle.textContent = title || 'Project Video';
+      if (adminVideoModalCategory) adminVideoModalCategory.textContent = category || 'VIDEO PREVIEW';
+
+      adminVideoModalPlayer.removeAttribute('muted');
+      adminVideoModalPlayer.muted = false;
+      adminVideoModalPlayer.defaultMuted = false;
+      adminVideoModalPlayer.volume = 1.0;
+
+      if (adminVideoModalPlayer.src !== videoSrc) {
+        adminVideoModalPlayer.src = videoSrc;
+      }
+
+      adminVideoModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+
+      // Always guarantee full unmuted volume on playback
+      adminVideoModalPlayer.removeAttribute('muted');
+      adminVideoModalPlayer.muted = false;
+      adminVideoModalPlayer.defaultMuted = false;
+      adminVideoModalPlayer.volume = 1.0;
+
+      const playPromise = adminVideoModalPlayer.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          adminVideoModalPlayer.removeAttribute('muted');
+          adminVideoModalPlayer.muted = false;
+          adminVideoModalPlayer.volume = 1.0;
+        }).catch((err) => {
+          console.warn('Admin video playback notice:', err);
+          adminVideoModalPlayer.removeAttribute('muted');
+          adminVideoModalPlayer.muted = false;
+          adminVideoModalPlayer.volume = 1.0;
+        });
+      }
+    }
+
+    function closeAdminVideoModal() {
+      if (!adminVideoModal) return;
+      adminVideoModal.style.display = 'none';
+      if (adminVideoModalPlayer) {
+        adminVideoModalPlayer.pause();
+        adminVideoModalPlayer.currentTime = 0;
+        adminVideoModalPlayer.removeAttribute('src');
+        adminVideoModalPlayer.load();
+        adminVideoModalPlayer.volume = 1.0;
+        adminVideoModalPlayer.muted = false;
+      }
+      document.body.style.overflow = '';
+    }
+
+    if (closeAdminVideoModalBtn) {
+      closeAdminVideoModalBtn.addEventListener('click', closeAdminVideoModal);
+    }
+
+    if (adminVideoModal) {
+      adminVideoModal.addEventListener('click', (e) => {
+        if (e.target === adminVideoModal) {
+          closeAdminVideoModal();
+        }
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && adminVideoModal && adminVideoModal.style.display === 'flex') {
+        closeAdminVideoModal();
+      }
+    });
 
     // ============================================
     // 7. Edit Project Details Modal Logic
