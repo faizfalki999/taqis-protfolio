@@ -272,16 +272,20 @@ function setupVideoModal() {
     if (catEl) catEl.textContent = category || 'VIDEO';
 
     player.src = videoSrc;
+    player.volume = 1.0;
+    player.muted = false;
     player.load();
     videoModal.classList.add('is-active');
     document.body.style.overflow = 'hidden';
 
-    // Attempt unmuted play first; if blocked by browser policy, fall back to muted
+    // Ensure volume is always initialized at 100% full volume
+    player.volume = 1.0;
     player.muted = false;
     const playPromise = player.play();
     if (playPromise !== undefined) {
       playPromise.catch(() => {
         player.muted = true;
+        player.volume = 1.0;
         player.play().catch(() => {});
       });
     }
@@ -294,8 +298,14 @@ function setupVideoModal() {
     player.currentTime = 0;
     player.removeAttribute('src');
     player.load();
+    player.volume = 1.0;
+    player.muted = false;
     document.body.style.overflow = '';
   }
+
+  player.addEventListener('loadedmetadata', () => {
+    player.volume = 1.0;
+  });
 
   // Delegated click listener for all video triggers (cards, links, play buttons)
   document.addEventListener('click', (e) => {
