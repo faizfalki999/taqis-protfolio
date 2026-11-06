@@ -3,3 +3,7 @@ __pycache__/
 *.pyc
 .DS_Store
 Thumbs.db
+
+# Dev scripts and raw source footage (not used by the site)
+animate_portrait.py
+assets/videos/me_1.mov
